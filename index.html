@@ -73,6 +73,7 @@
                 </div>
             </div>
 
+            <!-- Search & Navigation Actions -->
             <div class="flex items-center space-x-2.5">
                 <button onclick="openTrackOrderModal()" class="hidden sm:flex bg-vibe-card border border-vibe-border hover:bg-zinc-800 text-slate-200 text-xs font-bold uppercase px-3.5 py-2.5 rounded-xl transition items-center gap-1.5">
                     <i class="fa-solid fa-truck-fast text-emerald-400"></i> <span>Track Order</span>
@@ -93,18 +94,23 @@
     <main class="flex-grow">
         <!-- VIEW 1: STORE FRONTEND -->
         <section id="storeView" class="block">
-            <div class="relative bg-gradient-to-b from-vibe-card to-vibe-black border-b border-vibe-border py-8 sm:py-20 overflow-hidden">
+            <div class="relative bg-gradient-to-b from-vibe-card to-vibe-black border-b border-vibe-border py-8 sm:py-16 overflow-hidden">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-6">
                     <div class="max-w-2xl">
                         <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white px-3 py-1 rounded-full text-[11px] font-semibold mb-3 tracking-wide">
                             <i class="fa-solid fa-bolt text-amber-400"></i> Premium Local Collection
                         </div>
-                        <h1 class="text-3xl sm:text-6xl font-black uppercase tracking-tight text-white mb-3 leading-tight">
+                        <h1 class="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white mb-3 leading-tight">
                             ELEVATE YOUR <br><span class="text-slate-400">DAILY VIBE</span>
                         </h1>
                         <p class="text-slate-400 text-xs sm:text-base leading-relaxed mb-5 font-normal">
-                            Top Trending Tech, Home Gadgets & Accessories in Pakistan[cite: 5].
+                            Top Trending Tech, Home Gadgets & Accessories in Pakistan.
                         </p>
+                        <!-- Search Bar -->
+                        <div class="relative max-w-md">
+                            <input type="text" id="storeSearchInput" oninput="filterStoreProducts()" placeholder="Search products..." class="w-full bg-black border border-vibe-border rounded-xl px-4 py-3 text-xs text-white outline-none focus:border-white transition">
+                            <i class="fa-solid fa-search absolute right-4 top-3.5 text-slate-500"></i>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -174,7 +180,7 @@
                     </div>
                 </div>
 
-                <!-- SHOPIFY STYLE ANALYTICS -->
+                <!-- ANALYTICS -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
                     <div class="bg-vibe-card p-4 rounded-2xl border border-vibe-border flex items-center justify-between">
                         <div>
@@ -196,6 +202,27 @@
                             <h3 id="statTotalProfit" class="text-3xl font-black text-emerald-400">Rs. 0</h3>
                         </div>
                         <i class="fa-solid fa-percent text-amber-400 text-2xl"></i>
+                    </div>
+                </div>
+
+                <!-- ADMIN PRODUCTS MANAGEMENT LIST -->
+                <div class="bg-vibe-card rounded-2xl border border-vibe-border overflow-hidden mb-8 shadow-xl">
+                    <div class="p-4 border-b border-vibe-border flex items-center justify-between">
+                        <h3 class="font-black text-white text-base uppercase">Manage Store Products</h3>
+                        <span id="adminProdCountBadge" class="text-[10px] font-bold bg-white text-black px-2.5 py-1 rounded-full uppercase">0 Products</span>
+                    </div>
+                    <div class="overflow-x-auto custom-scrollbar">
+                        <table class="w-full text-left border-collapse min-w-[650px]">
+                            <thead>
+                                <tr class="bg-black text-[10px] font-extrabold text-slate-400 uppercase tracking-widest border-b border-vibe-border">
+                                    <th class="p-3">Product Title</th>
+                                    <th class="p-3">Category</th>
+                                    <th class="p-3">Price</th>
+                                    <th class="p-3 text-center">Actions (Edit / Delete)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminProductsTableBody" class="divide-y divide-vibe-border text-xs"></tbody>
+                        </table>
                     </div>
                 </div>
 
@@ -237,7 +264,7 @@
         </div>
     </div>
 
-    <!-- FLOATING WHATSAPP BUTTON -->
+    <!-- FLOATING WHATSAPP BUTTON (Number: 03114690687) -->
     <a href="https://wa.me/923114690687" target="_blank" class="fixed bottom-16 sm:bottom-6 left-4 sm:left-6 z-50 bg-emerald-500 hover:bg-emerald-600 text-white w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center text-xl sm:text-2xl shadow-2xl transition-transform hover:scale-110 border-2 border-white">
         <i class="fa-brands fa-whatsapp"></i>
     </a>
@@ -351,6 +378,42 @@
         </div>
     </div>
 
+    <!-- EDIT PRODUCT MODAL -->
+    <div id="editProductModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-vibe-card border border-vibe-border w-full max-w-lg rounded-3xl p-5 relative shadow-2xl">
+            <div class="flex items-center justify-between mb-3 border-b border-vibe-border pb-2.5">
+                <h3 class="font-extrabold text-white text-sm uppercase">Edit Product Details</h3>
+                <button onclick="closeEditProductModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="handleUpdateProduct(event)" class="space-y-3 text-xs">
+                <input type="hidden" id="editProdId">
+                <div>
+                    <label class="block font-semibold text-slate-300 mb-1">GitHub Personal Access Token</label>
+                    <input type="password" id="editGhToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" class="w-full bg-black border border-vibe-border text-amber-400 font-mono rounded-xl p-2.5 outline-none">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-300 mb-1">Product Title</label>
+                    <input type="text" id="editProdTitle" required class="w-full bg-black border border-vibe-border text-white rounded-xl p-2.5 outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-2.5">
+                    <div>
+                        <label class="block font-semibold text-slate-300 mb-1">Selling Price (Rs.)</label>
+                        <input type="number" id="editProdPrice" required class="w-full bg-black border border-vibe-border text-white rounded-xl p-2.5 outline-none">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-300 mb-1">Cost Price (Rs.)</label>
+                        <input type="number" id="editProdCost" required class="w-full bg-black border border-vibe-border text-white rounded-xl p-2.5 outline-none">
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-300 mb-1">Description</label>
+                    <textarea id="editProdDesc" rows="3" required class="w-full bg-black border border-vibe-border text-white rounded-xl p-2.5 outline-none"></textarea>
+                </div>
+                <button type="submit" id="updateProdBtn" class="w-full bg-white hover:bg-slate-200 text-black font-extrabold uppercase py-3 rounded-xl transition">Save Changes & GitHub Sync</button>
+            </form>
+        </div>
+    </div>
+
     <!-- TRACK ORDER & AUTH MODALS -->
     <div id="trackOrderModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-vibe-card border border-vibe-border w-full max-w-md rounded-3xl p-5 relative shadow-2xl space-y-4">
@@ -414,17 +477,19 @@
             if(currentUser && currentUser.isAdmin) renderAdminDashboard();
         }
 
-        function renderStoreGrid() {
+        function renderStoreGrid(filteredProducts = null) {
             const grid = document.getElementById('productGrid');
             if(!grid) return;
             grid.innerHTML = '';
 
-            if(products.length === 0) {
-                grid.innerHTML = `<div class="col-span-full py-16 text-center text-slate-500"><p class="text-xs uppercase font-bold">Loading products from GitHub...</p></div>`;
+            const listToRender = filteredProducts !== null ? filteredProducts : products;
+
+            if(listToRender.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-16 text-center text-slate-500"><p class="text-xs uppercase font-bold">No products found.</p></div>`;
                 return;
             }
 
-            products.forEach(p => {
+            listToRender.forEach(p => {
                 const firstMedia = p.mediaList && p.mediaList.length > 0 ? p.mediaList[0] : { url: '', type: 'image' };
                 const card = document.createElement('div');
                 card.className = 'bg-vibe-card rounded-2xl border border-vibe-border overflow-hidden hover:border-slate-400 transition duration-300 flex flex-col justify-between group cursor-pointer';
@@ -454,6 +519,16 @@
                 `;
                 grid.appendChild(card);
             });
+        }
+
+        function filterStoreProducts() {
+            const query = document.getElementById('storeSearchInput').value.toLowerCase().trim();
+            if(!query) {
+                renderStoreGrid(products);
+                return;
+            }
+            const filtered = products.filter(p => p.title.toLowerCase().includes(query) || p.category.toLowerCase().includes(query) || p.description.toLowerCase().includes(query));
+            renderStoreGrid(filtered);
         }
 
         function openProductDetail(prodId) {
@@ -556,7 +631,6 @@
                 `;
             });
 
-            // Free Shipping Bar Logic
             const target = 5000;
             if (subtotal >= target) {
                 document.getElementById('shippingProgressText').innerText = '🎉 You unlocked FREE Shipping!';
@@ -621,7 +695,19 @@
         function openAddProductModal() { document.getElementById('addProductModal').classList.remove('hidden'); }
         function closeAddProductModal() { document.getElementById('addProductModal').classList.add('hidden'); }
 
-        // --- MULTIPLE FILES UPLOAD & GITHUB SYNC ---
+        function openEditProductModal(id) {
+            const p = products.find(item => item.id === id);
+            if(!p) return;
+            document.getElementById('editProdId').value = p.id;
+            document.getElementById('editProdTitle').value = p.title;
+            document.getElementById('editProdPrice').value = p.price;
+            document.getElementById('editProdCost').value = p.costPrice || 0;
+            document.getElementById('editProdDesc').value = p.description;
+            document.getElementById('editProductModal').classList.remove('hidden');
+        }
+        function closeEditProductModal() { document.getElementById('editProductModal').classList.add('hidden'); }
+
+        // --- BASE64 & GITHUB SYNC UTILS ---
         function toBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -681,34 +767,11 @@
                 };
 
                 products.push(newProd);
+                await syncProductsToGitHub(token, "Add new product with multiple media files");
 
-                const getRes = await fetch(`https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/${GH_FILE_PATH}`, {
-                    headers: { 'Authorization': `token ${token}` }
-                });
-                const fileData = await getRes.json();
-                const sha = fileData.sha;
-
-                const updatedContent = btoa(unescape(encodeURIComponent(JSON.stringify(products, null, 2))));
-                const putRes = await fetch(`https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/${GH_FILE_PATH}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Authorization': `token ${token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        message: "Add new product with multiple media files",
-                        content: updatedContent,
-                        sha: sha
-                    })
-                });
-
-                if(putRes.ok) {
-                    alert("All files successfully uploaded and product synced globally!");
-                    closeAddProductModal();
-                    loadData();
-                } else {
-                    alert("Failed to update products.json on GitHub.");
-                }
+                alert("All files successfully uploaded and product synced globally!");
+                closeAddProductModal();
+                loadData();
 
             } catch(err) {
                 console.error(err);
@@ -717,6 +780,75 @@
 
             btn.innerText = "Upload All & Sync to GitHub";
             btn.disabled = false;
+        }
+
+        async function handleUpdateProduct(e) {
+            e.preventDefault();
+            const token = document.getElementById('editGhToken').value.trim();
+            if(!token) { alert("Please enter your GitHub Personal Access Token!"); return; }
+
+            const id = document.getElementById('editProdId').value;
+            const p = products.find(item => item.id === id);
+            if(!p) return;
+
+            p.title = document.getElementById('editProdTitle').value;
+            p.price = parseFloat(document.getElementById('editProdPrice').value);
+            p.costPrice = parseFloat(document.getElementById('editProdCost').value);
+            p.description = document.getElementById('editProdDesc').value;
+
+            const btn = document.getElementById('updateProdBtn');
+            btn.innerText = "Updating...";
+            btn.disabled = true;
+
+            try {
+                await syncProductsToGitHub(token, "Update product details");
+                alert("Product updated & synced successfully!");
+                closeEditProductModal();
+                loadData();
+            } catch(err) {
+                alert("Error updating product: " + err.message);
+            }
+            btn.innerText = "Save Changes & GitHub Sync";
+            btn.disabled = false;
+        }
+
+        async function deleteProduct(id) {
+            const token = prompt("Enter your GitHub Personal Access Token to confirm deletion:");
+            if(!token) return;
+
+            products = products.filter(p => p.id !== id);
+            try {
+                await syncProductsToGitHub(token.trim(), "Delete product");
+                alert("Product deleted and GitHub synced successfully!");
+                loadData();
+            } catch(err) {
+                alert("Error deleting product: " + err.message);
+                loadData();
+            }
+        }
+
+        async function syncProductsToGitHub(token, commitMsg) {
+            const getRes = await fetch(`https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/${GH_FILE_PATH}`, {
+                headers: { 'Authorization': `token ${token}` }
+            });
+            const fileData = await getRes.json();
+            const sha = fileData.sha;
+
+            const updatedContent = btoa(unescape(encodeURIComponent(JSON.stringify(products, null, 2))));
+            const putRes = await fetch(`https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/${GH_FILE_PATH}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: commitMsg,
+                    content: updatedContent,
+                    sha: sha
+                })
+            });
+
+            if(!putRes.ok) throw new Error("Failed to update products.json on GitHub.");
         }
 
         // --- SALES POPUPS & TIMER ---
@@ -796,6 +928,27 @@
 
         function renderAdminDashboard() {
             document.getElementById('statTotalProfit').innerText = `Rs. ${orders.reduce((sum, o) => o.status !== 'Cancelled' ? sum + o.profit : sum, 0).toLocaleString()}`;
+            
+            // Render Products in Admin Dashboard for easy management, editing and deletion
+            const adminProdTable = document.getElementById('adminProductsTableBody');
+            adminProdTable.innerHTML = products.length === 0 ? `<tr><td colspan="4" class="p-6 text-center text-slate-500">No products uploaded yet.</td></tr>` : '';
+            document.getElementById('adminProdCountBadge').innerText = `${products.length} Products`;
+            
+            products.forEach(p => {
+                adminProdTable.innerHTML += `
+                    <tr class="hover:bg-vibe-border/40">
+                        <td class="p-3 font-bold text-white">${p.title}</td>
+                        <td class="p-3 text-slate-400">${p.category}</td>
+                        <td class="p-3 font-mono text-white">Rs. ${p.price.toLocaleString()}</td>
+                        <td class="p-3 text-center space-x-2">
+                            <button onclick="openEditProductModal('${p.id}')" class="bg-blue-600 hover:bg-blue-500 text-white px-2.5 py-1 rounded text-xs font-bold">Edit</button>
+                            <button onclick="deleteProduct('${p.id}')" class="bg-rose-600 hover:bg-rose-500 text-white px-2.5 py-1 rounded text-xs font-bold">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            // Render Orders
             const tbody = document.getElementById('ordersTableBody');
             tbody.innerHTML = orders.length === 0 ? `<tr><td colspan="6" class="p-6 text-center text-slate-500">No orders received yet.</td></tr>` : '';
             orders.slice().reverse().forEach(o => {
