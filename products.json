@@ -15,18 +15,33 @@
     "active": true
   },
   {
-    "id": "prod-1792851626733",
-    "title": "trthyt",
-    "category": "Home & Kitchen",
-    "price": 44864,
-    "costPrice": 55555,
+    "id": "prod-1792588573702",
+    "title": "Instant Electric Water Heater Tap & Smart LED Temperature Display",
+    "category": "Trending Gadgets",
+    "price": 6499,
+    "costPrice": 3610,
     "mediaList": [
       {
-        "url": "https://mayanumer239-ops.github.io/vibeshop/media-1792851624361-0-WhatsApp-Image-2026-10-19-at-4.53.53-PM.jpeg",
+        "url": "https://mayanumer239-ops.github.io/vibeshop/media-1792588542191-0-WhatsApp-Video-2026-10-19-at-4.53.56-PM.mp4",
+        "type": "video"
+      }
+    ],
+    "description": "⚡ 3-Second Fast Heating: Built-in high-efficiency heating element provides warm water instantly with no waiting time.\n\n🌡️ Digital Temperature Display: Bright LED screen displays the real-time water temperature for safe and easy monitoring.\n\n🔄 360° Swivel Spout: Flexible 360-degree rotating pipe lets you easily wash dishes, fruits, or vegetables from any angle.\n\n💧 Dual Hot & Cold Controls: Smooth single-lever handle allows effortless switching between hot and cold water.\n\n🛡️ Built-in Safety Protections: Designed with hydro-electric isolation technology, anti-overheating protection, and IPX4 waterproof insulation to prevent any electrical leakage.\n\n🛠️ Easy DIY Installation: Fits standard kitchen and bathroom sink fittings without needing complex plumbing work.",
+    "active": true
+  },
+  {
+    "id": "prod-1792590352824",
+    "title": "fvfsevr",
+    "category": "Home & Kitchen",
+    "price": 36,
+    "costPrice": 256368,
+    "mediaList": [
+      {
+        "url": "https://mayanumer239-ops.github.io/vibeshop/media-1792590349169-0-WhatsApp-Image-2026-10-19-at-4.53.53-PM-(2).jpeg",
         "type": "image"
       }
     ],
-    "description": "jykyukjy",
+    "description": "jykjyukiu",
     "active": true
   }
 ]
