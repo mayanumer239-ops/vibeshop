@@ -43,5 +43,20 @@
     ],
     "description": "jykjyukiu",
     "active": true
+  },
+  {
+    "id": "prod-1792851626733",
+    "title": "trthyt",
+    "category": "Home & Kitchen",
+    "price": 44864,
+    "costPrice": 55555,
+    "mediaList": [
+      {
+        "url": "https://mayanumer239-ops.github.io/vibeshop/media-1792851624361-0-WhatsApp-Image-2026-10-19-at-4.53.53-PM.jpeg",
+        "type": "image"
+      }
+    ],
+    "description": "jykyukjy",
+    "active": true
   }
 ]
