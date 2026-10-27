@@ -108,7 +108,7 @@
                             ELEVATE YOUR <br><span class="text-slate-400">DAILY VIBE</span>
                         </h1>
                         <p class="text-slate-400 text-xs sm:text-base leading-relaxed mb-5 font-normal">
-                            Top Trending Tech, Home Gadgets & Accessories in Pakistan.
+                            Top Trending Tech, Home Gadgets & Accessories in Pakistan[cite: 5].
                         </p>
                         <!-- Search Bar -->
                         <div class="relative max-w-md">
@@ -119,18 +119,59 @@
                 </div>
             </div>
 
+            <!-- Products Grid Section -->
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
+                <h2 class="text-xl sm:text-2xl font-black text-white uppercase mb-6 flex items-center gap-2">
+                    <i class="fa-solid fa-fire text-amber-400"></i> Trending Products
+                </h2>
                 <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"></div>
+            </div>
+
+            <!-- HOME PAGE CUSTOMER REVIEWS SECTION -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 border-t border-vibe-border">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <span class="text-amber-400 font-bold text-[10px] uppercase tracking-widest">Testimonials</span>
+                        <h2 class="text-xl sm:text-2xl font-black text-white uppercase">What Our Customers Say</h2>
+                    </div>
+                    <button onclick="openAddHomeReviewModal()" class="bg-vibe-card border border-vibe-border hover:bg-zinc-800 text-white text-xs font-bold uppercase px-3.5 py-2 rounded-xl transition">
+                        + Add Review
+                    </button>
+                </div>
+                <div id="homeReviewsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Default Reviews -->
+                    <div class="bg-vibe-card p-4 rounded-2xl border border-vibe-border">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="font-bold text-white text-xs">Usman Ghani (Lahore)</span>
+                            <span class="text-amber-400 text-xs">⭐⭐⭐⭐⭐</span>
+                        </div>
+                        <p class="text-slate-400 text-xs">Instant water heater tap mangwaya tha, quality zabardast hai aur delivery bhi time par mil gayi!</p>
+                    </div>
+                    <div class="bg-vibe-card p-4 rounded-2xl border border-vibe-border">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="font-bold text-white text-xs">Bilal Khan (Karachi)</span>
+                            <span class="text-amber-400 text-xs">⭐⭐⭐⭐⭐</span>
+                        </div>
+                        <p class="text-slate-400 text-xs">Open parcel inspection allow thi, bohot hi honest service hai VibeShop ki. Highly recommended!</p>
+                    </div>
+                    <div class="bg-vibe-card p-4 rounded-2xl border border-vibe-border">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="font-bold text-white text-xs">Ayesha Malik (Islamabad)</span>
+                            <span class="text-amber-400 text-xs">⭐⭐⭐⭐⭐</span>
+                        </div>
+                        <p class="text-slate-400 text-xs">Floating magnetic lamp order kiya tha, room ki look hi badal di. Amazing product!</p>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <!-- VIEW 2: PRODUCT DETAIL PAGE + REVIEWS -->
+        <!-- VIEW 2: PRODUCT DETAIL PAGE -->
         <section id="productDetailView" class="hidden py-6 sm:py-12 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <button onclick="openStoreView()" class="mb-4 sm:mb-6 inline-flex items-center gap-2 bg-vibe-card border border-vibe-border text-slate-300 hover:text-white px-3.5 py-2 rounded-xl text-xs font-bold transition">
                 <i class="fa-solid fa-arrow-left"></i> Back to Store
             </button>
 
-            <div class="bg-vibe-card border border-vibe-border rounded-3xl p-5 sm:p-10 grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10 shadow-2xl mb-8">
+            <div class="bg-vibe-card border border-vibe-border rounded-3xl p-5 sm:p-10 grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10 shadow-2xl">
                 <div>
                     <div id="detailMediaContainer" class="aspect-square bg-black rounded-2xl overflow-hidden border border-vibe-border relative flex items-center justify-center mb-3">
                         <img id="detailMainImg" src="" alt="Product" class="w-full h-full object-cover">
@@ -164,38 +205,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- REVIEWS SECTION -->
-            <div class="bg-vibe-card border border-vibe-border rounded-3xl p-5 sm:p-8 shadow-xl">
-                <h3 class="text-lg font-black text-white uppercase mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-star text-amber-400"></i> Customer Reviews & Ratings
-                </h3>
-                
-                <div class="space-y-4 mb-6" id="reviewsContainer">
-                    <div class="bg-black p-4 rounded-2xl border border-vibe-border">
-                        <div class="flex justify-between items-center mb-1">
-                            <span class="font-bold text-white text-xs">Ahmad Raza (Verified Buyer)</span>
-                            <span class="text-amber-400 text-xs">⭐⭐⭐⭐⭐</span>
-                        </div>
-                        <p class="text-slate-400 text-xs">Bohot hi kamal ki quality hai! Fast delivery aur parcel open karke check bhi kiya. Highly recommended!</p>
-                    </div>
-                </div>
-
-                <!-- ADD REVIEW FORM -->
-                <form onsubmit="handleAddReview(event)" class="bg-black p-4 rounded-2xl border border-vibe-border space-y-3 text-xs">
-                    <h4 class="font-bold text-white uppercase">Write a Review</h4>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <input type="text" id="revName" required placeholder="Your Name" class="bg-vibe-card border border-vibe-border rounded-xl p-2.5 text-white outline-none">
-                        <select id="revRating" class="bg-vibe-card border border-vibe-border rounded-xl p-2.5 text-white outline-none">
-                            <option value="5">⭐⭐⭐⭐⭐ (5 Stars)</option>
-                            <option value="4">⭐⭐⭐⭐ (4 Stars)</option>
-                            <option value="3">⭐⭐⭐ (3 Stars)</option>
-                        </select>
-                    </div>
-                    <textarea id="revComment" required rows="2" placeholder="Write your experience..." class="w-full bg-vibe-card border border-vibe-border rounded-xl p-2.5 text-white outline-none"></textarea>
-                    <button type="submit" class="bg-white text-black font-extrabold uppercase px-4 py-2.5 rounded-xl">Submit Review</button>
-                </form>
             </div>
         </section>
 
@@ -241,7 +250,7 @@
                     </div>
                 </div>
 
-                <!-- ADMIN PRODUCTS MANAGEMENT TABLE -->
+                <!-- ADMIN PRODUCTS MANAGEMENT TABLE (EDIT & DELETE) -->
                 <div class="bg-vibe-card rounded-2xl border border-vibe-border overflow-hidden mb-8 shadow-xl">
                     <div class="p-4 border-b border-vibe-border flex items-center justify-between">
                         <h3 class="font-black text-white text-base uppercase">Manage Store Products</h3>
@@ -300,7 +309,7 @@
         </div>
     </div>
 
-    <!-- FLOATING WHATSAPP BUTTON (BOTTOM-RIGHT) -->
+    <!-- FLOATING WHATSAPP BUTTON (BOTTOM RIGHT) -->
     <a href="https://wa.me/923114690687" target="_blank" class="fixed bottom-6 right-6 z-50 bg-emerald-500 hover:bg-emerald-600 text-white w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center text-xl sm:text-2xl shadow-2xl transition-transform hover:scale-110 border-2 border-white">
         <i class="fa-brands fa-whatsapp"></i>
     </a>
@@ -329,6 +338,23 @@
                 </div>
             </div>
             <a href="https://wa.me/923114690687" target="_blank" class="w-full bg-emerald-500 text-white font-extrabold text-xs uppercase py-3 rounded-xl text-center block">Chat on WhatsApp Now</a>
+        </div>
+    </div>
+
+    <!-- ADD HOME REVIEW MODAL -->
+    <div id="addHomeReviewModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-vibe-card border border-vibe-border w-full max-w-md rounded-3xl p-5 relative shadow-2xl space-y-3 text-xs">
+            <button onclick="closeAddHomeReviewModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <h3 class="text-base font-extrabold text-white uppercase">Add Customer Review</h3>
+            <form onsubmit="handleHomeReviewSubmit(event)" class="space-y-3">
+                <input type="text" id="homeRevName" required placeholder="Your Name & City (e.g. Ali, Lahore)" class="w-full bg-black border border-vibe-border rounded-xl p-2.5 text-white outline-none">
+                <select id="homeRevStars" class="w-full bg-black border border-vibe-border rounded-xl p-2.5 text-white outline-none">
+                    <option value="⭐⭐⭐⭐⭐">⭐⭐⭐⭐⭐ (5 Stars)</option>
+                    <option value="⭐⭐⭐⭐">⭐⭐⭐⭐ (4 Stars)</option>
+                </select>
+                <textarea id="homeRevText" required rows="3" placeholder="Write your review..." class="w-full bg-black border border-vibe-border rounded-xl p-2.5 text-white outline-none"></textarea>
+                <button type="submit" class="w-full bg-white text-black font-extrabold uppercase py-3 rounded-xl">Post Review</button>
+            </form>
         </div>
     </div>
 
@@ -391,7 +417,7 @@
         </div>
     </div>
 
-    <!-- ADD PRODUCT MODAL (MULTIPLE FILES + GITHUB SYNC) -->
+    <!-- ADD PRODUCT MODAL (MULTIPLE FILES SUPPORT) -->
     <div id="addProductModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-vibe-card border border-vibe-border w-full max-w-lg rounded-3xl p-5 relative shadow-2xl">
             <div class="flex items-center justify-between mb-3 border-b border-vibe-border pb-2.5">
@@ -400,7 +426,7 @@
             </div>
             <form onsubmit="handleAddNewProduct(event)" class="space-y-3 text-xs">
                 <div>
-                    <label class="block font-semibold text-slate-300 mb-1">GitHub Personal Access Token</label>
+                    <label class="block font-semibold text-slate-300 mb-1">GitHub Personal Access Token (Optional)</label>
                     <input type="password" id="ghToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" class="w-full bg-black border border-vibe-border text-amber-400 font-mono rounded-xl p-2.5 outline-none">
                 </div>
                 <div>
@@ -435,7 +461,7 @@
                     <label class="block font-semibold text-slate-300 mb-1">Description</label>
                     <textarea id="newProdDesc" rows="3" required class="w-full bg-black border border-vibe-border text-white rounded-xl p-2.5 outline-none"></textarea>
                 </div>
-                <button type="submit" id="saveProdBtn" class="w-full bg-white hover:bg-slate-200 text-black font-extrabold uppercase py-3 rounded-xl transition">Upload All & Sync to GitHub</button>
+                <button type="submit" id="saveProdBtn" class="w-full bg-white hover:bg-slate-200 text-black font-extrabold uppercase py-3 rounded-xl transition">Save & Add Product</button>
             </form>
         </div>
     </div>
@@ -449,10 +475,6 @@
             </div>
             <form onsubmit="handleUpdateProduct(event)" class="space-y-3 text-xs">
                 <input type="hidden" id="editProdId">
-                <div>
-                    <label class="block font-semibold text-slate-300 mb-1">GitHub Personal Access Token</label>
-                    <input type="password" id="editGhToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" class="w-full bg-black border border-vibe-border text-amber-400 font-mono rounded-xl p-2.5 outline-none">
-                </div>
                 <div>
                     <label class="block font-semibold text-slate-300 mb-1">Product Title</label>
                     <input type="text" id="editProdTitle" required class="w-full bg-black border border-vibe-border text-white rounded-xl p-2.5 outline-none">
@@ -471,7 +493,7 @@
                     <label class="block font-semibold text-slate-300 mb-1">Description</label>
                     <textarea id="editProdDesc" rows="3" required class="w-full bg-black border border-vibe-border text-white rounded-xl p-2.5 outline-none"></textarea>
                 </div>
-                <button type="submit" id="updateProdBtn" class="w-full bg-white hover:bg-slate-200 text-black font-extrabold uppercase py-3 rounded-xl transition">Save Changes & Sync</button>
+                <button type="submit" id="updateProdBtn" class="w-full bg-white hover:bg-slate-200 text-black font-extrabold uppercase py-3 rounded-xl transition">Save Changes</button>
             </form>
         </div>
     </div>
@@ -510,31 +532,28 @@
         const ADMIN_PASS = 'umero2391.';
         const DELIVERY_FEE = 250;
 
-        const GH_USER = 'mayanumer239-ops';
-        const GH_REPO = 'vibeshop';
-        const GH_FILE_PATH = 'products.json';
+        let products = JSON.parse(localStorage.getItem('vibe_products')) || [
+            {
+                id: 'prod-1',
+                title: 'Instant Electric Water Heater Tap (3000W)',
+                category: 'Home & Kitchen',
+                price: 3499,
+                costPrice: 2400,
+                description: 'Get hot water in 3 seconds! Digital LED temperature display with 360-degree swivel spout.',
+                mediaList: [{ url: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=600', type: 'image' }]
+            }
+        ];
 
-        let products = [];
-        let orders = [];
+        let orders = JSON.parse(localStorage.getItem('vibeshop_orders')) || [];
+        let homeReviews = JSON.parse(localStorage.getItem('vibeshop_reviews')) || [];
         let cart = [];
         let currentUser = null;
         let selectedProductForDetail = null;
         let checkoutItem = null;
 
-        async function loadData() {
-            try {
-                const response = await fetch('products.json?v=' + Date.now());
-                if (response.ok) {
-                    products = await response.json();
-                } else {
-                    products = [];
-                }
-                const savedOrders = localStorage.getItem('vibeshop_orders');
-                orders = savedOrders ? JSON.parse(savedOrders) : [];
-            } catch (e) {
-                products = [];
-            }
+        function loadData() {
             renderStoreGrid();
+            renderHomeReviews();
             updateCartBadge();
             if(currentUser && currentUser.isAdmin) renderAdminDashboard();
         }
@@ -547,7 +566,7 @@
             const listToRender = filteredProducts !== null ? filteredProducts : products;
 
             if(listToRender.length === 0) {
-                grid.innerHTML = `<div class="col-span-full py-16 text-center text-slate-500"><p class="text-xs uppercase font-bold">No products found.</p></div>`;
+                grid.innerHTML = `<div class="col-span-full py-16 text-center text-slate-500"><p class="text-xs uppercase font-bold">No products found. Add products from Admin panel!</p></div>`;
                 return;
             }
 
@@ -640,24 +659,63 @@
             }
         }
 
-        function handleAddReview(e) {
-            e.preventDefault();
-            const name = document.getElementById('revName').value;
-            const rating = document.getElementById('revRating').value;
-            const comment = document.getElementById('revComment').value;
-
-            const stars = '⭐'.repeat(parseInt(rating));
-            const revBox = document.getElementById('reviewsContainer');
-            revBox.innerHTML += `
-                <div class="bg-black p-4 rounded-2xl border border-vibe-border">
-                    <div class="flex justify-between items-center mb-1">
-                        <span class="font-bold text-white text-xs">${name} (Verified Buyer)</span>
-                        <span class="text-amber-400 text-xs">${stars}</span>
+        function renderHomeReviews() {
+            const container = document.getElementById('homeReviewsGrid');
+            if(!container) return;
+            
+            let defaultReviewsHTML = `
+                <div class="bg-vibe-card p-4 rounded-2xl border border-vibe-border">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="font-bold text-white text-xs">Usman Ghani (Lahore)</span>
+                        <span class="text-amber-400 text-xs">⭐⭐⭐⭐⭐</span>
                     </div>
-                    <p class="text-slate-400 text-xs">${comment}</p>
+                    <p class="text-slate-400 text-xs">Instant water heater tap mangwaya tha, quality zabardast hai aur delivery bhi time par mil gayi!</p>
+                </div>
+                <div class="bg-vibe-card p-4 rounded-2xl border border-vibe-border">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="font-bold text-white text-xs">Bilal Khan (Karachi)</span>
+                        <span class="text-amber-400 text-xs">⭐⭐⭐⭐⭐</span>
+                    </div>
+                    <p class="text-slate-400 text-xs">Open parcel inspection allow thi, bohot hi honest service hai VibeShop ki. Highly recommended!</p>
+                </div>
+                <div class="bg-vibe-card p-4 rounded-2xl border border-vibe-border">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="font-bold text-white text-xs">Ayesha Malik (Islamabad)</span>
+                        <span class="text-amber-400 text-xs">⭐⭐⭐⭐⭐</span>
+                    </div>
+                    <p class="text-slate-400 text-xs">Floating magnetic lamp order kiya tha, room ki look hi badal di. Amazing product!</p>
                 </div>
             `;
-            alert("Review submitted successfully!");
+
+            homeReviews.forEach(r => {
+                defaultReviewsHTML += `
+                    <div class="bg-vibe-card p-4 rounded-2xl border border-vibe-border">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="font-bold text-white text-xs">${r.name}</span>
+                            <span class="text-amber-400 text-xs">${r.stars}</span>
+                        </div>
+                        <p class="text-slate-400 text-xs">${r.text}</p>
+                    </div>
+                `;
+            });
+            container.innerHTML = defaultReviewsHTML;
+        }
+
+        function openAddHomeReviewModal() { document.getElementById('addHomeReviewModal').classList.remove('hidden'); }
+        function closeAddHomeReviewModal() { document.getElementById('addHomeReviewModal').classList.add('hidden'); }
+
+        function handleHomeReviewSubmit(e) {
+            e.preventDefault();
+            const newRev = {
+                name: document.getElementById('homeRevName').value,
+                stars: document.getElementById('homeRevStars').value,
+                text: document.getElementById('homeRevText').value
+            };
+            homeReviews.push(newRev);
+            localStorage.setItem('vibeshop_reviews', JSON.stringify(homeReviews));
+            renderHomeReviews();
+            closeAddHomeReviewModal();
+            alert("Review added successfully!");
             e.target.reset();
         }
 
@@ -793,52 +851,32 @@
         function openContactModal() { document.getElementById('contactModal').classList.remove('hidden'); }
         function closeContactModal() { document.getElementById('contactModal').classList.add('hidden'); }
 
-        // BASE64 & GITHUB SYNC UTILS
-        function toBase64(file) {
+        // FILE READER UTILS FOR MULTIPLE FILES
+        function readFileAsDataURL(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = () => resolve(reader.result.split(',')[1]);
+                reader.onload = () => resolve(reader.result);
                 reader.onerror = error => reject(error);
+                reader.readAsDataURL(file);
             });
         }
 
         async function handleAddNewProduct(e) {
             e.preventDefault();
-            const token = document.getElementById('ghToken').value.trim();
-            if(!token) { alert("Please enter your GitHub Personal Access Token!"); return; }
-
             const fileInput = document.getElementById('newProdFiles');
             if(!fileInput.files || fileInput.files.length === 0) { alert("Please select files!"); return; }
 
             const btn = document.getElementById('saveProdBtn');
-            btn.innerText = "Uploading files & Syncing...";
+            btn.innerText = "Processing files...";
             btn.disabled = true;
 
             try {
                 let mediaList = [];
                 for (let i = 0; i < fileInput.files.length; i++) {
                     const file = fileInput.files[i];
-                    const fileBase64 = await toBase64(file);
-                    const fileName = 'media-' + Date.now() + '-' + i + '-' + file.name.replace(/\s+/g, '-');
+                    const base64Url = await readFileAsDataURL(file);
                     const fileType = file.type.startsWith('video/') ? 'video' : 'image';
-
-                    const uploadRes = await fetch(`https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/${fileName}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Authorization': `token ${token}`,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            message: "Upload multiple product media via Admin Panel",
-                            content: fileBase64
-                        })
-                    });
-
-                    if(uploadRes.ok) {
-                        const fileUrl = `https://${GH_USER}.github.io/${GH_REPO}/${fileName}`;
-                        mediaList.push({ url: fileUrl, type: fileType });
-                    }
+                    mediaList.push({ url: base64Url, type: fileType });
                 }
 
                 const newProd = {
@@ -853,26 +891,24 @@
                 };
 
                 products.push(newProd);
-                await syncProductsToGitHub(token, "Add new product with multiple media files");
+                localStorage.setItem('vibe_products', JSON.stringify(products));
 
-                alert("All files successfully uploaded and product synced globally!");
+                alert("Product added successfully!");
                 closeAddProductModal();
                 loadData();
+                e.target.reset();
 
             } catch(err) {
                 console.error(err);
-                alert("Error during upload: " + err.message);
+                alert("Error: " + err.message);
             }
 
-            btn.innerText = "Upload All & Sync to GitHub";
+            btn.innerText = "Save & Add Product";
             btn.disabled = false;
         }
 
         async function handleUpdateProduct(e) {
             e.preventDefault();
-            const token = document.getElementById('editGhToken').value.trim();
-            if(!token) { alert("Please enter your GitHub Personal Access Token!"); return; }
-
             const id = document.getElementById('editProdId').value;
             const p = products.find(item => item.id === id);
             if(!p) return;
@@ -882,59 +918,18 @@
             p.costPrice = parseFloat(document.getElementById('editProdCost').value);
             p.description = document.getElementById('editProdDesc').value;
 
-            const btn = document.getElementById('updateProdBtn');
-            btn.innerText = "Updating...";
-            btn.disabled = true;
-
-            try {
-                await syncProductsToGitHub(token, "Update product details");
-                alert("Product updated & synced successfully!");
-                closeEditProductModal();
-                loadData();
-            } catch(err) {
-                alert("Error updating product: " + err.message);
-            }
-            btn.innerText = "Save Changes & Sync";
-            btn.disabled = false;
+            localStorage.setItem('vibe_products', JSON.stringify(products));
+            alert("Product updated successfully!");
+            closeEditProductModal();
+            loadData();
         }
 
-        async function deleteProduct(id) {
-            const token = prompt("Enter your GitHub Personal Access Token to confirm deletion:");
-            if(!token) return;
-
+        function deleteProduct(id) {
+            if(!confirm("Kya aap is product ko delete karna chahte hain?")) return;
             products = products.filter(p => p.id !== id);
-            try {
-                await syncProductsToGitHub(token.trim(), "Delete product");
-                alert("Product deleted and GitHub synced successfully!");
-                loadData();
-            } catch(err) {
-                alert("Error deleting product: " + err.message);
-                loadData();
-            }
-        }
-
-        async function syncProductsToGitHub(token, commitMsg) {
-            const getRes = await fetch(`https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/${GH_FILE_PATH}`, {
-                headers: { 'Authorization': `token ${token}` }
-            });
-            const fileData = await getRes.json();
-            const sha = fileData.sha;
-
-            const updatedContent = btoa(unescape(encodeURIComponent(JSON.stringify(products, null, 2))));
-            const putRes = await fetch(`https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/${GH_FILE_PATH}`, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `token ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    message: commitMsg,
-                    content: updatedContent,
-                    sha: sha
-                })
-            });
-
-            if(!putRes.ok) throw new Error("Failed to update products.json on GitHub.");
+            localStorage.setItem('vibe_products', JSON.stringify(products));
+            alert("Product deleted!");
+            loadData();
         }
 
         function startSalesPopups() {
