@@ -108,7 +108,7 @@
                             ELEVATE YOUR <br><span class="text-slate-400">DAILY VIBE</span>
                         </h1>
                         <p class="text-slate-400 text-xs sm:text-base leading-relaxed mb-5 font-normal">
-                            Top Trending Tech, Home Gadgets & Accessories in Pakistan[cite: 5].
+                            Top Trending Tech, Home Gadgets & Accessories in Pakistan.
                         </p>
                         <!-- Search Bar -->
                         <div class="relative max-w-md">
@@ -273,7 +273,7 @@
                 <!-- ORDERS TABLE -->
                 <div class="bg-vibe-card rounded-2xl border border-vibe-border overflow-hidden mb-8 shadow-xl">
                     <div class="p-4 border-b border-vibe-border flex items-center justify-between">
-                        <h3 class="font-black text-white text-base uppercase">Customer Orders (Synced Online)</h3>
+                        <h3 class="font-black text-white text-base uppercase">Customer Orders (WhatsApp Notification Active)</h3>
                         <span id="orderCountBadge" class="text-[10px] font-bold bg-white text-black px-2.5 py-1 rounded-full uppercase">0 Orders</span>
                     </div>
                     <div class="overflow-x-auto custom-scrollbar">
@@ -409,7 +409,7 @@
                     <div class="flex justify-between"><span>Delivery:</span> <span class="font-bold text-white">Rs. 250</span></div>
                     <div class="flex justify-between text-sm font-black text-white pt-2 border-t border-vibe-border"><span>Total:</span> <span id="checkoutGrandTotal">Rs. 250</span></div>
                 </div>
-                <button type="submit" class="w-full bg-white text-black font-extrabold uppercase py-3.5 rounded-xl shadow">Confirm Order</button>
+                <button type="submit" class="w-full bg-white text-black font-extrabold uppercase py-3.5 rounded-xl shadow">Confirm Order & Notify WhatsApp</button>
             </form>
         </div>
     </div>
@@ -519,16 +519,12 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC WITH GITHUB GLOBAL SYNC -->
+    <!-- JAVASCRIPT LOGIC WITH WHATSAPP INSTANT NOTIFICATION -->
     <script>
         const ADMIN_EMAIL = 'mayanumer239@gmail.com';
         const ADMIN_PASS = 'umero2391.';
         const DELIVERY_FEE = 250;
-        
-        // GitHub Repository Config for Global Sync
-        const GH_OWNER = 'mayanumer239-ops';
-        const GH_REPO = 'vibeshop';
-        const GH_ORDERS_PATH = 'orders.json';
+        const MERCHANT_WHATSAPP = '923114690687'; // Aapka WhatsApp number
 
         let products = JSON.parse(localStorage.getItem('vibe_products')) || [
             {
@@ -542,36 +538,18 @@
             }
         ];
 
-        let orders = [];
+        let orders = JSON.parse(localStorage.getItem('vibeshop_orders')) || [];
         let homeReviews = JSON.parse(localStorage.getItem('vibeshop_reviews')) || [];
         let cart = [];
         let currentUser = null;
         let selectedProductForDetail = null;
         let checkoutItem = null;
 
-        async function loadData() {
+        function loadData() {
             renderStoreGrid();
             renderHomeReviews();
             updateCartBadge();
-            await fetchGlobalOrders();
             if(currentUser && currentUser.isAdmin) renderAdminDashboard();
-        }
-
-        // Fetch Orders from GitHub Repository (`orders.json`)
-        async function fetchGlobalOrders() {
-            try {
-                const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_ORDERS_PATH}?t=${Date.now()}`);
-                if(res.ok) {
-                    const data = await res.json();
-                    const decoded = JSON.parse(atob(data.content));
-                    if(Array.isArray(decoded)) {
-                        orders = decoded;
-                    }
-                }
-            } catch(e) {
-                console.log("Using local orders fallback");
-                orders = JSON.parse(localStorage.getItem('vibeshop_orders')) || [];
-            }
         }
 
         function renderStoreGrid(filteredProducts = null) {
@@ -755,7 +733,7 @@
         function orderViaWhatsApp() {
             if(!selectedProductForDetail) return;
             const text = `Hi VibeShop! I want to order:\n\n*Item:* ${selectedProductForDetail.title}\n*Price:* Rs. ${selectedProductForDetail.price}`;
-            window.open(`https://wa.me/923114690687?text=${encodeURIComponent(text)}`, '_blank');
+            window.open(`https://wa.me/${MERCHANT_WHATSAPP}?text=${encodeURIComponent(text)}`, '_blank');
         }
 
         function toggleCartDrawer() { document.getElementById('cartDrawer').classList.toggle('hidden'); renderCartItems(); }
@@ -819,37 +797,49 @@
         }
         function closeCheckoutModal() { document.getElementById('checkoutModal').classList.add('hidden'); }
 
-        async function handlePlaceOrder(e) {
+        function handlePlaceOrder(e) {
             e.preventDefault();
             let itemsToOrder = checkoutItem ? [checkoutItem] : [...cart];
             let subtotal = itemsToOrder.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            let grandTotal = subtotal + (subtotal >= 5000 ? 0 : DELIVERY_FEE);
             let totalProfit = itemsToOrder.reduce((sum, item) => sum + ((item.price - (item.costPrice || 0)) * item.qty), 0);
+
+            const cName = document.getElementById('custName').value;
+            const cPhone = document.getElementById('custPhone').value;
+            const cCity = document.getElementById('custCity').value;
+            const cAddress = document.getElementById('custAddress').value;
+            const prodListStr = itemsToOrder.map(i => `${i.title} (${i.qty}x)`).join(', ');
 
             const newOrder = {
                 id: 'ord-' + Date.now(),
                 ref: '#VS-' + Math.floor(1000 + Math.random() * 9000),
                 date: new Date().toLocaleDateString(),
-                custName: document.getElementById('custName').value,
-                custPhone: document.getElementById('custPhone').value,
-                custCity: document.getElementById('custCity').value,
-                custAddress: document.getElementById('custAddress').value,
-                productTitle: itemsToOrder.map(i => `${i.title} (${i.qty}x)`).join(', '),
-                price: subtotal + (subtotal >= 5000 ? 0 : DELIVERY_FEE),
+                custName: cName,
+                custPhone: cPhone,
+                custCity: cCity,
+                custAddress: cAddress,
+                productTitle: prodListStr,
+                price: grandTotal,
                 profit: totalProfit,
                 status: 'Pending Markaz'
             };
 
             orders.push(newOrder);
-            
-            // Save locally and in localStorage backup
             localStorage.setItem('vibeshop_orders', JSON.stringify(orders));
 
             if(!checkoutItem) cart = [];
             checkoutItem = null;
             updateCartBadge();
             closeCheckoutModal();
+
+            // WhatsApp Instant Message Trigger (Background or new tab to notify merchant)
+            const waMessage = `🚨 *NEW VIBESHOP ORDER!* 🚨\n\n*Order Ref:* ${newOrder.ref}\n*Customer Name:* ${cName}\n*Phone:* ${cPhone}\n*City:* ${cCity}\n*Address:* ${cAddress}\n\n*Products:* ${prodListStr}\n*Total Bill:* Rs. ${grandTotal}\n\n*Status:* Pending`;
+            const waUrl = `https://wa.me/${MERCHANT_WHATSAPP}?text=${encodeURIComponent(waMessage)}`;
             
-            alert(`Order Placed Successfully! Your Reference ID is ${newOrder.ref}.`);
+            // Open WhatsApp notification link
+            window.open(waUrl, '_blank');
+
+            alert(`Order Placed Successfully! Reference: ${newOrder.ref}\nWhatsApp notification window opened.`);
             openStoreView();
         }
 
@@ -1018,16 +1008,15 @@
             document.getElementById('productDetailView').classList.add('hidden');
             document.getElementById('storeView').classList.remove('hidden');
         }
-        async function openAdminView() {
+        function openAdminView() {
             document.getElementById('storeView').classList.add('hidden');
             document.getElementById('productDetailView').classList.add('hidden');
             document.getElementById('adminView').classList.remove('hidden');
-            await fetchGlobalOrders();
             renderAdminDashboard();
         }
 
         function renderAdminDashboard() {
-            document.getElementById('statTotalProfit').innerText = `Rs. ${orders.reduce((sum, o) => o.status !== 'Cancelled' ? sum + (o.profit || 0) : sum, 0).toLocaleString()}`;
+            document.getElementById('statTotalProfit').innerText = `Rs. ${orders.reduce((sum, o) => o.status !== 'Cancelled' ? sum + o.profit : sum, 0).toLocaleString()}`;
             
             const adminProdTable = document.getElementById('adminProductsTableBody');
             adminProdTable.innerHTML = products.length === 0 ? `<tr><td colspan="4" class="p-6 text-center text-slate-500">No products uploaded yet.</td></tr>` : '';
