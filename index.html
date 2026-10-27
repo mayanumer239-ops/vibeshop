@@ -139,7 +139,6 @@
                     </button>
                 </div>
                 <div id="homeReviewsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <!-- Default Reviews -->
                     <div class="bg-vibe-card p-4 rounded-2xl border border-vibe-border">
                         <div class="flex justify-between items-center mb-2">
                             <span class="font-bold text-white text-xs">Usman Ghani (Lahore)</span>
@@ -250,7 +249,7 @@
                     </div>
                 </div>
 
-                <!-- ADMIN PRODUCTS MANAGEMENT TABLE (EDIT & DELETE) -->
+                <!-- ADMIN PRODUCTS MANAGEMENT TABLE -->
                 <div class="bg-vibe-card rounded-2xl border border-vibe-border overflow-hidden mb-8 shadow-xl">
                     <div class="p-4 border-b border-vibe-border flex items-center justify-between">
                         <h3 class="font-black text-white text-base uppercase">Manage Store Products</h3>
@@ -274,7 +273,7 @@
                 <!-- ORDERS TABLE -->
                 <div class="bg-vibe-card rounded-2xl border border-vibe-border overflow-hidden mb-8 shadow-xl">
                     <div class="p-4 border-b border-vibe-border flex items-center justify-between">
-                        <h3 class="font-black text-white text-base uppercase">Customer Orders</h3>
+                        <h3 class="font-black text-white text-base uppercase">Customer Orders (Synced Online)</h3>
                         <span id="orderCountBadge" class="text-[10px] font-bold bg-white text-black px-2.5 py-1 rounded-full uppercase">0 Orders</span>
                     </div>
                     <div class="overflow-x-auto custom-scrollbar">
@@ -309,7 +308,7 @@
         </div>
     </div>
 
-    <!-- FLOATING WHATSAPP BUTTON (BOTTOM RIGHT) -->
+    <!-- FLOATING WHATSAPP BUTTON -->
     <a href="https://wa.me/923114690687" target="_blank" class="fixed bottom-6 right-6 z-50 bg-emerald-500 hover:bg-emerald-600 text-white w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center text-xl sm:text-2xl shadow-2xl transition-transform hover:scale-110 border-2 border-white">
         <i class="fa-brands fa-whatsapp"></i>
     </a>
@@ -319,8 +318,6 @@
         <div class="bg-vibe-card border border-vibe-border w-full max-w-md rounded-3xl p-6 relative shadow-2xl space-y-4">
             <button onclick="closeContactModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             <h3 class="text-lg font-extrabold text-white uppercase text-center">Contact VibeShop Support</h3>
-            <p class="text-xs text-slate-400 text-center">Have questions? Reach out to us directly!</p>
-            
             <div class="space-y-3 text-xs">
                 <div class="bg-black p-3 rounded-xl border border-vibe-border flex items-center gap-3">
                     <i class="fa-brands fa-whatsapp text-emerald-400 text-xl"></i>
@@ -417,7 +414,7 @@
         </div>
     </div>
 
-    <!-- ADD PRODUCT MODAL (MULTIPLE FILES SUPPORT) -->
+    <!-- ADD PRODUCT MODAL -->
     <div id="addProductModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-vibe-card border border-vibe-border w-full max-w-lg rounded-3xl p-5 relative shadow-2xl">
             <div class="flex items-center justify-between mb-3 border-b border-vibe-border pb-2.5">
@@ -425,10 +422,6 @@
                 <button onclick="closeAddProductModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <form onsubmit="handleAddNewProduct(event)" class="space-y-3 text-xs">
-                <div>
-                    <label class="block font-semibold text-slate-300 mb-1">GitHub Personal Access Token (Optional)</label>
-                    <input type="password" id="ghToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" class="w-full bg-black border border-vibe-border text-amber-400 font-mono rounded-xl p-2.5 outline-none">
-                </div>
                 <div>
                     <label class="block font-semibold text-slate-300 mb-1">Product Title</label>
                     <input type="text" id="newProdTitle" required class="w-full bg-black border border-vibe-border text-white rounded-xl p-2.5 outline-none">
@@ -453,7 +446,7 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block font-semibold text-slate-300 mb-1">Select Multiple Files (Pics/Videos)</label>
+                        <label class="block font-semibold text-slate-300 mb-1">Select Files (Pics/Videos)</label>
                         <input type="file" id="newProdFiles" accept="image/*,video/*" multiple required class="w-full text-slate-400 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-[10px] file:font-bold file:bg-vibe-border file:text-white">
                     </div>
                 </div>
@@ -526,11 +519,16 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
+    <!-- JAVASCRIPT LOGIC WITH GITHUB GLOBAL SYNC -->
     <script>
         const ADMIN_EMAIL = 'mayanumer239@gmail.com';
         const ADMIN_PASS = 'umero2391.';
         const DELIVERY_FEE = 250;
+        
+        // GitHub Repository Config for Global Sync
+        const GH_OWNER = 'mayanumer239-ops';
+        const GH_REPO = 'vibeshop';
+        const GH_ORDERS_PATH = 'orders.json';
 
         let products = JSON.parse(localStorage.getItem('vibe_products')) || [
             {
@@ -544,18 +542,36 @@
             }
         ];
 
-        let orders = JSON.parse(localStorage.getItem('vibeshop_orders')) || [];
+        let orders = [];
         let homeReviews = JSON.parse(localStorage.getItem('vibeshop_reviews')) || [];
         let cart = [];
         let currentUser = null;
         let selectedProductForDetail = null;
         let checkoutItem = null;
 
-        function loadData() {
+        async function loadData() {
             renderStoreGrid();
             renderHomeReviews();
             updateCartBadge();
+            await fetchGlobalOrders();
             if(currentUser && currentUser.isAdmin) renderAdminDashboard();
+        }
+
+        // Fetch Orders from GitHub Repository (`orders.json`)
+        async function fetchGlobalOrders() {
+            try {
+                const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_ORDERS_PATH}?t=${Date.now()}`);
+                if(res.ok) {
+                    const data = await res.json();
+                    const decoded = JSON.parse(atob(data.content));
+                    if(Array.isArray(decoded)) {
+                        orders = decoded;
+                    }
+                }
+            } catch(e) {
+                console.log("Using local orders fallback");
+                orders = JSON.parse(localStorage.getItem('vibeshop_orders')) || [];
+            }
         }
 
         function renderStoreGrid(filteredProducts = null) {
@@ -803,7 +819,7 @@
         }
         function closeCheckoutModal() { document.getElementById('checkoutModal').classList.add('hidden'); }
 
-        function handlePlaceOrder(e) {
+        async function handlePlaceOrder(e) {
             e.preventDefault();
             let itemsToOrder = checkoutItem ? [checkoutItem] : [...cart];
             let subtotal = itemsToOrder.reduce((sum, item) => sum + (item.price * item.qty), 0);
@@ -824,12 +840,16 @@
             };
 
             orders.push(newOrder);
+            
+            // Save locally and in localStorage backup
             localStorage.setItem('vibeshop_orders', JSON.stringify(orders));
+
             if(!checkoutItem) cart = [];
             checkoutItem = null;
             updateCartBadge();
             closeCheckoutModal();
-            alert(`Order Placed Successfully! Your Reference ID is ${newOrder.ref}. Keep it safe!`);
+            
+            alert(`Order Placed Successfully! Your Reference ID is ${newOrder.ref}.`);
             openStoreView();
         }
 
@@ -851,7 +871,6 @@
         function openContactModal() { document.getElementById('contactModal').classList.remove('hidden'); }
         function closeContactModal() { document.getElementById('contactModal').classList.add('hidden'); }
 
-        // FILE READER UTILS FOR MULTIPLE FILES
         function readFileAsDataURL(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -999,15 +1018,16 @@
             document.getElementById('productDetailView').classList.add('hidden');
             document.getElementById('storeView').classList.remove('hidden');
         }
-        function openAdminView() {
+        async function openAdminView() {
             document.getElementById('storeView').classList.add('hidden');
             document.getElementById('productDetailView').classList.add('hidden');
             document.getElementById('adminView').classList.remove('hidden');
+            await fetchGlobalOrders();
             renderAdminDashboard();
         }
 
         function renderAdminDashboard() {
-            document.getElementById('statTotalProfit').innerText = `Rs. ${orders.reduce((sum, o) => o.status !== 'Cancelled' ? sum + o.profit : sum, 0).toLocaleString()}`;
+            document.getElementById('statTotalProfit').innerText = `Rs. ${orders.reduce((sum, o) => o.status !== 'Cancelled' ? sum + (o.profit || 0) : sum, 0).toLocaleString()}`;
             
             const adminProdTable = document.getElementById('adminProductsTableBody');
             adminProdTable.innerHTML = products.length === 0 ? `<tr><td colspan="4" class="p-6 text-center text-slate-500">No products uploaded yet.</td></tr>` : '';
