@@ -66,25 +66,25 @@
 
     <!-- MAIN NAVBAR -->
     <header class="sticky top-0 z-40 bg-vibe-black/90 backdrop-blur-md border-b border-vibe-border">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
             <div class="flex items-center space-x-2.5 cursor-pointer" onclick="openStoreView()">
-                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-white text-black flex items-center justify-center font-black text-xl sm:text-2xl tracking-tighter rounded-xl shadow-lg border border-slate-300">
+                <div class="w-9 h-9 sm:w-12 sm:h-12 bg-white text-black flex items-center justify-center font-black text-lg sm:text-2xl tracking-tighter rounded-xl shadow-lg border border-slate-300">
                     VS
                 </div>
                 <div>
-                    <span class="text-xl sm:text-2xl font-black tracking-widest uppercase text-white block leading-none">VIBE<span class="text-slate-400">SHOP</span></span>
-                    <span class="text-[9px] sm:text-[10px] font-bold tracking-[0.2em] text-slate-400 uppercase mt-0.5 block">YOUR TRUST</span>
+                    <span class="text-lg sm:text-2xl font-black tracking-widest uppercase text-white block leading-none">VIBE<span class="text-slate-400">SHOP</span></span>
+                    <span class="text-[8px] sm:text-[10px] font-bold tracking-[0.2em] text-slate-400 uppercase mt-0.5 block">YOUR TRUST</span>
                 </div>
             </div>
 
             <!-- Header Actions -->
-            <div class="flex items-center space-x-2.5">
+            <div class="flex items-center space-x-1.5 sm:space-x-2.5">
                 <button onclick="scrollToContact()" class="hidden sm:flex bg-vibe-card border border-vibe-border hover:bg-zinc-800 text-slate-200 text-xs font-bold uppercase px-3 py-2.5 rounded-xl transition items-center gap-1.5">
-                    <i class="fa-solid fa-envelope text-sky-400"></i> <span>Contact Us</span>
+                    <i class="fa-solid fa-envelope text-sky-400"></i> <span>Contact</span>
                 </button>
 
-                <button onclick="openTrackOrderModal()" class="hidden sm:flex bg-vibe-card border border-vibe-border hover:bg-zinc-800 text-slate-200 text-xs font-bold uppercase px-3 py-2.5 rounded-xl transition items-center gap-1.5">
-                    <i class="fa-solid fa-truck-fast text-emerald-400"></i> <span>Track Order</span>
+                <button onclick="openTrackOrderModal()" class="bg-vibe-card border border-vibe-border hover:bg-zinc-800 text-slate-200 text-[11px] sm:text-xs font-bold uppercase px-2.5 sm:px-3 py-2.5 rounded-xl transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-truck-fast text-emerald-400"></i> <span class="hidden xs:inline">Track</span>
                 </button>
 
                 <button onclick="toggleCartDrawer()" class="relative bg-vibe-card border border-vibe-border hover:bg-zinc-800 text-white p-2.5 sm:p-3 rounded-xl transition flex items-center justify-center">
@@ -93,7 +93,7 @@
                 </button>
 
                 <div id="navAuthContainer" class="flex items-center gap-2">
-                    <button onclick="openAuthModal()" class="bg-white hover:bg-slate-200 text-black text-[10px] sm:text-xs font-extrabold uppercase px-3 py-2 rounded-xl transition shadow">Sign In</button>
+                    <button onclick="openAuthModal()" class="bg-white hover:bg-slate-200 text-black text-[10px] sm:text-xs font-extrabold uppercase px-2.5 sm:px-3 py-2 rounded-xl transition shadow">Sign In</button>
                 </div>
             </div>
         </div>
@@ -106,7 +106,7 @@
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-6">
                     <div class="max-w-2xl">
                         <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white px-3 py-1 rounded-full text-[11px] font-semibold mb-3 tracking-wide">
-                            <i class="fa-solid fa-bolt text-amber-400"></i> Premium Cloud Synchronized Store
+                            <i class="fa-solid fa-bolt text-amber-400"></i> Premium Online Shopping Experience
                         </div>
                         <h1 class="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white mb-3 leading-tight">
                             ELEVATE YOUR <br><span class="text-slate-400">DAILY VIBE</span>
@@ -126,7 +126,7 @@
             <!-- Products Grid Section -->
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
                 <h2 class="text-xl sm:text-2xl font-black text-white uppercase mb-6 flex items-center gap-2">
-                    <i class="fa-solid fa-fire text-amber-400"></i> Trending Products (Cloud Live)
+                    <i class="fa-solid fa-fire text-amber-400"></i> Trending Products
                 </h2>
                 <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"></div>
             </div>
@@ -284,7 +284,7 @@
                 <!-- ADMIN PRODUCTS MANAGEMENT TABLE -->
                 <div class="bg-vibe-card rounded-2xl border border-vibe-border overflow-hidden mb-8 shadow-xl">
                     <div class="p-4 border-b border-vibe-border flex items-center justify-between">
-                        <h3 class="font-black text-white text-base uppercase">Manage Store Products (Cloud Firestore)</h3>
+                        <h3 class="font-black text-white text-base uppercase">Manage Store Products</h3>
                         <span id="adminProdCountBadge" class="text-[10px] font-bold bg-white text-black px-2.5 py-1 rounded-full uppercase">0 Products</span>
                     </div>
                     <div class="overflow-x-auto custom-scrollbar">
@@ -305,11 +305,11 @@
                 <!-- ORDERS TABLE -->
                 <div class="bg-vibe-card rounded-2xl border border-vibe-border overflow-hidden mb-8 shadow-xl">
                     <div class="p-4 border-b border-vibe-border flex items-center justify-between">
-                        <h3 class="font-black text-white text-base uppercase">Customer Orders (Cloud Database Synced)</h3>
+                        <h3 class="font-black text-white text-base uppercase">Customer Orders</h3>
                         <span id="orderCountBadge" class="text-[10px] font-bold bg-white text-black px-2.5 py-1 rounded-full uppercase">0 Orders</span>
                     </div>
                     <div class="overflow-x-auto custom-scrollbar">
-                        <table class="w-full text-left border-collapse min-w-[650px]">
+                        <table class="w-full text-left border-collapse min-w-[750px]">
                             <thead>
                                 <tr class="bg-black text-[10px] font-extrabold text-slate-400 uppercase tracking-widest border-b border-vibe-border">
                                     <th class="p-3">Ref / Date</th>
@@ -336,7 +336,7 @@
             </div>
             <div>
                 <h3 class="text-lg font-black text-white uppercase">Order Placed Successfully!</h3>
-                <p class="text-xs text-slate-400 mt-1">Aapka order cloud par save ho gaya hai. Apni Order ID copy kar lein:</p>
+                <p class="text-xs text-slate-400 mt-1">Apna Order ID copy kar lein taake aap status track kar sakein:</p>
             </div>
             <div class="bg-black border border-vibe-border p-3 rounded-2xl flex items-center justify-between">
                 <span id="successOrderIdDisplay" class="font-mono font-bold text-amber-400 text-sm">#VS-0000</span>
@@ -441,11 +441,11 @@
         </div>
     </div>
 
-    <!-- ADD PRODUCT MODAL (DIRECT LAPTOP FILE UPLOAD WITH COMPRESSION) -->
+    <!-- ADD PRODUCT MODAL -->
     <div id="addProductModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-vibe-card border border-vibe-border w-full max-w-lg rounded-3xl p-5 relative shadow-2xl">
             <div class="flex items-center justify-between mb-3 border-b border-vibe-border pb-2.5">
-                <h3 class="font-extrabold text-white text-sm uppercase">Add Product (Select Image from Laptop)</h3>
+                <h3 class="font-extrabold text-white text-sm uppercase">Add Product</h3>
                 <button onclick="closeAddProductModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <form onsubmit="handleAddNewProduct(event)" class="space-y-3 text-xs">
@@ -481,7 +481,7 @@
                     <label class="block font-semibold text-slate-300 mb-1">Description</label>
                     <textarea id="newProdDesc" rows="3" required class="w-full bg-black border border-vibe-border text-white rounded-xl p-2.5 outline-none"></textarea>
                 </div>
-                <button type="submit" id="saveProdBtn" class="w-full bg-white hover:bg-slate-200 text-black font-extrabold uppercase py-3 rounded-xl transition">Save & Sync to Cloud</button>
+                <button type="submit" id="saveProdBtn" class="w-full bg-white hover:bg-slate-200 text-black font-extrabold uppercase py-3 rounded-xl transition">Save Product</button>
             </form>
         </div>
     </div>
@@ -518,7 +518,7 @@
         </div>
     </div>
 
-    <!-- TRACK ORDER & AUTH MODALS -->
+    <!-- TRACK ORDER MODAL -->
     <div id="trackOrderModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-vibe-card border border-vibe-border w-full max-w-md rounded-3xl p-5 relative shadow-2xl space-y-4">
             <button onclick="closeTrackOrderModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -534,6 +534,7 @@
         </div>
     </div>
 
+    <!-- AUTH MODAL -->
     <div id="authModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-vibe-card border border-vibe-border w-full max-w-sm rounded-3xl p-5 text-center relative">
             <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -933,7 +934,6 @@
         }
         function closeEditProductModal() { document.getElementById('editProductModal').classList.add('hidden'); }
 
-        // Helper to resize laptop image so it fits instantly in Cloud Firestore without hanging
         function resizeImageAndGetBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -962,7 +962,6 @@
                         canvas.height = height;
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, width, height);
-                        // Compress to JPEG with 0.7 quality to ensure small size for cloud database
                         const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
                         resolve(dataUrl);
                     };
@@ -980,7 +979,7 @@
             if(!fileInput.files || fileInput.files.length === 0) { alert("Please select an image file!"); return; }
 
             const btn = document.getElementById('saveProdBtn');
-            btn.innerText = "Compressing & Syncing...";
+            btn.innerText = "Saving Product...";
             btn.disabled = true;
 
             try {
@@ -1000,7 +999,7 @@
                 await db.collection('products').add(newProd);
                 await fetchProductsFromCloud();
 
-                alert("Product added & synced to cloud successfully!");
+                alert("Product added successfully!");
                 closeAddProductModal();
                 e.target.reset();
             } catch(err) {
@@ -1008,7 +1007,7 @@
                 alert("Error: " + err.message);
             }
 
-            btn.innerText = "Save & Sync to Cloud";
+            btn.innerText = "Save Product";
             btn.disabled = false;
         }
 
@@ -1027,13 +1026,25 @@
             try {
                 await db.collection('products').doc(docId).update(updatedData);
                 await fetchProductsFromCloud();
-                alert("Product updated in cloud successfully!");
+                alert("Product updated successfully!");
             } catch(err) {
                 console.error(err);
                 alert("Error: " + err.message);
             }
 
             closeEditProductModal();
+        }
+
+        async function updateOrderStatus(firebaseDocId, newStatus) {
+            try {
+                await db.collection('orders').doc(firebaseDocId).update({ status: newStatus });
+                const orderObj = orders.find(o => o.firebaseId === firebaseDocId);
+                if(orderObj) orderObj.status = newStatus;
+                alert("Order status updated successfully!");
+            } catch(err) {
+                console.error(err);
+                alert("Failed to update status.");
+            }
         }
 
         async function deleteProduct(id) {
@@ -1043,7 +1054,7 @@
                 if(p && p.cloudDocId) {
                     await db.collection('products').doc(p.cloudDocId).delete();
                     await fetchProductsFromCloud();
-                    alert("Product deleted from cloud!");
+                    alert("Product deleted!");
                 }
             } catch(err) {
                 console.error(err);
@@ -1086,6 +1097,7 @@
 
         function openTrackOrderModal() { document.getElementById('trackOrderModal').classList.remove('hidden'); }
         function closeTrackOrderModal() { document.getElementById('trackOrderModal').classList.add('hidden'); }
+        
         function handleTrackOrder(e) {
             e.preventDefault();
             const inputRef = document.getElementById('trackInputRef').value.trim().toUpperCase();
@@ -1103,6 +1115,7 @@
 
         function openAuthModal() { document.getElementById('authModal').classList.remove('hidden'); }
         function closeAuthModal() { document.getElementById('authModal').classList.add('hidden'); }
+        
         function handleAuthSubmit(e) {
             e.preventDefault();
             if (document.getElementById('authEmailInput').value.trim() === ADMIN_EMAIL && document.getElementById('authPasswordInput').value === ADMIN_PASS) {
@@ -1111,12 +1124,15 @@
                 openAdminView();
             } else { alert("Invalid Credentials!"); }
         }
+
         function logout() { currentUser = null; openStoreView(); }
+        
         function openStoreView() {
             document.getElementById('adminView').classList.add('hidden');
             document.getElementById('productDetailView').classList.add('hidden');
             document.getElementById('storeView').classList.remove('hidden');
         }
+
         async function openAdminView() {
             document.getElementById('storeView').classList.add('hidden');
             document.getElementById('productDetailView').classList.add('hidden');
@@ -1148,6 +1164,7 @@
 
             const tbody = document.getElementById('ordersTableBody');
             tbody.innerHTML = orders.length === 0 ? `<tr><td colspan="6" class="p-6 text-center text-slate-500">No orders received yet.</td></tr>` : '';
+            
             orders.forEach(o => {
                 tbody.innerHTML += `
                     <tr class="hover:bg-vibe-border/40">
@@ -1155,16 +1172,26 @@
                         <td class="p-3"><div class="font-bold text-slate-200">${o.custName}</div><div class="text-slate-400 font-mono text-[10px]">${o.custPhone}</div></td>
                         <td class="p-3"><div class="truncate text-slate-300 text-[11px]">${o.custAddress}</div><div class="font-bold text-white text-[10px]">${o.custCity}</div></td>
                         <td class="p-3 text-amber-400 text-[11px]">${o.productTitle}</td>
-                        <td class="p-3 font-bold text-white">${o.status}</td>
-                        <td class="p-3 text-center"><button onclick="copyForMarkaz('${o.id || o.ref}')" class="bg-white text-black px-2 py-1 rounded text-xs font-bold">Copy</button></td>
+                        <td class="p-3">
+                            <select onchange="updateOrderStatus('${o.firebaseId}', this.value)" class="bg-black border border-vibe-border text-white rounded p-1 text-xs">
+                                <option value="Pending" ${o.status === 'Pending' ? 'selected' : ''}>Pending</option>
+                                <option value="Confirmed" ${o.status === 'Confirmed' ? 'selected' : ''}>Confirmed</option>
+                                <option value="Shipped" ${o.status === 'Shipped' ? 'selected' : ''}>Shipped</option>
+                                <option value="Delivered" ${o.status === 'Delivered' ? 'selected' : ''}>Delivered</option>
+                                <option value="Cancelled" ${o.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+                            </select>
+                        </td>
+                        <td class="p-3 text-center space-x-1">
+                            <button onclick="copyForMarkaz('${o.firebaseId || o.id}')" class="bg-white text-black px-2 py-1 rounded text-xs font-bold">Copy</button>
+                        </td>
                     </tr>
                 `;
             });
             document.getElementById('orderCountBadge').innerText = `${orders.length} Orders`;
         }
 
-        function copyForMarkaz(id) {
-            const o = orders.find(item => item.id === id || item.ref === id);
+        function copyForMarkaz(firebaseId) {
+            const o = orders.find(item => item.firebaseId === firebaseId || item.id === firebaseId);
             if(!o) return;
             navigator.clipboard.writeText(`MARKAZ ORDER:\nName: ${o.custName}\nPhone: ${o.custPhone}\nCity: ${o.custCity}\nAddress: ${o.custAddress}\nProducts: ${o.productTitle}\nTotal: Rs. ${o.price}`);
             alert("Order details copied for Markaz!");
