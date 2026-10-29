@@ -11,6 +11,10 @@
     <!-- Google Font Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
+    <!-- Firebase SDK Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -75,7 +79,7 @@
 
             <!-- Header Actions -->
             <div class="flex items-center space-x-2.5">
-                <button onclick="openContactModal()" class="hidden sm:flex bg-vibe-card border border-vibe-border hover:bg-zinc-800 text-slate-200 text-xs font-bold uppercase px-3 py-2.5 rounded-xl transition items-center gap-1.5">
+                <button onclick="scrollToContact()" class="hidden sm:flex bg-vibe-card border border-vibe-border hover:bg-zinc-800 text-slate-200 text-xs font-bold uppercase px-3 py-2.5 rounded-xl transition items-center gap-1.5">
                     <i class="fa-solid fa-envelope text-sky-400"></i> <span>Contact Us</span>
                 </button>
 
@@ -102,7 +106,7 @@
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-6">
                     <div class="max-w-2xl">
                         <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white px-3 py-1 rounded-full text-[11px] font-semibold mb-3 tracking-wide">
-                            <i class="fa-solid fa-bolt text-amber-400"></i> Premium Local Collection
+                            <i class="fa-solid fa-bolt text-amber-400"></i> Premium Cloud Synchronized Store
                         </div>
                         <h1 class="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white mb-3 leading-tight">
                             ELEVATE YOUR <br><span class="text-slate-400">DAILY VIBE</span>
@@ -122,7 +126,7 @@
             <!-- Products Grid Section -->
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
                 <h2 class="text-xl sm:text-2xl font-black text-white uppercase mb-6 flex items-center gap-2">
-                    <i class="fa-solid fa-fire text-amber-400"></i> Trending Products
+                    <i class="fa-solid fa-fire text-amber-400"></i> Trending Products (Cloud Live)
                 </h2>
                 <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"></div>
             </div>
@@ -160,6 +164,34 @@
                         </div>
                         <p class="text-slate-400 text-xs">Floating magnetic lamp order kiya tha, room ki look hi badal di. Amazing product!</p>
                     </div>
+                </div>
+            </div>
+
+            <!-- SCROLLABLE CONTACT US SECTION -->
+            <div id="contactSection" class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 border-t border-vibe-border">
+                <div class="bg-vibe-card border border-vibe-border rounded-3xl p-6 sm:p-8 shadow-2xl">
+                    <div class="text-center mb-6">
+                        <span class="text-sky-400 font-bold text-[10px] uppercase tracking-widest">Get in Touch</span>
+                        <h2 class="text-2xl font-black text-white uppercase mt-1">Contact VibeShop Support</h2>
+                        <p class="text-slate-400 text-xs mt-1">Have questions about your order or products? Drop us a message!</p>
+                    </div>
+                    <form onsubmit="handleContactSubmit(event)" class="space-y-4 text-xs">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block font-bold text-slate-300 mb-1">Your Name *</label>
+                                <input type="text" id="contactName" required placeholder="Ali Ahmed" class="w-full bg-black border border-vibe-border rounded-xl p-3 text-white outline-none">
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-300 mb-1">WhatsApp / Phone *</label>
+                                <input type="tel" id="contactPhone" required placeholder="03001234567" class="w-full bg-black border border-vibe-border rounded-xl p-3 text-white outline-none">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-300 mb-1">Your Message *</label>
+                            <textarea id="contactMsg" required rows="4" placeholder="Write your query here..." class="w-full bg-black border border-vibe-border rounded-xl p-3 text-white outline-none"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-white hover:bg-slate-200 text-black font-extrabold uppercase py-3.5 rounded-xl transition shadow">Send Message to WhatsApp</button>
+                    </form>
                 </div>
             </div>
         </section>
@@ -249,10 +281,10 @@
                     </div>
                 </div>
 
-                <!-- ADMIN PRODUCTS MANAGEMENT TABLE -->
+                <!-- ADMIN PRODUCTS MANAGEMENT TABLE (CLOUD SYNCED) -->
                 <div class="bg-vibe-card rounded-2xl border border-vibe-border overflow-hidden mb-8 shadow-xl">
                     <div class="p-4 border-b border-vibe-border flex items-center justify-between">
-                        <h3 class="font-black text-white text-base uppercase">Manage Store Products</h3>
+                        <h3 class="font-black text-white text-base uppercase">Manage Store Products (Cloud Firestore)</h3>
                         <span id="adminProdCountBadge" class="text-[10px] font-bold bg-white text-black px-2.5 py-1 rounded-full uppercase">0 Products</span>
                     </div>
                     <div class="overflow-x-auto custom-scrollbar">
@@ -273,7 +305,7 @@
                 <!-- ORDERS TABLE -->
                 <div class="bg-vibe-card rounded-2xl border border-vibe-border overflow-hidden mb-8 shadow-xl">
                     <div class="p-4 border-b border-vibe-border flex items-center justify-between">
-                        <h3 class="font-black text-white text-base uppercase">Customer Orders (With Quick Copy)</h3>
+                        <h3 class="font-black text-white text-base uppercase">Customer Orders (Cloud Database Synced)</h3>
                         <span id="orderCountBadge" class="text-[10px] font-bold bg-white text-black px-2.5 py-1 rounded-full uppercase">0 Orders</span>
                     </div>
                     <div class="overflow-x-auto custom-scrollbar">
@@ -304,7 +336,7 @@
             </div>
             <div>
                 <h3 class="text-lg font-black text-white uppercase">Order Placed Successfully!</h3>
-                <p class="text-xs text-slate-400 mt-1">Aapka order receive ho gaya hai. Apni Order ID copy kar lein tracking ke liye:</p>
+                <p class="text-xs text-slate-400 mt-1">Aapka order cloud par save ho gaya hai. Apni Order ID copy kar lein:</p>
             </div>
             <div class="bg-black border border-vibe-border p-3 rounded-2xl flex items-center justify-between">
                 <span id="successOrderIdDisplay" class="font-mono font-bold text-amber-400 text-sm">#VS-0000</span>
@@ -332,31 +364,6 @@
     <a href="https://wa.me/923114690687" target="_blank" class="fixed bottom-6 right-6 z-50 bg-emerald-500 hover:bg-emerald-600 text-white w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center text-xl sm:text-2xl shadow-2xl transition-transform hover:scale-110 border-2 border-white">
         <i class="fa-brands fa-whatsapp"></i>
     </a>
-
-    <!-- CONTACT US MODAL -->
-    <div id="contactModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-vibe-card border border-vibe-border w-full max-w-md rounded-3xl p-6 relative shadow-2xl space-y-4">
-            <button onclick="closeContactModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
-            <h3 class="text-lg font-extrabold text-white uppercase text-center">Contact VibeShop Support</h3>
-            <div class="space-y-3 text-xs">
-                <div class="bg-black p-3 rounded-xl border border-vibe-border flex items-center gap-3">
-                    <i class="fa-brands fa-whatsapp text-emerald-400 text-xl"></i>
-                    <div>
-                        <div class="font-bold text-white">WhatsApp Helpline</div>
-                        <div class="text-slate-400">+92 311 4690687</div>
-                    </div>
-                </div>
-                <div class="bg-black p-3 rounded-xl border border-vibe-border flex items-center gap-3">
-                    <i class="fa-solid fa-envelope text-sky-400 text-lg"></i>
-                    <div>
-                        <div class="font-bold text-white">Email Support</div>
-                        <div class="text-slate-400">mayanumer239@gmail.com</div>
-                    </div>
-                </div>
-            </div>
-            <a href="https://wa.me/923114690687" target="_blank" class="w-full bg-emerald-500 text-white font-extrabold text-xs uppercase py-3 rounded-xl text-center block">Chat on WhatsApp Now</a>
-        </div>
-    </div>
 
     <!-- ADD HOME REVIEW MODAL -->
     <div id="addHomeReviewModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
@@ -539,36 +546,85 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC WITH COPY ID FEATURE -->
+    <!-- JAVASCRIPT LOGIC WITH CLOUD PRODUCTS & ORDERS SYNC -->
     <script>
+        // FIREBASE CONFIGURATION
+        const firebaseConfig = {
+            apiKey: "AIzaSyAQ-8LYO-AmFEnHETeK-QOrWyytC5bfbkw",
+            authDomain: "vibeshop-8d633.firebaseapp.com",
+            projectId: "vibeshop-8d633",
+            storageBucket: "vibeshop-8d633.firebasestorage.app",
+            messagingSenderId: "333654695191",
+            appId: "1:333654695191:web:f6c3befd151e0c365beb52",
+            measurementId: "G-K53KDCTM5H"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
         const ADMIN_EMAIL = 'mayanumer239@gmail.com';
         const ADMIN_PASS = 'umero2391.';
         const DELIVERY_FEE = 250;
+        const MERCHANT_WHATSAPP = '923114690687';
 
-        let products = JSON.parse(localStorage.getItem('vibe_products')) || [
-            {
-                id: 'prod-1',
-                title: 'Instant Electric Water Heater Tap (3000W)',
-                category: 'Home & Kitchen',
-                price: 3499,
-                costPrice: 2400,
-                description: 'Get hot water in 3 seconds! Digital LED temperature display with 360-degree swivel spout.',
-                mediaList: [{ url: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=600', type: 'image' }]
-            }
-        ];
-
-        let orders = JSON.parse(localStorage.getItem('vibeshop_orders')) || [];
+        let products = [];
+        let orders = [];
         let homeReviews = JSON.parse(localStorage.getItem('vibeshop_reviews')) || [];
         let cart = [];
         let currentUser = null;
         let selectedProductForDetail = null;
         let checkoutItem = null;
 
-        function loadData() {
-            renderStoreGrid();
+        async function loadData() {
+            await fetchProductsFromCloud();
+            await fetchOrdersFromCloud();
             renderHomeReviews();
             updateCartBadge();
             if(currentUser && currentUser.isAdmin) renderAdminDashboard();
+        }
+
+        // Fetch Products from Cloud Firestore
+        async function fetchProductsFromCloud() {
+            try {
+                const snapshot = await db.collection('products').get();
+                products = [];
+                snapshot.forEach(doc => {
+                    products.push({ cloudId: doc.id, ...doc.data() });
+                });
+                if(products.length === 0) {
+                    // Default product if empty
+                    const defaultProd = {
+                        id: 'prod-1',
+                        title: 'Instant Electric Water Heater Tap (3000W)',
+                        category: 'Home & Kitchen',
+                        price: 3499,
+                        costPrice: 2400,
+                        description: 'Get hot water in 3 seconds! Digital LED temperature display with 360-degree swivel spout.',
+                        mediaList: [{ url: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=600', type: 'image' }]
+                    };
+                    await db.collection('products').add(defaultProd);
+                    products.push(defaultProd);
+                }
+            } catch(e) {
+                console.log("Cloud products fetch error", e);
+                products = JSON.parse(localStorage.getItem('vibe_products')) || [];
+            }
+            renderStoreGrid();
+        }
+
+        // Fetch Orders from Cloud Firestore
+        async function fetchOrdersFromCloud() {
+            try {
+                const snapshot = await db.collection('orders').orderBy('dateRaw', 'desc').get();
+                orders = [];
+                snapshot.forEach(doc => {
+                    orders.push({ firebaseId: doc.id, ...doc.data() });
+                });
+            } catch(e) {
+                console.log("Cloud orders fetch error", e);
+                orders = JSON.parse(localStorage.getItem('vibeshop_orders')) || [];
+            }
         }
 
         function renderStoreGrid(filteredProducts = null) {
@@ -732,6 +788,21 @@
             e.target.reset();
         }
 
+        function scrollToContact() {
+            document.getElementById('contactSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function handleContactSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('contactName').value;
+            const phone = document.getElementById('contactPhone').value;
+            const msg = document.getElementById('contactMsg').value;
+
+            const text = `📬 *VIBESHOP SUPPORT QUERY* 📬\n\n*Name:* ${name}\n*Phone:* ${phone}\n*Message:* ${msg}`;
+            window.open(`https://wa.me/${MERCHANT_WHATSAPP}?text=${encodeURIComponent(text)}`, '_blank');
+            e.target.reset();
+        }
+
         function addCurrentToCart() {
             if(!selectedProductForDetail) return;
             const existing = cart.find(i => i.id === selectedProductForDetail.id);
@@ -752,7 +823,7 @@
         function orderViaWhatsApp() {
             if(!selectedProductForDetail) return;
             const text = `Hi VibeShop! I want to order:\n\n*Item:* ${selectedProductForDetail.title}\n*Price:* Rs. ${selectedProductForDetail.price}`;
-            window.open(`https://wa.me/923114690687?text=${encodeURIComponent(text)}`, '_blank');
+            window.open(`https://wa.me/${MERCHANT_WHATSAPP}?text=${encodeURIComponent(text)}`, '_blank');
         }
 
         function toggleCartDrawer() { document.getElementById('cartDrawer').classList.toggle('hidden'); renderCartItems(); }
@@ -816,7 +887,8 @@
         }
         function closeCheckoutModal() { document.getElementById('checkoutModal').classList.add('hidden'); }
 
-        function handlePlaceOrder(e) {
+        // PLACE ORDER DIRECTLY TO CLOUD DATABASE
+        async function handlePlaceOrder(e) {
             e.preventDefault();
             let itemsToOrder = checkoutItem ? [checkoutItem] : [...cart];
             let subtotal = itemsToOrder.reduce((sum, item) => sum + (item.price * item.qty), 0);
@@ -827,6 +899,7 @@
                 id: 'ord-' + Date.now(),
                 ref: '#VS-' + Math.floor(1000 + Math.random() * 9000),
                 date: new Date().toLocaleDateString(),
+                dateRaw: Date.now(),
                 custName: document.getElementById('custName').value,
                 custPhone: document.getElementById('custPhone').value,
                 custCity: document.getElementById('custCity').value,
@@ -837,15 +910,18 @@
                 status: 'Pending'
             };
 
-            orders.push(newOrder);
-            localStorage.setItem('vibeshop_orders', JSON.stringify(orders));
+            try {
+                await db.collection('orders').add(newOrder);
+                orders.unshift(newOrder);
+            } catch(err) {
+                console.error("Firestore error", err);
+            }
 
             if(!checkoutItem) cart = [];
             checkoutItem = null;
             updateCartBadge();
             closeCheckoutModal();
 
-            // Show Success Modal with Copy Order ID Button
             document.getElementById('successOrderIdDisplay').innerText = newOrder.ref;
             document.getElementById('copyBtnText').innerText = 'Copy ID';
             document.getElementById('orderSuccessModal').classList.remove('hidden');
@@ -855,11 +931,7 @@
             const orderIdText = document.getElementById('successOrderIdDisplay').innerText;
             navigator.clipboard.writeText(orderIdText).then(() => {
                 document.getElementById('copyBtnText').innerText = 'Copied! ✓';
-                setTimeout(() => {
-                    document.getElementById('copyBtnText').innerText = 'Copy ID';
-                }, 2000);
-            }).catch(err => {
-                alert('Failed to copy: ' + err);
+                setTimeout(() => { document.getElementById('copyBtnText').innerText = 'Copy ID'; }, 2000);
             });
         }
 
@@ -883,9 +955,6 @@
         }
         function closeEditProductModal() { document.getElementById('editProductModal').classList.add('hidden'); }
 
-        function openContactModal() { document.getElementById('contactModal').classList.remove('hidden'); }
-        function closeContactModal() { document.getElementById('contactModal').classList.add('hidden'); }
-
         function readFileAsDataURL(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -901,7 +970,7 @@
             if(!fileInput.files || fileInput.files.length === 0) { alert("Please select files!"); return; }
 
             const btn = document.getElementById('saveProdBtn');
-            btn.innerText = "Processing files...";
+            btn.innerText = "Processing files to cloud...";
             btn.disabled = true;
 
             try {
@@ -924,12 +993,12 @@
                     active: true
                 };
 
-                products.push(newProd);
-                localStorage.setItem('vibe_products', JSON.stringify(products));
+                // Save to Cloud Firestore
+                await db.collection('products').add(newProd);
+                await fetchProductsFromCloud();
 
-                alert("Product added successfully!");
+                alert("Product added successfully & synced to cloud!");
                 closeAddProductModal();
-                loadData();
                 e.target.reset();
 
             } catch(err) {
@@ -952,18 +1021,40 @@
             p.costPrice = parseFloat(document.getElementById('editProdCost').value);
             p.description = document.getElementById('editProdDesc').value;
 
-            localStorage.setItem('vibe_products', JSON.stringify(products));
-            alert("Product updated successfully!");
+            try {
+                // Update in Cloud Firestore
+                const snapshot = await db.collection('products').where('id', '==', id).get();
+                snapshot.forEach(async (doc) => {
+                    await db.collection('products').doc(doc.id).update({
+                        title: p.title,
+                        price: p.price,
+                        costPrice: p.costPrice,
+                        description: p.description
+                    });
+                });
+                await fetchProductsFromCloud();
+                alert("Product updated in cloud successfully!");
+            } catch(err) {
+                console.error(err);
+            }
+
             closeEditProductModal();
-            loadData();
+            renderAdminDashboard();
         }
 
-        function deleteProduct(id) {
+        async function deleteProduct(id) {
             if(!confirm("Kya aap is product ko delete karna chahte hain?")) return;
-            products = products.filter(p => p.id !== id);
-            localStorage.setItem('vibe_products', JSON.stringify(products));
-            alert("Product deleted!");
-            loadData();
+            try {
+                const snapshot = await db.collection('products').where('id', '==', id).get();
+                snapshot.forEach(async (doc) => {
+                    await db.collection('products').doc(doc.id).delete();
+                });
+                await fetchProductsFromCloud();
+                alert("Product deleted from cloud!");
+                renderAdminDashboard();
+            } catch(err) {
+                console.error(err);
+            }
         }
 
         function startSalesPopups() {
@@ -1033,15 +1124,16 @@
             document.getElementById('productDetailView').classList.add('hidden');
             document.getElementById('storeView').classList.remove('hidden');
         }
-        function openAdminView() {
+        async function openAdminView() {
             document.getElementById('storeView').classList.add('hidden');
             document.getElementById('productDetailView').classList.add('hidden');
             document.getElementById('adminView').classList.remove('hidden');
+            await fetchOrdersFromCloud();
             renderAdminDashboard();
         }
 
         function renderAdminDashboard() {
-            document.getElementById('statTotalProfit').innerText = `Rs. ${orders.reduce((sum, o) => o.status !== 'Cancelled' ? sum + o.profit : sum, 0).toLocaleString()}`;
+            document.getElementById('statTotalProfit').innerText = `Rs. ${orders.reduce((sum, o) => o.status !== 'Cancelled' ? sum + (o.profit || 0) : sum, 0).toLocaleString()}`;
             
             const adminProdTable = document.getElementById('adminProductsTableBody');
             adminProdTable.innerHTML = products.length === 0 ? `<tr><td colspan="4" class="p-6 text-center text-slate-500">No products uploaded yet.</td></tr>` : '';
@@ -1063,7 +1155,7 @@
 
             const tbody = document.getElementById('ordersTableBody');
             tbody.innerHTML = orders.length === 0 ? `<tr><td colspan="6" class="p-6 text-center text-slate-500">No orders received yet.</td></tr>` : '';
-            orders.slice().reverse().forEach(o => {
+            orders.forEach(o => {
                 tbody.innerHTML += `
                     <tr class="hover:bg-vibe-border/40">
                         <td class="p-3"><span class="font-mono font-bold text-white">${o.ref}</span><div class="text-[9px] text-slate-500">${o.date}</div></td>
@@ -1071,7 +1163,7 @@
                         <td class="p-3"><div class="truncate text-slate-300 text-[11px]">${o.custAddress}</div><div class="font-bold text-white text-[10px]">${o.custCity}</div></td>
                         <td class="p-3 text-amber-400 text-[11px]">${o.productTitle}</td>
                         <td class="p-3 font-bold text-white">${o.status}</td>
-                        <td class="p-3 text-center"><button onclick="copyForMarkaz('${o.id}')" class="bg-white text-black px-2 py-1 rounded text-xs font-bold">Copy</button></td>
+                        <td class="p-3 text-center"><button onclick="copyForMarkaz('${o.id || o.ref}')" class="bg-white text-black px-2 py-1 rounded text-xs font-bold">Copy</button></td>
                     </tr>
                 `;
             });
@@ -1079,7 +1171,7 @@
         }
 
         function copyForMarkaz(id) {
-            const o = orders.find(item => item.id === id);
+            const o = orders.find(item => item.id === id || item.ref === id);
             if(!o) return;
             navigator.clipboard.writeText(`MARKAZ ORDER:\nName: ${o.custName}\nPhone: ${o.custPhone}\nCity: ${o.custCity}\nAddress: ${o.custAddress}\nProducts: ${o.productTitle}\nTotal: Rs. ${o.price}`);
             alert("Order details copied for Markaz!");
