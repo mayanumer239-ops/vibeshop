@@ -635,6 +635,7 @@
 
             listToRender.forEach(p => {
                 const firstMedia = p.mediaList && p.mediaList.length > 0 ? p.mediaList[0] : { url: '', type: 'image' };
+                const priceNum = Number(p.price) || 0;
                 const card = document.createElement('div');
                 card.className = 'bg-vibe-card rounded-2xl border border-vibe-border overflow-hidden hover:border-slate-400 transition duration-300 flex flex-col justify-between group cursor-pointer';
                 card.onclick = () => openProductDetail(p.id);
@@ -645,10 +646,10 @@
                             <img src="${firstMedia.url}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                         </div>
                         <div class="p-4 sm:p-5">
-                            <span class="text-[8px] sm:text-[9px] font-black text-slate-500 uppercase tracking-widest block mb-1">${p.category}</span>
-                            <h3 class="font-bold text-white text-xs sm:text-sm line-clamp-2">${p.title}</h3>
+                            <span class="text-[8px] sm:text-[9px] font-black text-slate-500 uppercase tracking-widest block mb-1">${p.category || 'General'}</span>
+                            <h3 class="font-bold text-white text-xs sm:text-sm line-clamp-2">${p.title || 'Product'}</h3>
                             <div class="flex items-baseline gap-2 mt-2.5">
-                                <span class="text-lg sm:text-xl font-black text-white">Rs. ${p.price.toLocaleString()}</span>
+                                <span class="text-lg sm:text-xl font-black text-white">Rs. ${priceNum.toLocaleString()}</span>
                             </div>
                         </div>
                     </div>
@@ -666,7 +667,7 @@
                 renderStoreGrid(products);
                 return;
             }
-            const filtered = products.filter(p => p.title.toLowerCase().includes(query) || p.category.toLowerCase().includes(query) || p.description.toLowerCase().includes(query));
+            const filtered = products.filter(p => (p.title || '').toLowerCase().includes(query) || (p.category || '').toLowerCase().includes(query) || (p.description || '').toLowerCase().includes(query));
             renderStoreGrid(filtered);
         }
 
@@ -675,10 +676,11 @@
             if(!product) return;
             selectedProductForDetail = product;
 
-            document.getElementById('detailCategory').innerText = product.category;
-            document.getElementById('detailTitle').innerText = product.title;
-            document.getElementById('detailPrice').innerText = `Rs. ${product.price.toLocaleString()}`;
-            document.getElementById('detailDesc').innerText = product.description;
+            const priceNum = Number(product.price) || 0;
+            document.getElementById('detailCategory').innerText = product.category || 'General';
+            document.getElementById('detailTitle').innerText = product.title || '';
+            document.getElementById('detailPrice').innerText = `Rs. ${priceNum.toLocaleString()}`;
+            document.getElementById('detailDesc').innerText = product.description || '';
 
             renderDetailMediaGallery(product.mediaList);
 
@@ -740,10 +742,10 @@
                 defaultReviewsHTML += `
                     <div class="bg-vibe-card p-4 rounded-2xl border border-vibe-border">
                         <div class="flex justify-between items-center mb-1">
-                            <span class="font-bold text-white text-xs">${r.name}</span>
-                            <span class="text-amber-400 text-xs">${r.stars}</span>
+                            <span class="font-bold text-white text-xs">${r.name || 'Customer'}</span>
+                            <span class="text-amber-400 text-xs">${r.stars || '⭐⭐⭐⭐⭐'}</span>
                         </div>
-                        <p class="text-slate-400 text-xs">${r.text}</p>
+                        <p class="text-slate-400 text-xs">${r.text || ''}</p>
                     </div>
                 `;
             });
@@ -795,14 +797,16 @@
         function buyNowCurrent() {
             if(!selectedProductForDetail) return;
             checkoutItem = { ...selectedProductForDetail, qty: 1 };
-            document.getElementById('checkoutSubtotal').innerText = `Rs. ${checkoutItem.price.toLocaleString()}`;
-            document.getElementById('checkoutGrandTotal').innerText = `Rs. ${(checkoutItem.price + DELIVERY_FEE).toLocaleString()}`;
+            const priceNum = Number(checkoutItem.price) || 0;
+            document.getElementById('checkoutSubtotal').innerText = `Rs. ${priceNum.toLocaleString()}`;
+            document.getElementById('checkoutGrandTotal').innerText = `Rs. ${(priceNum + DELIVERY_FEE).toLocaleString()}`;
             document.getElementById('checkoutModal').classList.remove('hidden');
         }
 
         function orderViaWhatsApp() {
             if(!selectedProductForDetail) return;
-            const text = `Hi VibeShop! I want to order:\n\n*Item:* ${selectedProductForDetail.title}\n*Price:* Rs. ${selectedProductForDetail.price}`;
+            const priceNum = Number(selectedProductForDetail.price) || 0;
+            const text = `Hi VibeShop! I want to order:\n\n*Item:* ${selectedProductForDetail.title}\n*Price:* Rs. ${priceNum}`;
             window.open(`https://wa.me/${MERCHANT_WHATSAPP}?text=${encodeURIComponent(text)}`, '_blank');
         }
 
@@ -822,14 +826,15 @@
             footer.classList.remove('hidden');
             let subtotal = 0;
             cart.forEach((item, index) => {
-                subtotal += item.price * item.qty;
+                const itemPrice = Number(item.price) || 0;
+                subtotal += itemPrice * (item.qty || 1);
                 const firstImg = item.mediaList && item.mediaList.length > 0 ? item.mediaList[0].url : '';
                 container.innerHTML += `
                     <div class="flex items-center justify-between gap-3 bg-black p-3 rounded-2xl border border-vibe-border text-xs">
                         <img src="${firstImg}" class="w-10 h-10 rounded-xl object-cover border border-vibe-border">
                         <div class="flex-grow">
-                            <h4 class="font-bold text-white line-clamp-1 text-[11px]">${item.title}</h4>
-                            <span class="text-slate-400 text-[10px]">Rs. ${item.price.toLocaleString()} × ${item.qty}</span>
+                            <h4 class="font-bold text-white line-clamp-1 text-[11px]">${item.title || ''}</h4>
+                            <span class="text-slate-400 text-[10px]">Rs. ${itemPrice.toLocaleString()} × ${item.qty || 1}</span>
                         </div>
                         <button onclick="removeFromCart(${index})" class="text-rose-400 p-1"><i class="fa-solid fa-trash text-xs"></i></button>
                     </div>
@@ -849,17 +854,18 @@
                 document.getElementById('shippingPercent').innerText = `${percent}%`;
             }
 
-            document.getElementById('cartGrandTotal').innerText = `Rs. ${(subtotal + (subtotal >= target ? 0 : DELIVERY_FEE)).toLocaleString()}`;
+            const finalGrand = subtotal + (subtotal >= target ? 0 : DELIVERY_FEE);
+            document.getElementById('cartGrandTotal').innerText = `Rs. ${finalGrand.toLocaleString()}`;
         }
 
         function removeFromCart(index) { cart.splice(index, 1); updateCartBadge(); renderCartItems(); }
-        function updateCartBadge() { document.getElementById('cartBadgeCount').innerText = cart.reduce((sum, i) => sum + i.qty, 0); }
+        function updateCartBadge() { document.getElementById('cartBadgeCount').innerText = cart.reduce((sum, i) => sum + (i.qty || 1), 0); }
 
         function openCheckoutModal() {
             if (cart.length === 0) return;
             document.getElementById('cartDrawer').classList.add('hidden');
             checkoutItem = null;
-            let subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            let subtotal = cart.reduce((sum, item) => sum + ((Number(item.price) || 0) * (item.qty || 1)), 0);
             let deliv = subtotal >= 5000 ? 0 : DELIVERY_FEE;
             document.getElementById('checkoutSubtotal').innerText = `Rs. ${subtotal.toLocaleString()}`;
             document.getElementById('checkoutGrandTotal').innerText = `Rs. ${(subtotal + deliv).toLocaleString()}`;
@@ -870,9 +876,9 @@
         async function handlePlaceOrder(e) {
             e.preventDefault();
             let itemsToOrder = checkoutItem ? [checkoutItem] : [...cart];
-            let subtotal = itemsToOrder.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            let subtotal = itemsToOrder.reduce((sum, item) => sum + ((Number(item.price) || 0) * (item.qty || 1)), 0);
             let grandTotal = subtotal + (subtotal >= 5000 ? 0 : DELIVERY_FEE);
-            let totalProfit = itemsToOrder.reduce((sum, item) => sum + ((item.price - (item.costPrice || 0)) * item.qty), 0);
+            let totalProfit = itemsToOrder.reduce((sum, item) => sum + (((Number(item.price) || 0) - (Number(item.costPrice) || 0)) * (item.qty || 1)), 0);
 
             const newOrder = {
                 id: 'ord-' + Date.now(),
@@ -883,7 +889,7 @@
                 custPhone: document.getElementById('custPhone').value,
                 custCity: document.getElementById('custCity').value,
                 custAddress: document.getElementById('custAddress').value,
-                productTitle: itemsToOrder.map(i => `${i.title} (${i.qty}x)`).join(', '),
+                productTitle: itemsToOrder.map(i => `${i.title || 'Product'} (${i.qty || 1}x)`).join(', '),
                 price: grandTotal,
                 profit: totalProfit,
                 status: 'Pending'
@@ -926,10 +932,10 @@
             const p = products.find(item => item.id === id);
             if(!p) return;
             document.getElementById('editProdDocId').value = p.cloudDocId;
-            document.getElementById('editProdTitle').value = p.title;
-            document.getElementById('editProdPrice').value = p.price;
+            document.getElementById('editProdTitle').value = p.title || '';
+            document.getElementById('editProdPrice').value = p.price || 0;
             document.getElementById('editProdCost').value = p.costPrice || 0;
-            document.getElementById('editProdDesc').value = p.description;
+            document.getElementById('editProdDesc').value = p.description || '';
             document.getElementById('editProductModal').classList.remove('hidden');
         }
         function closeEditProductModal() { document.getElementById('editProductModal').classList.add('hidden'); }
@@ -989,8 +995,8 @@
                     id: 'prod-' + Date.now(),
                     title: document.getElementById('newProdTitle').value,
                     category: document.getElementById('newProdCat').value,
-                    price: parseFloat(document.getElementById('newProdPrice').value),
-                    costPrice: parseFloat(document.getElementById('newProdCost').value),
+                    price: parseFloat(document.getElementById('newProdPrice').value) || 0,
+                    costPrice: parseFloat(document.getElementById('newProdCost').value) || 0,
                     mediaList: [{ url: compressedBase64, type: 'image' }],
                     description: document.getElementById('newProdDesc').value,
                     active: true
@@ -1018,8 +1024,8 @@
 
             const updatedData = {
                 title: document.getElementById('editProdTitle').value,
-                price: parseFloat(document.getElementById('editProdPrice').value),
-                costPrice: parseFloat(document.getElementById('editProdCost').value),
+                price: parseFloat(document.getElementById('editProdPrice').value) || 0,
+                costPrice: parseFloat(document.getElementById('editProdCost').value) || 0,
                 description: document.getElementById('editProdDesc').value
             };
 
@@ -1070,7 +1076,7 @@
                 const randomProd = products[Math.floor(Math.random() * products.length)];
                 
                 document.getElementById('popupName').innerText = randomCust;
-                document.getElementById('popupMsg').innerText = `purchased ${randomProd.title}`;
+                document.getElementById('popupMsg').innerText = `purchased ${randomProd.title || 'Item'}`;
 
                 popup.classList.remove('hidden');
                 popup.classList.add('animate-sales-popup');
@@ -1101,11 +1107,11 @@
         function handleTrackOrder(e) {
             e.preventDefault();
             const inputRef = document.getElementById('trackInputRef').value.trim().toUpperCase();
-            const found = orders.find(o => o.ref.toUpperCase() === inputRef);
+            const found = orders.find(o => (o.ref || '').toUpperCase() === inputRef);
             const container = document.getElementById('trackResultContainer');
             if(found) {
-                document.getElementById('trackRef').innerText = found.ref;
-                document.getElementById('trackStatusBadge').innerText = found.status;
+                document.getElementById('trackRef').innerText = found.ref || '#VS-0000';
+                document.getElementById('trackStatusBadge').innerText = found.status || 'PENDING';
                 container.classList.remove('hidden');
             } else {
                 alert("Order Reference Code not found!");
@@ -1142,18 +1148,20 @@
         }
 
         function renderAdminDashboard() {
-            document.getElementById('statTotalProfit').innerText = `Rs. ${orders.reduce((sum, o) => o.status !== 'Cancelled' ? sum + (o.profit || 0) : sum, 0).toLocaleString()}`;
+            const totalProfitSum = orders.reduce((sum, o) => o.status !== 'Cancelled' ? sum + (Number(o.profit) || 0) : sum, 0);
+            document.getElementById('statTotalProfit').innerText = `Rs. ${totalProfitSum.toLocaleString()}`;
             
             const adminProdTable = document.getElementById('adminProductsTableBody');
             adminProdTable.innerHTML = products.length === 0 ? `<tr><td colspan="4" class="p-6 text-center text-slate-500">No products uploaded yet.</td></tr>` : '';
             document.getElementById('adminProdCountBadge').innerText = `${products.length} Products`;
             
             products.forEach(p => {
+                const priceNum = Number(p.price) || 0;
                 adminProdTable.innerHTML += `
                     <tr class="hover:bg-vibe-border/40">
-                        <td class="p-3 font-bold text-white">${p.title}</td>
-                        <td class="p-3 text-slate-400">${p.category}</td>
-                        <td class="p-3 font-mono text-white">Rs. ${p.price.toLocaleString()}</td>
+                        <td class="p-3 font-bold text-white">${p.title || ''}</td>
+                        <td class="p-3 text-slate-400">${p.category || ''}</td>
+                        <td class="p-3 font-mono text-white">Rs. ${priceNum.toLocaleString()}</td>
                         <td class="p-3 text-center space-x-2">
                             <button onclick="openEditProductModal('${p.id}')" class="bg-blue-600 hover:bg-blue-500 text-white px-2.5 py-1 rounded text-xs font-bold">Edit</button>
                             <button onclick="deleteProduct('${p.id}')" class="bg-rose-600 hover:bg-rose-500 text-white px-2.5 py-1 rounded text-xs font-bold">Delete</button>
@@ -1168,10 +1176,10 @@
             orders.forEach(o => {
                 tbody.innerHTML += `
                     <tr class="hover:bg-vibe-border/40">
-                        <td class="p-3"><span class="font-mono font-bold text-white">${o.ref}</span><div class="text-[9px] text-slate-500">${o.date}</div></td>
-                        <td class="p-3"><div class="font-bold text-slate-200">${o.custName}</div><div class="text-slate-400 font-mono text-[10px]">${o.custPhone}</div></td>
-                        <td class="p-3"><div class="truncate text-slate-300 text-[11px]">${o.custAddress}</div><div class="font-bold text-white text-[10px]">${o.custCity}</div></td>
-                        <td class="p-3 text-amber-400 text-[11px]">${o.productTitle}</td>
+                        <td class="p-3"><span class="font-mono font-bold text-white">${o.ref || '#VS'}</span><div class="text-[9px] text-slate-500">${o.date || ''}</div></td>
+                        <td class="p-3"><div class="font-bold text-slate-200">${o.custName || ''}</div><div class="text-slate-400 font-mono text-[10px]">${o.custPhone || ''}</div></td>
+                        <td class="p-3"><div class="truncate text-slate-300 text-[11px]">${o.custAddress || ''}</div><div class="font-bold text-white text-[10px]">${o.custCity || ''}</div></td>
+                        <td class="p-3 text-amber-400 text-[11px]">${o.productTitle || ''}</td>
                         <td class="p-3">
                             <select onchange="updateOrderStatus('${o.firebaseId}', this.value)" class="bg-black border border-vibe-border text-white rounded p-1 text-xs">
                                 <option value="Pending" ${o.status === 'Pending' ? 'selected' : ''}>Pending</option>
@@ -1193,7 +1201,8 @@
         function copyForMarkaz(firebaseId) {
             const o = orders.find(item => item.firebaseId === firebaseId || item.id === firebaseId);
             if(!o) return;
-            navigator.clipboard.writeText(`MARKAZ ORDER:\nName: ${o.custName}\nPhone: ${o.custPhone}\nCity: ${o.custCity}\nAddress: ${o.custAddress}\nProducts: ${o.productTitle}\nTotal: Rs. ${o.price}`);
+            const priceNum = Number(o.price) || 0;
+            navigator.clipboard.writeText(`MARKAZ ORDER:\nName: ${o.custName}\nPhone: ${o.custPhone}\nCity: ${o.custCity}\nAddress: ${o.custAddress}\nProducts: ${o.productTitle}\nTotal: Rs. ${priceNum}`);
             alert("Order details copied for Markaz!");
         }
 
