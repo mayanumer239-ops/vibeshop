@@ -638,7 +638,7 @@
                 const priceNum = Number(p.price) || 0;
                 const card = document.createElement('div');
                 card.className = 'bg-vibe-card rounded-2xl border border-vibe-border overflow-hidden hover:border-slate-400 transition duration-300 flex flex-col justify-between group cursor-pointer';
-                card.onclick = () => openProductDetail(p.id);
+                card.onclick = () => openProductDetail(p.cloudDocId || p.id);
 
                 card.innerHTML = `
                     <div>
@@ -671,8 +671,8 @@
             renderStoreGrid(filtered);
         }
 
-        function openProductDetail(prodId) {
-            const product = products.find(p => p.id === prodId);
+        function openProductDetail(prodKey) {
+            const product = products.find(p => p.cloudDocId === prodKey || p.id === prodKey);
             if(!product) return;
             selectedProductForDetail = product;
 
@@ -787,7 +787,7 @@
 
         function addCurrentToCart() {
             if(!selectedProductForDetail) return;
-            const existing = cart.find(i => i.id === selectedProductForDetail.id);
+            const existing = cart.find(i => (i.cloudDocId === selectedProductForDetail.cloudDocId || i.id === selectedProductForDetail.id));
             if(existing) { existing.qty += 1; }
             else { cart.push({ ...selectedProductForDetail, qty: 1 }); }
             updateCartBadge();
@@ -928,8 +928,8 @@
         function openAddProductModal() { document.getElementById('addProductModal').classList.remove('hidden'); }
         function closeAddProductModal() { document.getElementById('addProductModal').classList.add('hidden'); }
 
-        function openEditProductModal(id) {
-            const p = products.find(item => item.id === id);
+        function openEditProductModal(cloudDocId) {
+            const p = products.find(item => item.cloudDocId === cloudDocId || item.id === cloudDocId);
             if(!p) return;
             document.getElementById('editProdDocId').value = p.cloudDocId;
             document.getElementById('editProdTitle').value = p.title || '';
@@ -1053,17 +1053,17 @@
             }
         }
 
-        async function deleteProduct(id) {
+        async function deleteProduct(cloudDocId) {
             if(!confirm("Kya aap is product ko delete karna chahte hain?")) return;
             try {
-                const p = products.find(item => item.id === id);
-                if(p && p.cloudDocId) {
-                    await db.collection('products').doc(p.cloudDocId).delete();
+                if(cloudDocId) {
+                    await db.collection('products').doc(cloudDocId).delete();
                     await fetchProductsFromCloud();
-                    alert("Product deleted!");
+                    alert("Product deleted successfully!");
                 }
             } catch(err) {
                 console.error(err);
+                alert("Error deleting product: " + err.message);
             }
         }
 
@@ -1163,8 +1163,8 @@
                         <td class="p-3 text-slate-400">${p.category || ''}</td>
                         <td class="p-3 font-mono text-white">Rs. ${priceNum.toLocaleString()}</td>
                         <td class="p-3 text-center space-x-2">
-                            <button onclick="openEditProductModal('${p.id}')" class="bg-blue-600 hover:bg-blue-500 text-white px-2.5 py-1 rounded text-xs font-bold">Edit</button>
-                            <button onclick="deleteProduct('${p.id}')" class="bg-rose-600 hover:bg-rose-500 text-white px-2.5 py-1 rounded text-xs font-bold">Delete</button>
+                            <button onclick="openEditProductModal('${p.cloudDocId}')" class="bg-blue-600 hover:bg-blue-500 text-white px-2.5 py-1 rounded text-xs font-bold">Edit</button>
+                            <button onclick="deleteProduct('${p.cloudDocId}')" class="bg-rose-600 hover:bg-rose-500 text-white px-2.5 py-1 rounded text-xs font-bold">Delete</button>
                         </td>
                     </tr>
                 `;
