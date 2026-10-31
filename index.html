@@ -106,7 +106,7 @@
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-6">
                     <div class="max-w-2xl">
                         <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white px-3 py-1 rounded-full text-[11px] font-semibold mb-3 tracking-wide">
-                            <i class="fa-solid fa-bolt text-amber-400"></i> Premium Online Shopping Experience
+                            <i class="fa-solid fa-bolt text-amber-400"></i> Next-Gen Smart Shopping Experience
                         </div>
                         <h1 class="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white mb-3 leading-tight">
                             ELEVATE YOUR <br><span class="text-slate-400">DAILY VIBE</span>
@@ -118,6 +118,33 @@
                         <div class="relative max-w-md">
                             <input type="text" id="storeSearchInput" oninput="filterStoreProducts()" placeholder="Search products..." class="w-full bg-black border border-vibe-border rounded-xl px-4 py-3 text-xs text-white outline-none focus:border-white transition">
                             <i class="fa-solid fa-search absolute right-4 top-3.5 text-slate-500"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FEATURE BANNER: 4-5 NEW ADVANCED PRO FEATURES -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-5 relative z-20 mb-8">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div class="bg-vibe-card border border-vibe-border p-4 rounded-2xl flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg"><i class="fa-solid fa-shield-halved"></i></div>
+                        <div>
+                            <h4 class="font-bold text-white text-xs">100% Verified Quality</h4>
+                            <p class="text-[10px] text-slate-400">Tested products before dispatch</p>
+                        </div>
+                    </div>
+                    <div class="bg-vibe-card border border-vibe-border p-4 rounded-2xl flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center text-lg"><i class="fa-solid fa-box-open"></i></div>
+                        <div>
+                            <h4 class="font-bold text-white text-xs">Open Parcel Inspection</h4>
+                            <p class="text-[10px] text-slate-400">Check before you pay courier</p>
+                        </div>
+                    </div>
+                    <div class="bg-vibe-card border border-vibe-border p-4 rounded-2xl flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/20 text-sky-400 flex items-center justify-center text-lg"><i class="fa-solid fa-headset"></i></div>
+                        <div>
+                            <h4 class="font-bold text-white text-xs">24/7 WhatsApp Support</h4>
+                            <p class="text-[10px] text-slate-400">Instant response for orders</p>
                         </div>
                     </div>
                 </div>
@@ -148,21 +175,7 @@
                             <span class="font-bold text-white text-xs">Usman Ghani (Lahore)</span>
                             <span class="text-amber-400 text-xs">⭐⭐⭐⭐⭐</span>
                         </div>
-                        <p class="text-slate-400 text-xs">Instant water heater tap mangwaya tha, quality zabardast hai aur delivery bhi time par mil gayi!</p>
-                    </div>
-                    <div class="bg-vibe-card p-4 rounded-2xl border border-vibe-border">
-                        <div class="flex justify-between items-center mb-1">
-                            <span class="font-bold text-white text-xs">Bilal Khan (Karachi)</span>
-                            <span class="text-amber-400 text-xs">⭐⭐⭐⭐⭐</span>
-                        </div>
-                        <p class="text-slate-400 text-xs">Open parcel inspection allow thi, bohot hi honest service hai VibeShop ki. Highly recommended!</p>
-                    </div>
-                    <div class="bg-vibe-card p-4 rounded-2xl border border-vibe-border">
-                        <div class="flex justify-between items-center mb-1">
-                            <span class="font-bold text-white text-xs">Ayesha Malik (Islamabad)</span>
-                            <span class="text-amber-400 text-xs">⭐⭐⭐⭐⭐</span>
-                        </div>
-                        <p class="text-slate-400 text-xs">Floating magnetic lamp order kiya tha, room ki look hi badal di. Amazing product!</p>
+                        <p class="text-slate-400 text-xs">Behtareen quality aur bohat fast delivery mili VibeShop se!</p>
                     </div>
                 </div>
             </div>
@@ -198,9 +211,15 @@
 
         <!-- VIEW 2: PRODUCT DETAIL PAGE -->
         <section id="productDetailView" class="hidden py-6 sm:py-12 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <button onclick="openStoreView()" class="mb-4 sm:mb-6 inline-flex items-center gap-2 bg-vibe-card border border-vibe-border text-slate-300 hover:text-white px-3.5 py-2 rounded-xl text-xs font-bold transition">
-                <i class="fa-solid fa-arrow-left"></i> Back to Store
-            </button>
+            <div class="flex items-center justify-between mb-4 sm:mb-6">
+                <button onclick="openStoreView()" class="inline-flex items-center gap-2 bg-vibe-card border border-vibe-border text-slate-300 hover:text-white px-3.5 py-2 rounded-xl text-xs font-bold transition">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Store
+                </button>
+                <!-- NEW FEATURE: ONE-CLICK SHARE BUTTON -->
+                <button onclick="shareCurrentProduct()" class="bg-vibe-card border border-vibe-border hover:bg-zinc-800 text-slate-300 hover:text-white px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2">
+                    <i class="fa-solid fa-share-nodes text-sky-400"></i> Share Product
+                </button>
+            </div>
 
             <div class="bg-vibe-card border border-vibe-border rounded-3xl p-5 sm:p-10 grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10 shadow-2xl">
                 <div>
@@ -217,6 +236,15 @@
                         
                         <div class="flex items-baseline gap-3 mt-3">
                             <span id="detailPrice" class="text-2xl sm:text-3xl font-black text-white">Rs. 0</span>
+                        </div>
+
+                        <!-- TRUST BADGE & FAST DELIVERY -->
+                        <div class="my-4 p-3 bg-black/60 rounded-2xl border border-vibe-border flex items-center gap-3 text-xs text-slate-300">
+                            <i class="fa-solid fa-truck-fast text-emerald-400 text-lg"></i>
+                            <div>
+                                <span class="font-bold text-white block">Fast Delivery Guarantee</span>
+                                <span class="text-[10px] text-slate-400">Estimated delivery within 2 to 3 business days across Pakistan.</span>
+                            </div>
                         </div>
 
                         <p id="detailDesc" class="text-xs sm:text-sm text-slate-400 mt-3 leading-relaxed whitespace-pre-line"></p>
@@ -249,7 +277,7 @@
                     </div>
                     <div class="flex items-center gap-2 flex-wrap">
                         <button onclick="openAddProductModal()" class="bg-white hover:bg-slate-200 text-black text-xs font-extrabold uppercase px-4 py-2.5 rounded-xl shadow flex items-center gap-1.5 transition">
-                            <i class="fa-solid fa-plus"></i> Add Product & Image File
+                            <i class="fa-solid fa-plus"></i> Add Product (Multiple Media)
                         </button>
                         <button onclick="openStoreView()" class="bg-vibe-border text-slate-200 text-xs font-bold uppercase px-3.5 py-2.5 rounded-xl">Store View</button>
                         <button onclick="logout()" class="bg-rose-900/60 text-rose-200 text-xs font-bold uppercase px-3.5 py-2.5 rounded-xl">Logout</button>
@@ -315,7 +343,7 @@
                                     <th class="p-3">Ref / Date</th>
                                     <th class="p-3">Customer Info</th>
                                     <th class="p-3">Delivery Address</th>
-                                    <th class="p-3">Products / Bill</th>
+                                    <th class="p-3">Products / Bill / Payment</th>
                                     <th class="p-3">Status</th>
                                     <th class="p-3 text-center">Actions</th>
                                 </tr>
@@ -407,63 +435,85 @@
         </div>
     </div>
 
-    <!-- CHECKOUT MODAL -->
+    <!-- CHECKOUT MODAL (FLEXIBLE ADDRESS & COD CHARGES) -->
     <div id="checkoutModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-vibe-card border border-vibe-border w-full max-w-lg rounded-3xl p-5 relative shadow-2xl my-6">
             <button onclick="closeCheckoutModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
-            <h3 class="text-lg font-black text-white uppercase mb-1">Delivery Address & Checkout</h3>
+            <h3 class="text-lg font-black text-white uppercase mb-1">Secure Checkout & Delivery Address</h3>
             <form onsubmit="handlePlaceOrder(event)" class="space-y-3.5 text-xs">
                 <div>
                     <label class="block font-bold text-slate-300 mb-1">Full Name *</label>
-                    <input type="text" id="custName" required placeholder="Muhammad Ali" class="w-full bg-black border border-vibe-border rounded-xl p-2.5 text-white outline-none">
+                    <input type="text" id="custName" required placeholder="Muhammad Ali" class="w-full bg-black border border-vibe-border rounded-xl p-2.5 text-white outline-none focus:border-white">
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                         <label class="block font-bold text-slate-300 mb-1">WhatsApp Number *</label>
-                        <input type="tel" id="custPhone" required placeholder="03001234567" class="w-full bg-black border border-vibe-border rounded-xl p-2.5 text-white outline-none">
+                        <input type="tel" id="custPhone" required placeholder="03001234567" class="w-full bg-black border border-vibe-border rounded-xl p-2.5 text-white outline-none focus:border-white">
                     </div>
                     <div>
                         <label class="block font-bold text-slate-300 mb-1">City *</label>
-                        <input type="text" id="custCity" required placeholder="Lahore / Karachi" class="w-full bg-black border border-vibe-border rounded-xl p-2.5 text-white outline-none">
+                        <input type="text" id="custCity" required placeholder="Lahore / Karachi" class="w-full bg-black border border-vibe-border rounded-xl p-2.5 text-white outline-none focus:border-white">
                     </div>
                 </div>
                 <div>
-                    <label class="block font-bold text-slate-300 mb-1">Complete Address *</label>
-                    <textarea id="custAddress" required rows="2" placeholder="House #, Street #" class="w-full bg-black border border-vibe-border rounded-xl p-2.5 text-white outline-none"></textarea>
+                    <label class="block font-bold text-slate-300 mb-1">Delivery Address *</label>
+                    <textarea id="custAddress" required rows="2" placeholder="House #, Street, Area, City..." class="w-full bg-black border border-vibe-border rounded-xl p-2.5 text-white outline-none focus:border-white"></textarea>
                 </div>
+
+                <!-- PAYMENT METHOD SELECTION -->
+                <div class="space-y-2 pt-2 border-t border-vibe-border">
+                    <label class="block font-bold text-slate-300">Select Payment Method *</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="bg-black border border-vibe-border p-3 rounded-xl flex items-center gap-2 cursor-pointer hover:border-white transition">
+                            <input type="radio" name="paymentMethod" value="COD" checked onclick="togglePaymentMethod('COD')">
+                            <div>
+                                <span class="font-bold block text-white">Cash on Delivery</span>
+                                <span class="text-[9px] text-amber-400">+ Rs. 50 COD Charges</span>
+                            </div>
+                        </label>
+                        <label class="bg-black border border-vibe-border p-3 rounded-xl flex items-center gap-2 cursor-pointer hover:border-white transition">
+                            <input type="radio" name="paymentMethod" value="Online" onclick="togglePaymentMethod('Online')">
+                            <div>
+                                <span class="font-bold block text-white">Online Transfer</span>
+                                <span class="text-[9px] text-emerald-400">Zero Extra Fees</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
                 <div class="p-3.5 bg-black rounded-2xl border border-vibe-border space-y-1 text-slate-300">
                     <div class="flex justify-between"><span>Subtotal:</span> <span id="checkoutSubtotal" class="font-bold text-white">Rs. 0</span></div>
-                    <div class="flex justify-between"><span>Delivery:</span> <span class="font-bold text-white">Rs. 250</span></div>
+                    <div class="flex justify-between"><span>Delivery + Fees:</span> <span id="checkoutDeliveryFee" class="font-bold text-white">Rs. 300</span></div>
                     <div class="flex justify-between text-sm font-black text-white pt-2 border-t border-vibe-border"><span>Total:</span> <span id="checkoutGrandTotal">Rs. 250</span></div>
                 </div>
-                <button type="submit" class="w-full bg-white text-black font-extrabold uppercase py-3.5 rounded-xl shadow">Confirm Order</button>
+                <button type="submit" class="w-full bg-white text-black font-extrabold uppercase py-3.5 rounded-xl shadow">Confirm & Place Order</button>
             </form>
         </div>
     </div>
 
-    <!-- ADD PRODUCT MODAL -->
+    <!-- ADD PRODUCT MODAL WITH MULTIPLE MEDIA FILES -->
     <div id="addProductModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-vibe-card border border-vibe-border w-full max-w-lg rounded-3xl p-5 relative shadow-2xl">
             <div class="flex items-center justify-between mb-3 border-b border-vibe-border pb-2.5">
-                <h3 class="font-extrabold text-white text-sm uppercase">Add Product</h3>
+                <h3 class="font-extrabold text-white text-sm uppercase">Add Product (Multiple Media)</h3>
                 <button onclick="closeAddProductModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <form onsubmit="handleAddNewProduct(event)" class="space-y-3 text-xs">
                 <div>
-                    <label class="block font-semibold text-slate-300 mb-1">Product Title</label>
+                    <label class="block font-semibold text-slate-300 mb-1">Product Title *</label>
                     <input type="text" id="newProdTitle" required class="w-full bg-black border border-vibe-border text-white rounded-xl p-2.5 outline-none">
                 </div>
                 <div class="grid grid-cols-2 gap-2.5">
                     <div>
-                        <label class="block font-semibold text-slate-300 mb-1">Selling Price (Rs.)</label>
+                        <label class="block font-semibold text-slate-300 mb-1">Selling Price (Rs.) *</label>
                         <input type="number" id="newProdPrice" required class="w-full bg-black border border-vibe-border text-white rounded-xl p-2.5 outline-none">
                     </div>
                     <div>
-                        <label class="block font-semibold text-slate-300 mb-1">Cost Price (Rs.)</label>
+                        <label class="block font-semibold text-slate-300 mb-1">Cost Price (Rs.) *</label>
                         <input type="number" id="newProdCost" required class="w-full bg-black border border-vibe-border text-white rounded-xl p-2.5 outline-none">
                     </div>
                 </div>
-                <div class="grid grid-cols-2 gap-2.5">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     <div>
                         <label class="block font-semibold text-slate-300 mb-1">Category</label>
                         <select id="newProdCat" class="w-full bg-black border border-vibe-border text-white rounded-xl p-2.5 outline-none">
@@ -473,47 +523,15 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block font-semibold text-slate-300 mb-1">Select Image File</label>
-                        <input type="file" id="newProdFile" accept="image/*" required class="w-full text-slate-400 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-[10px] file:font-bold file:bg-vibe-border file:text-white">
+                        <label class="block font-semibold text-slate-300 mb-1">Select Multiple Image Files *</label>
+                        <input type="file" id="newProdFiles" accept="image/*" multiple required class="w-full text-slate-400 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-[10px] file:font-bold file:bg-vibe-border file:text-white">
                     </div>
                 </div>
                 <div>
-                    <label class="block font-semibold text-slate-300 mb-1">Description</label>
+                    <label class="block font-semibold text-slate-300 mb-1">Description *</label>
                     <textarea id="newProdDesc" rows="3" required class="w-full bg-black border border-vibe-border text-white rounded-xl p-2.5 outline-none"></textarea>
                 </div>
-                <button type="submit" id="saveProdBtn" class="w-full bg-white hover:bg-slate-200 text-black font-extrabold uppercase py-3 rounded-xl transition">Save Product</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- EDIT PRODUCT MODAL -->
-    <div id="editProductModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-vibe-card border border-vibe-border w-full max-w-lg rounded-3xl p-5 relative shadow-2xl">
-            <div class="flex items-center justify-between mb-3 border-b border-vibe-border pb-2.5">
-                <h3 class="font-extrabold text-white text-sm uppercase">Edit Product Details</h3>
-                <button onclick="closeEditProductModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <form onsubmit="handleUpdateProduct(event)" class="space-y-3 text-xs">
-                <input type="hidden" id="editProdDocId">
-                <div>
-                    <label class="block font-semibold text-slate-300 mb-1">Product Title</label>
-                    <input type="text" id="editProdTitle" required class="w-full bg-black border border-vibe-border text-white rounded-xl p-2.5 outline-none">
-                </div>
-                <div class="grid grid-cols-2 gap-2.5">
-                    <div>
-                        <label class="block font-semibold text-slate-300 mb-1">Selling Price (Rs.)</label>
-                        <input type="number" id="editProdPrice" required class="w-full bg-black border border-vibe-border text-white rounded-xl p-2.5 outline-none">
-                    </div>
-                    <div>
-                        <label class="block font-semibold text-slate-300 mb-1">Cost Price (Rs.)</label>
-                        <input type="number" id="editProdCost" required class="w-full bg-black border border-vibe-border text-white rounded-xl p-2.5 outline-none">
-                    </div>
-                </div>
-                <div>
-                    <label class="block font-semibold text-slate-300 mb-1">Description</label>
-                    <textarea id="editProdDesc" rows="3" required class="w-full bg-black border border-vibe-border text-white rounded-xl p-2.5 outline-none"></textarea>
-                </div>
-                <button type="submit" id="updateProdBtn" class="w-full bg-white hover:bg-slate-200 text-black font-extrabold uppercase py-3 rounded-xl transition">Save Changes</button>
+                <button type="submit" id="saveProdBtn" class="w-full bg-white hover:bg-slate-200 text-black font-extrabold uppercase py-3 rounded-xl transition">Save Product to Cloud</button>
             </form>
         </div>
     </div>
@@ -564,7 +582,8 @@
 
         const ADMIN_EMAIL = 'mayanumer239@gmail.com';
         const ADMIN_PASS = 'umero2391.';
-        const DELIVERY_FEE = 250;
+        const BASE_DELIVERY_FEE = 250;
+        const COD_EXTRA_FEE = 50;
         const MERCHANT_WHATSAPP = '923114690687';
 
         let products = [];
@@ -574,6 +593,7 @@
         let currentUser = null;
         let selectedProductForDetail = null;
         let checkoutItem = null;
+        let currentPaymentMethod = 'COD';
 
         async function loadData() {
             await fetchProductsFromCloud();
@@ -590,19 +610,6 @@
                 snapshot.forEach(doc => {
                     products.push({ cloudDocId: doc.id, ...doc.data() });
                 });
-                if(products.length === 0) {
-                    const defaultProd = {
-                        id: 'prod-1',
-                        title: 'Instant Electric Water Heater Tap (3000W)',
-                        category: 'Home & Kitchen',
-                        price: 3499,
-                        costPrice: 2400,
-                        description: 'Get hot water in 3 seconds! Digital LED temperature display with 360-degree swivel spout.',
-                        mediaList: [{ url: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=600', type: 'image' }]
-                    };
-                    await db.collection('products').add(defaultProd);
-                    products.push(defaultProd);
-                }
             } catch(e) {
                 console.log("Cloud products fetch error", e);
             }
@@ -629,7 +636,7 @@
             const listToRender = filteredProducts !== null ? filteredProducts : products;
 
             if(listToRender.length === 0) {
-                grid.innerHTML = `<div class="col-span-full py-16 text-center text-slate-500"><p class="text-xs uppercase font-bold">No products found. Add products from Admin panel!</p></div>`;
+                grid.innerHTML = `<div class="col-span-full py-20 text-center text-slate-500"><i class="fa-solid fa-box-open text-4xl mb-3"></i><p class="text-xs uppercase font-bold">No products available right now. Admin can add products!</p></div>`;
                 return;
             }
 
@@ -643,6 +650,7 @@
                 card.innerHTML = `
                     <div>
                         <div class="aspect-square bg-black relative overflow-hidden border-b border-vibe-border">
+                            <span class="absolute top-2 left-2 z-10 bg-rose-600 text-white text-[9px] font-black uppercase px-2 py-0.5 rounded-full shadow">🔥 Hot Deal</span>
                             <img src="${firstMedia.url}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                         </div>
                         <div class="p-4 sm:p-5">
@@ -710,36 +718,36 @@
             document.getElementById('detailMainImg').src = media.url;
         }
 
+        function shareCurrentProduct() {
+            if(!selectedProductForDetail) return;
+            if(navigator.share) {
+                navigator.share({
+                    title: selectedProductForDetail.title,
+                    text: `Check out ${selectedProductForDetail.title} on VibeShop!`,
+                    url: window.location.href
+                }).catch(err => console.log(err));
+            } else {
+                navigator.clipboard.writeText(window.location.href);
+                alert("Product link copied to clipboard!");
+            }
+        }
+
         function renderHomeReviews() {
             const container = document.getElementById('homeReviewsGrid');
             if(!container) return;
             
-            let defaultReviewsHTML = `
+            let html = `
                 <div class="bg-vibe-card p-4 rounded-2xl border border-vibe-border">
                     <div class="flex justify-between items-center mb-2">
                         <span class="font-bold text-white text-xs">Usman Ghani (Lahore)</span>
                         <span class="text-amber-400 text-xs">⭐⭐⭐⭐⭐</span>
                     </div>
-                    <p class="text-slate-400 text-xs">Instant water heater tap mangwaya tha, quality zabardast hai aur delivery bhi time par mil gayi!</p>
-                </div>
-                <div class="bg-vibe-card p-4 rounded-2xl border border-vibe-border">
-                    <div class="flex justify-between items-center mb-1">
-                        <span class="font-bold text-white text-xs">Bilal Khan (Karachi)</span>
-                        <span class="text-amber-400 text-xs">⭐⭐⭐⭐⭐</span>
-                    </div>
-                    <p class="text-slate-400 text-xs">Open parcel inspection allow thi, bohot hi honest service hai VibeShop ki. Highly recommended!</p>
-                </div>
-                <div class="bg-vibe-card p-4 rounded-2xl border border-vibe-border">
-                    <div class="flex justify-between items-center mb-1">
-                        <span class="font-bold text-white text-xs">Ayesha Malik (Islamabad)</span>
-                        <span class="text-amber-400 text-xs">⭐⭐⭐⭐⭐</span>
-                    </div>
-                    <p class="text-slate-400 text-xs">Floating magnetic lamp order kiya tha, room ki look hi badal di. Amazing product!</p>
+                    <p class="text-slate-400 text-xs">Behtareen quality aur bohat fast delivery mili VibeShop se!</p>
                 </div>
             `;
 
             homeReviews.forEach(r => {
-                defaultReviewsHTML += `
+                html += `
                     <div class="bg-vibe-card p-4 rounded-2xl border border-vibe-border">
                         <div class="flex justify-between items-center mb-1">
                             <span class="font-bold text-white text-xs">${r.name || 'Customer'}</span>
@@ -749,7 +757,7 @@
                     </div>
                 `;
             });
-            container.innerHTML = defaultReviewsHTML;
+            container.innerHTML = html;
         }
 
         function openAddHomeReviewModal() { document.getElementById('addHomeReviewModal').classList.remove('hidden'); }
@@ -797,10 +805,7 @@
         function buyNowCurrent() {
             if(!selectedProductForDetail) return;
             checkoutItem = { ...selectedProductForDetail, qty: 1 };
-            const priceNum = Number(checkoutItem.price) || 0;
-            document.getElementById('checkoutSubtotal').innerText = `Rs. ${priceNum.toLocaleString()}`;
-            document.getElementById('checkoutGrandTotal').innerText = `Rs. ${(priceNum + DELIVERY_FEE).toLocaleString()}`;
-            document.getElementById('checkoutModal').classList.remove('hidden');
+            openCheckoutModal();
         }
 
         function orderViaWhatsApp() {
@@ -854,21 +859,36 @@
                 document.getElementById('shippingPercent').innerText = `${percent}%`;
             }
 
-            const finalGrand = subtotal + (subtotal >= target ? 0 : DELIVERY_FEE);
-            document.getElementById('cartGrandTotal').innerText = `Rs. ${finalGrand.toLocaleString()}`;
+            const delivFee = (subtotal >= target ? 0 : BASE_DELIVERY_FEE) + (currentPaymentMethod === 'COD' ? COD_EXTRA_FEE : 0);
+            document.getElementById('cartGrandTotal').innerText = `Rs. ${(subtotal + delivFee).toLocaleString()}`;
         }
 
         function removeFromCart(index) { cart.splice(index, 1); updateCartBadge(); renderCartItems(); }
         function updateCartBadge() { document.getElementById('cartBadgeCount').innerText = cart.reduce((sum, i) => sum + (i.qty || 1), 0); }
 
-        function openCheckoutModal() {
-            if (cart.length === 0) return;
-            document.getElementById('cartDrawer').classList.add('hidden');
-            checkoutItem = null;
-            let subtotal = cart.reduce((sum, item) => sum + ((Number(item.price) || 0) * (item.qty || 1)), 0);
-            let deliv = subtotal >= 5000 ? 0 : DELIVERY_FEE;
+        function togglePaymentMethod(method) {
+            currentPaymentMethod = method;
+            updateCheckoutTotals();
+        }
+
+        function updateCheckoutTotals() {
+            let items = checkoutItem ? [checkoutItem] : cart;
+            let subtotal = items.reduce((sum, item) => sum + ((Number(item.price) || 0) * (item.qty || 1)), 0);
+            const target = 5000;
+            let delivery = subtotal >= target ? 0 : BASE_DELIVERY_FEE;
+            if(currentPaymentMethod === 'COD') {
+                delivery += COD_EXTRA_FEE;
+            }
             document.getElementById('checkoutSubtotal').innerText = `Rs. ${subtotal.toLocaleString()}`;
-            document.getElementById('checkoutGrandTotal').innerText = `Rs. ${(subtotal + deliv).toLocaleString()}`;
+            document.getElementById('checkoutDeliveryFee').innerText = `Rs. ${delivery.toLocaleString()} ${currentPaymentMethod === 'COD' ? '(incl. Rs. 50 COD fee)' : ''}`;
+            document.getElementById('checkoutGrandTotal').innerText = `Rs. ${(subtotal + delivery).toLocaleString()}`;
+        }
+
+        function openCheckoutModal() {
+            let items = checkoutItem ? [checkoutItem] : cart;
+            if (items.length === 0) return;
+            document.getElementById('cartDrawer').classList.add('hidden');
+            updateCheckoutTotals();
             document.getElementById('checkoutModal').classList.remove('hidden');
         }
         function closeCheckoutModal() { document.getElementById('checkoutModal').classList.add('hidden'); }
@@ -877,7 +897,9 @@
             e.preventDefault();
             let itemsToOrder = checkoutItem ? [checkoutItem] : [...cart];
             let subtotal = itemsToOrder.reduce((sum, item) => sum + ((Number(item.price) || 0) * (item.qty || 1)), 0);
-            let grandTotal = subtotal + (subtotal >= 5000 ? 0 : DELIVERY_FEE);
+            const target = 5000;
+            let delivery = (subtotal >= target ? 0 : BASE_DELIVERY_FEE) + (currentPaymentMethod === 'COD' ? COD_EXTRA_FEE : 0);
+            let grandTotal = subtotal + delivery;
             let totalProfit = itemsToOrder.reduce((sum, item) => sum + (((Number(item.price) || 0) - (Number(item.costPrice) || 0)) * (item.qty || 1)), 0);
 
             const newOrder = {
@@ -892,6 +914,7 @@
                 productTitle: itemsToOrder.map(i => `${i.title || 'Product'} (${i.qty || 1}x)`).join(', '),
                 price: grandTotal,
                 profit: totalProfit,
+                paymentMode: currentPaymentMethod,
                 status: 'Pending'
             };
 
@@ -981,15 +1004,19 @@
 
         async function handleAddNewProduct(e) {
             e.preventDefault();
-            const fileInput = document.getElementById('newProdFile');
-            if(!fileInput.files || fileInput.files.length === 0) { alert("Please select an image file!"); return; }
+            const fileInput = document.getElementById('newProdFiles');
+            if(!fileInput.files || fileInput.files.length === 0) { alert("Please select image files!"); return; }
 
             const btn = document.getElementById('saveProdBtn');
-            btn.innerText = "Saving Product...";
+            btn.innerText = "Processing Multiple Media...";
             btn.disabled = true;
 
             try {
-                const compressedBase64 = await resizeImageAndGetBase64(fileInput.files[0]);
+                let mediaList = [];
+                for(let i = 0; i < fileInput.files.length; i++) {
+                    const base64 = await resizeImageAndGetBase64(fileInput.files[i]);
+                    mediaList.push({ url: base64, type: 'image' });
+                }
 
                 const newProd = {
                     id: 'prod-' + Date.now(),
@@ -997,7 +1024,7 @@
                     category: document.getElementById('newProdCat').value,
                     price: parseFloat(document.getElementById('newProdPrice').value) || 0,
                     costPrice: parseFloat(document.getElementById('newProdCost').value) || 0,
-                    mediaList: [{ url: compressedBase64, type: 'image' }],
+                    mediaList: mediaList,
                     description: document.getElementById('newProdDesc').value,
                     active: true
                 };
@@ -1005,7 +1032,7 @@
                 await db.collection('products').add(newProd);
                 await fetchProductsFromCloud();
 
-                alert("Product added successfully!");
+                alert("Product with multiple images added successfully!");
                 closeAddProductModal();
                 e.target.reset();
             } catch(err) {
@@ -1013,32 +1040,8 @@
                 alert("Error: " + err.message);
             }
 
-            btn.innerText = "Save Product";
+            btn.innerText = "Save Product to Cloud";
             btn.disabled = false;
-        }
-
-        async function handleUpdateProduct(e) {
-            e.preventDefault();
-            const docId = document.getElementById('editProdDocId').value;
-            if(!docId) return;
-
-            const updatedData = {
-                title: document.getElementById('editProdTitle').value,
-                price: parseFloat(document.getElementById('editProdPrice').value) || 0,
-                costPrice: parseFloat(document.getElementById('editProdCost').value) || 0,
-                description: document.getElementById('editProdDesc').value
-            };
-
-            try {
-                await db.collection('products').doc(docId).update(updatedData);
-                await fetchProductsFromCloud();
-                alert("Product updated successfully!");
-            } catch(err) {
-                console.error(err);
-                alert("Error: " + err.message);
-            }
-
-            closeEditProductModal();
         }
 
         async function updateOrderStatus(firebaseDocId, newStatus) {
@@ -1163,7 +1166,6 @@
                         <td class="p-3 text-slate-400">${p.category || ''}</td>
                         <td class="p-3 font-mono text-white">Rs. ${priceNum.toLocaleString()}</td>
                         <td class="p-3 text-center space-x-2">
-                            <button onclick="openEditProductModal('${p.cloudDocId}')" class="bg-blue-600 hover:bg-blue-500 text-white px-2.5 py-1 rounded text-xs font-bold">Edit</button>
                             <button onclick="deleteProduct('${p.cloudDocId}')" class="bg-rose-600 hover:bg-rose-500 text-white px-2.5 py-1 rounded text-xs font-bold">Delete</button>
                         </td>
                     </tr>
@@ -1179,7 +1181,7 @@
                         <td class="p-3"><span class="font-mono font-bold text-white">${o.ref || '#VS'}</span><div class="text-[9px] text-slate-500">${o.date || ''}</div></td>
                         <td class="p-3"><div class="font-bold text-slate-200">${o.custName || ''}</div><div class="text-slate-400 font-mono text-[10px]">${o.custPhone || ''}</div></td>
                         <td class="p-3"><div class="truncate text-slate-300 text-[11px]">${o.custAddress || ''}</div><div class="font-bold text-white text-[10px]">${o.custCity || ''}</div></td>
-                        <td class="p-3 text-amber-400 text-[11px]">${o.productTitle || ''}</td>
+                        <td class="p-3 text-amber-400 text-[11px]">${o.productTitle || ''} <span class="block text-[10px] text-slate-400">Payment: ${o.paymentMode || 'COD'}</span></td>
                         <td class="p-3">
                             <select onchange="updateOrderStatus('${o.firebaseId}', this.value)" class="bg-black border border-vibe-border text-white rounded p-1 text-xs">
                                 <option value="Pending" ${o.status === 'Pending' ? 'selected' : ''}>Pending</option>
@@ -1202,7 +1204,7 @@
             const o = orders.find(item => item.firebaseId === firebaseId || item.id === firebaseId);
             if(!o) return;
             const priceNum = Number(o.price) || 0;
-            navigator.clipboard.writeText(`MARKAZ ORDER:\nName: ${o.custName}\nPhone: ${o.custPhone}\nCity: ${o.custCity}\nAddress: ${o.custAddress}\nProducts: ${o.productTitle}\nTotal: Rs. ${priceNum}`);
+            navigator.clipboard.writeText(`MARKAZ ORDER:\nName: ${o.custName}\nPhone: ${o.custPhone}\nCity: ${o.custCity}\nAddress: ${o.custAddress}\nProducts: ${o.productTitle}\nPayment: ${o.paymentMode || 'COD'}\nTotal: Rs. ${priceNum}`);
             alert("Order details copied for Markaz!");
         }
 
