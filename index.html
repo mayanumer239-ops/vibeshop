@@ -47,314 +47,441 @@
             100% { transform: translateY(100%); opacity: 0; }
         }
         .animate-sales-popup { animation: popupSlide 6s ease-in-out forwards; }
-        body { -webkit-tap-highlight-color: transparent; }
+        body { -webkit-tap-highlight-color: transparent; background-color: #0a0a0a; }
         button:active, div.cursor-pointer:active { transform: scale(0.98); transition: transform 0.1s ease; }
+
+        /* =========================================================
+           CINEMATIC 3D AIRPLANE INTRO & TAIL REVEAL OVERLAY
+           ========================================================= */
+        #vibeIntroOverlay {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            pointer-events: none;
+            overflow: hidden;
+            perspective: 1400px;
+            background: rgba(10, 10, 10, 0.96);
+            transition: opacity 0.55s ease, visibility 0.55s ease;
+            will-change: opacity, background;
+        }
+
+        #vibeIntroOverlay.intro-complete {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* Silver-white luminous tail ribbon trailing behind the aircraft */
+        #vibeTailRibbon {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            width: 5px;
+            height: 0px;
+            transform: translateX(-50%);
+            transform-origin: top center;
+            background: linear-gradient(
+                to bottom,
+                rgba(148, 163, 184, 0.04) 0%,
+                rgba(226, 232, 240, 0.45) 45%,
+                rgba(255, 255, 255, 0.94) 92%,
+                rgba(255, 255, 255, 1) 100%
+            );
+            box-shadow:
+                0 0 18px rgba(226, 232, 240, 0.6),
+                0 0 38px rgba(148, 163, 184, 0.28);
+            border-radius: 999px;
+            will-change: height, opacity, transform;
+        }
+
+        /* Soft silver-white slipstream aura around tail */
+        #vibeTailGlow {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            width: 56px;
+            height: 0px;
+            transform: translateX(-50%);
+            background: radial-gradient(
+                ellipse at center top,
+                rgba(255, 255, 255, 0.22) 0%,
+                rgba(148, 163, 184, 0.08) 55%,
+                transparent 100%
+            );
+            pointer-events: none;
+            will-change: height, opacity, transform;
+        }
+
+        /* 3D Airplane Container flying vertically downward */
+        #vibe3DPlane {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            width: min(540px, 88vw);
+            transform: translate3d(-50%, -120%, 120px) rotateX(10deg);
+            transform-style: preserve-3d;
+            will-change: transform;
+        }
+
+        @media (min-width: 768px) {
+            #vibe3DPlane {
+                width: min(620px, 52vw);
+            }
+        }
+
+        #vibe3DPlane img {
+            display: block;
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            mix-blend-mode: lighten;
+            filter:
+                drop-shadow(0 28px 34px rgba(0, 0, 0, 0.95))
+                drop-shadow(0 0 16px rgba(148, 163, 184, 0.16));
+        }
+
+        /* Progressive reveal wrapper for existing VibeShop website */
+        #vibeSiteContent {
+            will-change: clip-path, opacity;
+            clip-path: inset(0 0 100% 0);
+            opacity: 0.15;
+        }
+
+        #vibeSiteContent.intro-finished {
+            clip-path: none !important;
+            opacity: 1 !important;
+            will-change: auto;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            #vibeIntroOverlay {
+                display: none !important;
+            }
+            #vibeSiteContent {
+                clip-path: none !important;
+                opacity: 1 !important;
+            }
+        }
     </style>
 </head>
 <body class="font-sans antialiased bg-vibe-black text-slate-100 flex flex-col min-h-screen pb-20 sm:pb-0">
 
-    <!-- TOP ANNOUNCEMENT BAR -->
-    <div class="bg-gradient-to-r from-zinc-900 via-neutral-900 to-zinc-900 text-slate-200 text-[11px] sm:text-xs py-2 px-3 text-center border-b border-vibe-border flex flex-wrap items-center justify-center gap-2">
-        <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full font-black uppercase tracking-wider flex items-center gap-1">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Nationwide Express
-        </span>
-        <span class="font-bold tracking-wide">🔥 Flat Rs. 250 Delivery | Open Parcel Inspection Allowed!</span>
-        <div class="bg-black/60 border border-vibe-border px-2 py-0.5 rounded font-mono text-[10px] sm:text-[11px] text-amber-400 font-bold flex items-center gap-1">
-            <i class="fa-solid fa-clock text-amber-400 text-xs"></i> <span id="topTimer">02h : 45m : 12s</span>
+    <!-- CINEMATIC 3D AIRPLANE INTRO OVERLAY (EMBEDDED IMAGE DATA URI) -->
+    <div id="vibeIntroOverlay" aria-hidden="true">
+        <div id="vibeTailGlow"></div>
+        <div id="vibeTailRibbon"></div>
+        <div id="vibe3DPlane">
+            <img
+                id="vibePlaneImg"
+                src="data:image/jpeg;base64,[EMBEDDED_GEMINI_GENERATED_IMAGE_FBIUMFFBIUMFFBIU_3_JPG]"
+                alt="VibeShop 3D Airplane"
+            >
         </div>
     </div>
 
-    <!-- MAIN NAVBAR -->
-    <header class="sticky top-0 z-40 bg-vibe-black/90 backdrop-blur-md border-b border-vibe-border">
-        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
-            <div class="flex items-center space-x-2.5 cursor-pointer" onclick="openStoreView()">
-                <div class="w-9 h-9 sm:w-12 sm:h-12 bg-white text-black flex items-center justify-center font-black text-lg sm:text-2xl tracking-tighter rounded-xl shadow-lg border border-slate-300">
-                    VS
-                </div>
-                <div>
-                    <span class="text-lg sm:text-2xl font-black tracking-widest uppercase text-white block leading-none">VIBE<span class="text-slate-400">SHOP</span></span>
-                    <span class="text-[8px] sm:text-[10px] font-bold tracking-[0.2em] text-slate-400 uppercase mt-0.5 block">YOUR TRUST</span>
-                </div>
-            </div>
+    <!-- EXISTING VIBESHOP WEBSITE CONTENT -->
+    <div id="vibeSiteContent" class="flex flex-col flex-grow">
 
-            <!-- Header Actions -->
-            <div class="flex items-center space-x-1.5 sm:space-x-2.5">
-                <button onclick="scrollToContact()" class="hidden sm:flex bg-vibe-card border border-vibe-border hover:bg-zinc-800 text-slate-200 text-xs font-bold uppercase px-3 py-2.5 rounded-xl transition items-center gap-1.5">
-                    <i class="fa-solid fa-envelope text-sky-400"></i> <span>Contact</span>
-                </button>
-
-                <button onclick="openTrackOrderModal()" class="bg-vibe-card border border-vibe-border hover:bg-zinc-800 text-slate-200 text-[11px] sm:text-xs font-bold uppercase px-2.5 sm:px-3 py-2.5 rounded-xl transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-truck-fast text-emerald-400"></i> <span class="hidden xs:inline">Track</span>
-                </button>
-
-                <button onclick="toggleCartDrawer()" class="relative bg-vibe-card border border-vibe-border hover:bg-zinc-800 text-white p-2.5 sm:p-3 rounded-xl transition flex items-center justify-center">
-                    <i class="fa-solid fa-cart-shopping text-sm"></i>
-                    <span id="cartBadgeCount" class="absolute -top-1.5 -right-1.5 bg-white text-black text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
-                </button>
-
-                <div id="navAuthContainer" class="flex items-center gap-2">
-                    <button onclick="openAuthModal()" class="bg-white hover:bg-slate-200 text-black text-[10px] sm:text-xs font-extrabold uppercase px-2.5 sm:px-3 py-2 rounded-xl transition shadow">Sign In</button>
-                </div>
+        <!-- TOP ANNOUNCEMENT BAR -->
+        <div class="bg-gradient-to-r from-zinc-900 via-neutral-900 to-zinc-900 text-slate-200 text-[11px] sm:text-xs py-2 px-3 text-center border-b border-vibe-border flex flex-wrap items-center justify-center gap-2">
+            <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full font-black uppercase tracking-wider flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Nationwide Express
+            </span>
+            <span class="font-bold tracking-wide">🔥 Flat Rs. 250 Delivery | Open Parcel Inspection Allowed!</span>
+            <div class="bg-black/60 border border-vibe-border px-2 py-0.5 rounded font-mono text-[10px] sm:text-[11px] text-amber-400 font-bold flex items-center gap-1">
+                <i class="fa-solid fa-clock text-amber-400 text-xs"></i> <span id="topTimer">02h : 45m : 12s</span>
             </div>
         </div>
-    </header>
 
-    <main class="flex-grow">
-        <!-- VIEW 1: STORE FRONTEND -->
-        <section id="storeView" class="block">
-            <div class="relative bg-gradient-to-b from-vibe-card to-vibe-black border-b border-vibe-border py-8 sm:py-16 overflow-hidden">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-6">
-                    <div class="max-w-2xl">
-                        <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white px-3 py-1 rounded-full text-[11px] font-semibold mb-3 tracking-wide">
-                            <i class="fa-solid fa-bolt text-amber-400"></i> Next-Gen Smart Shopping Experience
-                        </div>
-                        <h1 class="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white mb-3 leading-tight">
-                            ELEVATE YOUR <br><span class="text-slate-400">DAILY VIBE</span>
-                        </h1>
-                        <p class="text-slate-400 text-xs sm:text-base leading-relaxed mb-5 font-normal">
-                            Top Trending Tech, Home Gadgets & Accessories in Pakistan.
-                        </p>
-                        <!-- Search Bar -->
-                        <div class="relative max-w-md">
-                            <input type="text" id="storeSearchInput" oninput="filterStoreProducts()" placeholder="Search products..." class="w-full bg-black border border-vibe-border rounded-xl px-4 py-3 text-xs text-white outline-none focus:border-white transition">
-                            <i class="fa-solid fa-search absolute right-4 top-3.5 text-slate-500"></i>
-                        </div>
+        <!-- MAIN NAVBAR -->
+        <header class="sticky top-0 z-40 bg-vibe-black/90 backdrop-blur-md border-b border-vibe-border">
+            <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
+                <div class="flex items-center space-x-2.5 cursor-pointer" onclick="openStoreView()">
+                    <div class="w-9 h-9 sm:w-12 sm:h-12 bg-white text-black flex items-center justify-center font-black text-lg sm:text-2xl tracking-tighter rounded-xl shadow-lg border border-slate-300">
+                        VS
                     </div>
-                </div>
-            </div>
-
-            <!-- FEATURE BANNER: 4-5 NEW ADVANCED PRO FEATURES -->
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-5 relative z-20 mb-8">
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div class="bg-vibe-card border border-vibe-border p-4 rounded-2xl flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg"><i class="fa-solid fa-shield-halved"></i></div>
-                        <div>
-                            <h4 class="font-bold text-white text-xs">100% Verified Quality</h4>
-                            <p class="text-[10px] text-slate-400">Tested products before dispatch</p>
-                        </div>
-                    </div>
-                    <div class="bg-vibe-card border border-vibe-border p-4 rounded-2xl flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center text-lg"><i class="fa-solid fa-box-open"></i></div>
-                        <div>
-                            <h4 class="font-bold text-white text-xs">Open Parcel Inspection</h4>
-                            <p class="text-[10px] text-slate-400">Check before you pay courier</p>
-                        </div>
-                    </div>
-                    <div class="bg-vibe-card border border-vibe-border p-4 rounded-2xl flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/20 text-sky-400 flex items-center justify-center text-lg"><i class="fa-solid fa-headset"></i></div>
-                        <div>
-                            <h4 class="font-bold text-white text-xs">24/7 WhatsApp Support</h4>
-                            <p class="text-[10px] text-slate-400">Instant response for orders</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Products Grid Section -->
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
-                <h2 class="text-xl sm:text-2xl font-black text-white uppercase mb-6 flex items-center gap-2">
-                    <i class="fa-solid fa-fire text-amber-400"></i> Trending Products
-                </h2>
-                <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"></div>
-            </div>
-
-            <!-- HOME PAGE CUSTOMER REVIEWS SECTION -->
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 border-t border-vibe-border">
-                <div class="flex items-center justify-between mb-6">
                     <div>
-                        <span class="text-amber-400 font-bold text-[10px] uppercase tracking-widest">Testimonials</span>
-                        <h2 class="text-xl sm:text-2xl font-black text-white uppercase">What Our Customers Say</h2>
+                        <span class="text-lg sm:text-2xl font-black tracking-widest uppercase text-white block leading-none">VIBE<span class="text-slate-400">SHOP</span></span>
+                        <span class="text-[8px] sm:text-[10px] font-bold tracking-[0.2em] text-slate-400 uppercase mt-0.5 block">YOUR TRUST</span>
                     </div>
-                    <button onclick="openAddHomeReviewModal()" class="bg-vibe-card border border-vibe-border hover:bg-zinc-800 text-white text-xs font-bold uppercase px-3.5 py-2 rounded-xl transition">
-                        + Add Review
+                </div>
+
+                <!-- Header Actions -->
+                <div class="flex items-center space-x-1.5 sm:space-x-2.5">
+                    <button onclick="scrollToContact()" class="hidden sm:flex bg-vibe-card border border-vibe-border hover:bg-zinc-800 text-slate-200 text-xs font-bold uppercase px-3 py-2.5 rounded-xl transition items-center gap-1.5">
+                        <i class="fa-solid fa-envelope text-sky-400"></i> <span>Contact</span>
+                    </button>
+
+                    <button onclick="openTrackOrderModal()" class="bg-vibe-card border border-vibe-border hover:bg-zinc-800 text-slate-200 text-[11px] sm:text-xs font-bold uppercase px-2.5 sm:px-3 py-2.5 rounded-xl transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-truck-fast text-emerald-400"></i> <span class="hidden xs:inline">Track</span>
+                    </button>
+
+                    <button onclick="toggleCartDrawer()" class="relative bg-vibe-card border border-vibe-border hover:bg-zinc-800 text-white p-2.5 sm:p-3 rounded-xl transition flex items-center justify-center">
+                        <i class="fa-solid fa-cart-shopping text-sm"></i>
+                        <span id="cartBadgeCount" class="absolute -top-1.5 -right-1.5 bg-white text-black text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
+                    </button>
+
+                    <div id="navAuthContainer" class="flex items-center gap-2">
+                        <button onclick="openAuthModal()" class="bg-white hover:bg-slate-200 text-black text-[10px] sm:text-xs font-extrabold uppercase px-2.5 sm:px-3 py-2 rounded-xl transition shadow">Sign In</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-grow">
+            <!-- VIEW 1: STORE FRONTEND -->
+            <section id="storeView" class="block">
+                <div class="relative bg-gradient-to-b from-vibe-card to-vibe-black border-b border-vibe-border py-8 sm:py-16 overflow-hidden">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-6">
+                        <div class="max-w-2xl">
+                            <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white px-3 py-1 rounded-full text-[11px] font-semibold mb-3 tracking-wide">
+                                <i class="fa-solid fa-bolt text-amber-400"></i> Next-Gen Smart Shopping Experience
+                            </div>
+                            <h1 class="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white mb-3 leading-tight">
+                                ELEVATE YOUR <br><span class="text-slate-400">DAILY VIBE</span>
+                            </h1>
+                            <p class="text-slate-400 text-xs sm:text-base leading-relaxed mb-5 font-normal">
+                                Top Trending Tech, Home Gadgets & Accessories in Pakistan.
+                            </p>
+                            <!-- Search Bar -->
+                            <div class="relative max-w-md">
+                                <input type="text" id="storeSearchInput" oninput="filterStoreProducts()" placeholder="Search products..." class="w-full bg-black border border-vibe-border rounded-xl px-4 py-3 text-xs text-white outline-none focus:border-white transition">
+                                <i class="fa-solid fa-search absolute right-4 top-3.5 text-slate-500"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FEATURE BANNER -->
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-5 relative z-20 mb-8">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="bg-vibe-card border border-vibe-border p-4 rounded-2xl flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg"><i class="fa-solid fa-shield-halved"></i></div>
+                            <div>
+                                <h4 class="font-bold text-white text-xs">100% Verified Quality</h4>
+                                <p class="text-[10px] text-slate-400">Tested products before dispatch</p>
+                            </div>
+                        </div>
+                        <div class="bg-vibe-card border border-vibe-border p-4 rounded-2xl flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center text-lg"><i class="fa-solid fa-box-open"></i></div>
+                            <div>
+                                <h4 class="font-bold text-white text-xs">Open Parcel Inspection</h4>
+                                <p class="text-[10px] text-slate-400">Check before you pay courier</p>
+                            </div>
+                        </div>
+                        <div class="bg-vibe-card border border-vibe-border p-4 rounded-2xl flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/20 text-sky-400 flex items-center justify-center text-lg"><i class="fa-solid fa-headset"></i></div>
+                            <div>
+                                <h4 class="font-bold text-white text-xs">24/7 WhatsApp Support</h4>
+                                <p class="text-[10px] text-slate-400">Instant response for orders</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Products Grid Section -->
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
+                    <h2 class="text-xl sm:text-2xl font-black text-white uppercase mb-6 flex items-center gap-2">
+                        <i class="fa-solid fa-fire text-amber-400"></i> Trending Products
+                    </h2>
+                    <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"></div>
+                </div>
+
+                <!-- HOME PAGE CUSTOMER REVIEWS SECTION -->
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 border-t border-vibe-border">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <span class="text-amber-400 font-bold text-[10px] uppercase tracking-widest">Testimonials</span>
+                            <h2 class="text-xl sm:text-2xl font-black text-white uppercase">What Our Customers Say</h2>
+                        </div>
+                        <button onclick="openAddHomeReviewModal()" class="bg-vibe-card border border-vibe-border hover:bg-zinc-800 text-white text-xs font-bold uppercase px-3.5 py-2 rounded-xl transition">
+                            + Add Review
+                        </button>
+                    </div>
+                    <div id="homeReviewsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="bg-vibe-card p-4 rounded-2xl border border-vibe-border">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-bold text-white text-xs">Usman Ghani (Lahore)</span>
+                                <span class="text-amber-400 text-xs">⭐⭐⭐⭐⭐</span>
+                            </div>
+                            <p class="text-slate-400 text-xs">Behtareen quality aur bohat fast delivery mili VibeShop se!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SCROLLABLE CONTACT US SECTION -->
+                <div id="contactSection" class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 border-t border-vibe-border">
+                    <div class="bg-vibe-card border border-vibe-border rounded-3xl p-6 sm:p-8 shadow-2xl">
+                        <div class="text-center mb-6">
+                            <span class="text-sky-400 font-bold text-[10px] uppercase tracking-widest">Get in Touch</span>
+                            <h2 class="text-2xl font-black text-white uppercase mt-1">Contact VibeShop Support</h2>
+                            <p class="text-slate-400 text-xs mt-1">Have questions about your order or products? Drop us a message!</p>
+                        </div>
+                        <form onsubmit="handleContactSubmit(event)" class="space-y-4 text-xs">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block font-bold text-slate-300 mb-1">Your Name *</label>
+                                    <input type="text" id="contactName" required placeholder="Ali Ahmed" class="w-full bg-black border border-vibe-border rounded-xl p-3 text-white outline-none">
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-slate-300 mb-1">WhatsApp / Phone *</label>
+                                    <input type="tel" id="contactPhone" required placeholder="03001234567" class="w-full bg-black border border-vibe-border rounded-xl p-3 text-white outline-none">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-300 mb-1">Your Message *</label>
+                                <textarea id="contactMsg" required rows="4" placeholder="Write your query here..." class="w-full bg-black border border-vibe-border rounded-xl p-3 text-white outline-none"></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-white hover:bg-slate-200 text-black font-extrabold uppercase py-3.5 rounded-xl transition shadow">Send Message to WhatsApp</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 2: PRODUCT DETAIL PAGE -->
+            <section id="productDetailView" class="hidden py-6 sm:py-12 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between mb-4 sm:mb-6">
+                    <button onclick="openStoreView()" class="inline-flex items-center gap-2 bg-vibe-card border border-vibe-border text-slate-300 hover:text-white px-3.5 py-2 rounded-xl text-xs font-bold transition">
+                        <i class="fa-solid fa-arrow-left"></i> Back to Store
+                    </button>
+                    <button onclick="shareCurrentProduct()" class="bg-vibe-card border border-vibe-border hover:bg-zinc-800 text-slate-300 hover:text-white px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2">
+                        <i class="fa-solid fa-share-nodes text-sky-400"></i> Share Product
                     </button>
                 </div>
-                <div id="homeReviewsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div class="bg-vibe-card p-4 rounded-2xl border border-vibe-border">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="font-bold text-white text-xs">Usman Ghani (Lahore)</span>
-                            <span class="text-amber-400 text-xs">⭐⭐⭐⭐⭐</span>
-                        </div>
-                        <p class="text-slate-400 text-xs">Behtareen quality aur bohat fast delivery mili VibeShop se!</p>
-                    </div>
-                </div>
-            </div>
 
-            <!-- SCROLLABLE CONTACT US SECTION -->
-            <div id="contactSection" class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 border-t border-vibe-border">
-                <div class="bg-vibe-card border border-vibe-border rounded-3xl p-6 sm:p-8 shadow-2xl">
-                    <div class="text-center mb-6">
-                        <span class="text-sky-400 font-bold text-[10px] uppercase tracking-widest">Get in Touch</span>
-                        <h2 class="text-2xl font-black text-white uppercase mt-1">Contact VibeShop Support</h2>
-                        <p class="text-slate-400 text-xs mt-1">Have questions about your order or products? Drop us a message!</p>
-                    </div>
-                    <form onsubmit="handleContactSubmit(event)" class="space-y-4 text-xs">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block font-bold text-slate-300 mb-1">Your Name *</label>
-                                <input type="text" id="contactName" required placeholder="Ali Ahmed" class="w-full bg-black border border-vibe-border rounded-xl p-3 text-white outline-none">
-                            </div>
-                            <div>
-                                <label class="block font-bold text-slate-300 mb-1">WhatsApp / Phone *</label>
-                                <input type="tel" id="contactPhone" required placeholder="03001234567" class="w-full bg-black border border-vibe-border rounded-xl p-3 text-white outline-none">
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block font-bold text-slate-300 mb-1">Your Message *</label>
-                            <textarea id="contactMsg" required rows="4" placeholder="Write your query here..." class="w-full bg-black border border-vibe-border rounded-xl p-3 text-white outline-none"></textarea>
-                        </div>
-                        <button type="submit" class="w-full bg-white hover:bg-slate-200 text-black font-extrabold uppercase py-3.5 rounded-xl transition shadow">Send Message to WhatsApp</button>
-                    </form>
-                </div>
-            </div>
-        </section>
-
-        <!-- VIEW 2: PRODUCT DETAIL PAGE -->
-        <section id="productDetailView" class="hidden py-6 sm:py-12 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between mb-4 sm:mb-6">
-                <button onclick="openStoreView()" class="inline-flex items-center gap-2 bg-vibe-card border border-vibe-border text-slate-300 hover:text-white px-3.5 py-2 rounded-xl text-xs font-bold transition">
-                    <i class="fa-solid fa-arrow-left"></i> Back to Store
-                </button>
-                <!-- NEW FEATURE: ONE-CLICK SHARE BUTTON -->
-                <button onclick="shareCurrentProduct()" class="bg-vibe-card border border-vibe-border hover:bg-zinc-800 text-slate-300 hover:text-white px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2">
-                    <i class="fa-solid fa-share-nodes text-sky-400"></i> Share Product
-                </button>
-            </div>
-
-            <div class="bg-vibe-card border border-vibe-border rounded-3xl p-5 sm:p-10 grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10 shadow-2xl">
-                <div>
-                    <div id="detailMediaContainer" class="aspect-square bg-black rounded-2xl overflow-hidden border border-vibe-border relative flex items-center justify-center mb-3">
-                        <img id="detailMainImg" src="" alt="Product" class="w-full h-full object-cover">
-                    </div>
-                    <div id="detailThumbnails" class="flex gap-2 overflow-x-auto pb-2 custom-scrollbar"></div>
-                </div>
-
-                <div class="flex flex-col justify-between space-y-5">
+                <div class="bg-vibe-card border border-vibe-border rounded-3xl p-5 sm:p-10 grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10 shadow-2xl">
                     <div>
-                        <span id="detailCategory" class="text-[10px] sm:text-xs font-black text-slate-500 uppercase tracking-widest block mb-2">Category</span>
-                        <h2 id="detailTitle" class="text-2xl sm:text-3xl font-black text-white leading-tight">Product Title</h2>
-                        
-                        <div class="flex items-baseline gap-3 mt-3">
-                            <span id="detailPrice" class="text-2xl sm:text-3xl font-black text-white">Rs. 0</span>
+                        <div id="detailMediaContainer" class="aspect-square bg-black rounded-2xl overflow-hidden border border-vibe-border relative flex items-center justify-center mb-3">
+                            <img id="detailMainImg" src="" alt="Product" class="w-full h-full object-cover">
+                        </div>
+                        <div id="detailThumbnails" class="flex gap-2 overflow-x-auto pb-2 custom-scrollbar"></div>
+                    </div>
+
+                    <div class="flex flex-col justify-between space-y-5">
+                        <div>
+                            <span id="detailCategory" class="text-[10px] sm:text-xs font-black text-slate-500 uppercase tracking-widest block mb-2">Category</span>
+                            <h2 id="detailTitle" class="text-2xl sm:text-3xl font-black text-white leading-tight">Product Title</h2>
+                            
+                            <div class="flex items-baseline gap-3 mt-3">
+                                <span id="detailPrice" class="text-2xl sm:text-3xl font-black text-white">Rs. 0</span>
+                            </div>
+
+                            <div class="my-4 p-3 bg-black/60 rounded-2xl border border-vibe-border flex items-center gap-3 text-xs text-slate-300">
+                                <i class="fa-solid fa-truck-fast text-emerald-400 text-lg"></i>
+                                <div>
+                                    <span class="font-bold text-white block">Fast Delivery Guarantee</span>
+                                    <span class="text-[10px] text-slate-400">Estimated delivery within 2 to 3 business days across Pakistan.</span>
+                                </div>
+                            </div>
+
+                            <p id="detailDesc" class="text-xs sm:text-sm text-slate-400 mt-3 leading-relaxed whitespace-pre-line"></p>
                         </div>
 
-                        <!-- TRUST BADGE & FAST DELIVERY -->
-                        <div class="my-4 p-3 bg-black/60 rounded-2xl border border-vibe-border flex items-center gap-3 text-xs text-slate-300">
-                            <i class="fa-solid fa-truck-fast text-emerald-400 text-lg"></i>
-                            <div>
-                                <span class="font-bold text-white block">Fast Delivery Guarantee</span>
-                                <span class="text-[10px] text-slate-400">Estimated delivery within 2 to 3 business days across Pakistan.</span>
+                        <div class="space-y-3 pt-4 border-t border-vibe-border">
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                                <button onclick="addCurrentToCart()" class="bg-vibe-border hover:bg-zinc-800 text-white text-xs font-extrabold uppercase py-3.5 rounded-xl transition flex items-center justify-center gap-2 border border-slate-700">
+                                    <i class="fa-solid fa-cart-plus"></i> Add to Cart
+                                </button>
+                                <button onclick="buyNowCurrent()" class="bg-white hover:bg-slate-200 text-black text-xs font-extrabold uppercase py-3.5 rounded-xl transition flex items-center justify-center gap-2 shadow">
+                                    <i class="fa-solid fa-bolt"></i> Buy Now
+                                </button>
+                                <button onclick="orderViaWhatsApp()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold uppercase py-3.5 rounded-xl transition flex items-center justify-center gap-2 shadow">
+                                    <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp
+                                </button>
                             </div>
                         </div>
-
-                        <p id="detailDesc" class="text-xs sm:text-sm text-slate-400 mt-3 leading-relaxed whitespace-pre-line"></p>
-                    </div>
-
-                    <div class="space-y-3 pt-4 border-t border-vibe-border">
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                            <button onclick="addCurrentToCart()" class="bg-vibe-border hover:bg-zinc-800 text-white text-xs font-extrabold uppercase py-3.5 rounded-xl transition flex items-center justify-center gap-2 border border-slate-700">
-                                <i class="fa-solid fa-cart-plus"></i> Add to Cart
-                            </button>
-                            <button onclick="buyNowCurrent()" class="bg-white hover:bg-slate-200 text-black text-xs font-extrabold uppercase py-3.5 rounded-xl transition flex items-center justify-center gap-2 shadow">
-                                <i class="fa-solid fa-bolt"></i> Buy Now
-                            </button>
-                            <button onclick="orderViaWhatsApp()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold uppercase py-3.5 rounded-xl transition flex items-center justify-center gap-2 shadow">
-                                <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp
-                            </button>
-                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- VIEW 3: ADMIN DASHBOARD -->
-        <section id="adminView" class="hidden py-6 sm:py-10 bg-vibe-black min-h-screen">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 bg-vibe-card p-5 rounded-3xl border border-vibe-border">
-                    <div>
-                        <span class="bg-amber-400 text-black text-[10px] font-black uppercase px-2 py-0.5 rounded-md">Admin Portal</span>
-                        <h2 class="text-2xl font-black uppercase text-white mt-2">Admin Control Center</h2>
-                    </div>
-                    <div class="flex items-center gap-2 flex-wrap">
-                        <button onclick="openAddProductModal()" class="bg-white hover:bg-slate-200 text-black text-xs font-extrabold uppercase px-4 py-2.5 rounded-xl shadow flex items-center gap-1.5 transition">
-                            <i class="fa-solid fa-plus"></i> Add Product (Multiple Media)
-                        </button>
-                        <button onclick="openStoreView()" class="bg-vibe-border text-slate-200 text-xs font-bold uppercase px-3.5 py-2.5 rounded-xl">Store View</button>
-                        <button onclick="logout()" class="bg-rose-900/60 text-rose-200 text-xs font-bold uppercase px-3.5 py-2.5 rounded-xl">Logout</button>
-                    </div>
-                </div>
-
-                <!-- ANALYTICS -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
-                    <div class="bg-vibe-card p-4 rounded-2xl border border-vibe-border flex items-center justify-between">
+            <!-- VIEW 3: ADMIN DASHBOARD -->
+            <section id="adminView" class="hidden py-6 sm:py-10 bg-vibe-black min-h-screen">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 bg-vibe-card p-5 rounded-3xl border border-vibe-border">
                         <div>
-                            <span class="text-[10px] text-emerald-400 font-bold uppercase">Live Visitors</span>
-                            <h3 id="statLiveVisitors" class="text-3xl font-black text-white">4</h3>
+                            <span class="bg-amber-400 text-black text-[10px] font-black uppercase px-2 py-0.5 rounded-md">Admin Portal</span>
+                            <h2 class="text-2xl font-black uppercase text-white mt-2">Admin Control Center</h2>
                         </div>
-                        <i class="fa-solid fa-users text-emerald-400 text-2xl"></i>
-                    </div>
-                    <div class="bg-vibe-card p-4 rounded-2xl border border-vibe-border flex items-center justify-between">
-                        <div>
-                            <span class="text-[10px] text-sky-400 font-bold uppercase">Total Sessions</span>
-                            <h3 id="statTotalSessions" class="text-3xl font-black text-white">58</h3>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <button onclick="openAddProductModal()" class="bg-white hover:bg-slate-200 text-black text-xs font-extrabold uppercase px-4 py-2.5 rounded-xl shadow flex items-center gap-1.5 transition">
+                                <i class="fa-solid fa-plus"></i> Add Product (Multiple Media)
+                            </button>
+                            <button onclick="openStoreView()" class="bg-vibe-border text-slate-200 text-xs font-bold uppercase px-3.5 py-2.5 rounded-xl">Store View</button>
+                            <button onclick="logout()" class="bg-rose-900/60 text-rose-200 text-xs font-bold uppercase px-3.5 py-2.5 rounded-xl">Logout</button>
                         </div>
-                        <i class="fa-solid fa-chart-line text-sky-400 text-2xl"></i>
                     </div>
-                    <div class="bg-vibe-card p-4 rounded-2xl border border-vibe-border flex items-center justify-between">
-                        <div>
-                            <span class="text-[10px] text-amber-400 font-bold uppercase">Est. Net Profit</span>
-                            <h3 id="statTotalProfit" class="text-3xl font-black text-emerald-400">Rs. 0</h3>
-                        </div>
-                        <i class="fa-solid fa-percent text-amber-400 text-2xl"></i>
-                    </div>
-                </div>
 
-                <!-- ADMIN PRODUCTS MANAGEMENT TABLE -->
-                <div class="bg-vibe-card rounded-2xl border border-vibe-border overflow-hidden mb-8 shadow-xl">
-                    <div class="p-4 border-b border-vibe-border flex items-center justify-between">
-                        <h3 class="font-black text-white text-base uppercase">Manage Store Products</h3>
-                        <span id="adminProdCountBadge" class="text-[10px] font-bold bg-white text-black px-2.5 py-1 rounded-full uppercase">0 Products</span>
+                    <!-- ANALYTICS -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
+                        <div class="bg-vibe-card p-4 rounded-2xl border border-vibe-border flex items-center justify-between">
+                            <div>
+                                <span class="text-[10px] text-emerald-400 font-bold uppercase">Live Visitors</span>
+                                <h3 id="statLiveVisitors" class="text-3xl font-black text-white">4</h3>
+                            </div>
+                            <i class="fa-solid fa-users text-emerald-400 text-2xl"></i>
+                        </div>
+                        <div class="bg-vibe-card p-4 rounded-2xl border border-vibe-border flex items-center justify-between">
+                            <div>
+                                <span class="text-[10px] text-sky-400 font-bold uppercase">Total Sessions</span>
+                                <h3 id="statTotalSessions" class="text-3xl font-black text-white">58</h3>
+                            </div>
+                            <i class="fa-solid fa-chart-line text-sky-400 text-2xl"></i>
+                        </div>
+                        <div class="bg-vibe-card p-4 rounded-2xl border border-vibe-border flex items-center justify-between">
+                            <div>
+                                <span class="text-[10px] text-amber-400 font-bold uppercase">Est. Net Profit</span>
+                                <h3 id="statTotalProfit" class="text-3xl font-black text-emerald-400">Rs. 0</h3>
+                            </div>
+                            <i class="fa-solid fa-percent text-amber-400 text-2xl"></i>
+                        </div>
                     </div>
-                    <div class="overflow-x-auto custom-scrollbar">
-                        <table class="w-full text-left border-collapse min-w-[650px]">
-                            <thead>
-                                <tr class="bg-black text-[10px] font-extrabold text-slate-400 uppercase tracking-widest border-b border-vibe-border">
-                                    <th class="p-3">Product Title</th>
-                                    <th class="p-3">Category</th>
-                                    <th class="p-3">Price</th>
-                                    <th class="p-3 text-center">Actions (Edit / Delete)</th>
-                                </tr>
-                            </thead>
-                            <tbody id="adminProductsTableBody" class="divide-y divide-vibe-border text-xs"></tbody>
-                        </table>
-                    </div>
-                </div>
 
-                <!-- ORDERS TABLE -->
-                <div class="bg-vibe-card rounded-2xl border border-vibe-border overflow-hidden mb-8 shadow-xl">
-                    <div class="p-4 border-b border-vibe-border flex items-center justify-between">
-                        <h3 class="font-black text-white text-base uppercase">Customer Orders</h3>
-                        <span id="orderCountBadge" class="text-[10px] font-bold bg-white text-black px-2.5 py-1 rounded-full uppercase">0 Orders</span>
+                    <!-- ADMIN PRODUCTS MANAGEMENT TABLE -->
+                    <div class="bg-vibe-card rounded-2xl border border-vibe-border overflow-hidden mb-8 shadow-xl">
+                        <div class="p-4 border-b border-vibe-border flex items-center justify-between">
+                            <h3 class="font-black text-white text-base uppercase">Manage Store Products</h3>
+                            <span id="adminProdCountBadge" class="text-[10px] font-bold bg-white text-black px-2.5 py-1 rounded-full uppercase">0 Products</span>
+                        </div>
+                        <div class="overflow-x-auto custom-scrollbar">
+                            <table class="w-full text-left border-collapse min-w-[650px]">
+                                <thead>
+                                    <tr class="bg-black text-[10px] font-extrabold text-slate-400 uppercase tracking-widest border-b border-vibe-border">
+                                        <th class="p-3">Product Title</th>
+                                        <th class="p-3">Category</th>
+                                        <th class="p-3">Price</th>
+                                        <th class="p-3 text-center">Actions (Edit / Delete)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adminProductsTableBody" class="divide-y divide-vibe-border text-xs"></tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div class="overflow-x-auto custom-scrollbar">
-                        <table class="w-full text-left border-collapse min-w-[750px]">
-                            <thead>
-                                <tr class="bg-black text-[10px] font-extrabold text-slate-400 uppercase tracking-widest border-b border-vibe-border">
-                                    <th class="p-3">Ref / Date</th>
-                                    <th class="p-3">Customer Info</th>
-                                    <th class="p-3">Delivery Address</th>
-                                    <th class="p-3">Products / Bill / Payment</th>
-                                    <th class="p-3">Status</th>
-                                    <th class="p-3 text-center">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="ordersTableBody" class="divide-y divide-vibe-border text-xs"></tbody>
-                        </table>
+
+                    <!-- ORDERS TABLE -->
+                    <div class="bg-vibe-card rounded-2xl border border-vibe-border overflow-hidden mb-8 shadow-xl">
+                        <div class="p-4 border-b border-vibe-border flex items-center justify-between">
+                            <h3 class="font-black text-white text-base uppercase">Customer Orders</h3>
+                            <span id="orderCountBadge" class="text-[10px] font-bold bg-white text-black px-2.5 py-1 rounded-full uppercase">0 Orders</span>
+                        </div>
+                        <div class="overflow-x-auto custom-scrollbar">
+                            <table class="w-full text-left border-collapse min-w-[750px]">
+                                <thead>
+                                    <tr class="bg-black text-[10px] font-extrabold text-slate-400 uppercase tracking-widest border-b border-vibe-border">
+                                        <th class="p-3">Ref / Date</th>
+                                        <th class="p-3">Customer Info</th>
+                                        <th class="p-3">Delivery Address</th>
+                                        <th class="p-3">Products / Bill / Payment</th>
+                                        <th class="p-3">Status</th>
+                                        <th class="p-3 text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ordersTableBody" class="divide-y divide-vibe-border text-xs"></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
-    </main>
+            </section>
+        </main>
+    </div>
 
     <!-- ORDER SUCCESS POPUP WITH COPY ID BUTTON -->
     <div id="orderSuccessModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
@@ -594,6 +721,94 @@
         let selectedProductForDetail = null;
         let checkoutItem = null;
         let currentPaymentMethod = 'COD';
+
+        /* =========================================================
+           3D AIRPLANE INTRO & TAIL REVEAL CONTROLLER
+           ========================================================= */
+        function runVibeAirplaneIntro() {
+            const overlay = document.getElementById('vibeIntroOverlay');
+            const plane = document.getElementById('vibe3DPlane');
+            const ribbon = document.getElementById('vibeTailRibbon');
+            const glow = document.getElementById('vibeTailGlow');
+            const site = document.getElementById('vibeSiteContent');
+
+            if (!overlay || !plane || !ribbon || !glow || !site) return;
+
+            const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (prefersReduced) {
+                site.classList.add('intro-finished');
+                overlay.remove();
+                return;
+            }
+
+            const duration = 2700;
+            const startTime = performance.now();
+
+            function easeInOutCubic(t) {
+                return t < 0.5
+                    ? 4 * t * t * t
+                    : 1 - Math.pow(-2 * t + 2, 3) / 2;
+            }
+
+            function finishIntro() {
+                site.classList.add('intro-finished');
+                overlay.classList.add('intro-complete');
+                setTimeout(() => {
+                    if (overlay && overlay.parentNode) {
+                        overlay.remove();
+                    }
+                }, 600);
+            }
+
+            function step(now) {
+                const rawProgress = Math.min(1, Math.max(0, (now - startTime) / duration));
+                const eased = easeInOutCubic(rawProgress);
+
+                const vh = window.innerHeight || 800;
+                const planeHeight = plane.offsetHeight || 350;
+
+                const startY = -planeHeight - 30;
+                const endY = vh + 80;
+                const currentY = startY + (endY - startY) * eased;
+
+                const centerFactor = 1 - Math.abs(eased - 0.5) * 2;
+                const rotateX = 12 - centerFactor * 6;
+                const rotateZ = Math.sin(eased * Math.PI) * 1.4;
+                const translateZ = 90 + centerFactor * 70;
+
+                plane.style.transform = `translate3d(-50%, ${currentY}px, ${translateZ}px) rotateX(${rotateX.toFixed(2)}deg) rotateZ(${rotateZ.toFixed(2)}deg)`;
+
+                const tailAnchorY = Math.max(0, currentY + planeHeight * 0.14);
+                const trailLength = Math.max(0, Math.min(tailAnchorY, vh * 0.85));
+                ribbon.style.height = `${trailLength}px`;
+                ribbon.style.opacity = rawProgress > 0.88
+                    ? String(Math.max(0, (1 - rawProgress) / 0.12))
+                    : String(Math.min(1, rawProgress * 3.5));
+
+                glow.style.height = `${trailLength * 0.9}px`;
+                glow.style.opacity = ribbon.style.opacity;
+
+                const revealRatio = Math.min(1, Math.max(0, (currentY + planeHeight * 0.45) / vh));
+                const unrevealedBottomPercent = Math.max(0, (1 - revealRatio) * 100);
+                site.style.clipPath = `inset(0 0 ${unrevealedBottomPercent.toFixed(2)}% 0)`;
+                site.style.opacity = String(Math.min(1, 0.18 + revealRatio * 0.82));
+
+                const bgAlpha = Math.max(0, (1 - revealRatio * 1.15) * 0.92);
+                overlay.style.background = `rgba(10, 10, 10, ${bgAlpha.toFixed(3)})`;
+
+                if (rawProgress < 1) {
+                    requestAnimationFrame(step);
+                } else {
+                    finishIntro();
+                }
+            }
+
+            const safetyTimer = setTimeout(finishIntro, duration + 900);
+            requestAnimationFrame((now) => {
+                clearTimeout(safetyTimer);
+                step(now);
+            });
+        }
 
         async function loadData() {
             await fetchProductsFromCloud();
@@ -1209,6 +1424,7 @@
         }
 
         window.onload = function() {
+            runVibeAirplaneIntro();
             loadData();
             startSalesPopups();
             startCountdownTimer();
