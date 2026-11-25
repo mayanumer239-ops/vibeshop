@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>VibeShop | Premium Store Pakistan</title>
+    <title id="pageTitleTag">VibeShop | Premium Store Pakistan</title>
+    <meta name="description" id="pageMetaDesc" content="VibeShop Pakistan — Trending Tech, Home Gadgets & Accessories with Open Parcel Inspection and Express Delivery.">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -70,7 +71,6 @@
             visibility: hidden;
         }
 
-        /* Silver-white luminous tail ribbon trailing behind the aircraft */
         #vibeTailRibbon {
             position: absolute;
             left: 50%;
@@ -93,7 +93,6 @@
             will-change: height, opacity, transform;
         }
 
-        /* Soft silver-white slipstream aura around tail */
         #vibeTailGlow {
             position: absolute;
             left: 50%;
@@ -111,7 +110,6 @@
             will-change: height, opacity, transform;
         }
 
-        /* 3D Airplane Container flying vertically downward */
         #vibe3DPlane {
             position: absolute;
             left: 50%;
@@ -139,7 +137,6 @@
                 drop-shadow(0 0 16px rgba(148, 163, 184, 0.16));
         }
 
-        /* Progressive reveal wrapper for existing VibeShop website */
         #vibeSiteContent {
             will-change: clip-path, opacity;
             clip-path: inset(0 0 100% 0);
@@ -160,6 +157,25 @@
                 clip-path: none !important;
                 opacity: 1 !important;
             }
+        }
+
+        /* =========================================================
+           LUMEN AI FLOATING WIDGET & CYAN ACCENTS
+           ========================================================= */
+        @keyframes lumenPopIn {
+            0% { opacity: 0; transform: translateY(16px) scale(0.95); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .lumen-window-open {
+            animation: lumenPopIn 0.24s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes lumenPulseRing {
+            0% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.45); }
+            70% { box-shadow: 0 0 0 10px rgba(34, 211, 238, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0); }
+        }
+        .lumen-float-btn {
+            animation: lumenPulseRing 2.6s infinite;
         }
     </style>
 </head>
@@ -186,7 +202,7 @@
             <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full font-black uppercase tracking-wider flex items-center gap-1">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Nationwide Express
             </span>
-            <span class="font-bold tracking-wide">🔥 Flat Rs. 250 Delivery | Open Parcel Inspection Allowed!</span>
+            <span id="announcementBannerText" class="font-bold tracking-wide">🔥 Flat Rs. 250 Delivery | Open Parcel Inspection Allowed!</span>
             <div class="bg-black/60 border border-vibe-border px-2 py-0.5 rounded font-mono text-[10px] sm:text-[11px] text-amber-400 font-bold flex items-center gap-1">
                 <i class="fa-solid fa-clock text-amber-400 text-xs"></i> <span id="topTimer">02h : 45m : 12s</span>
             </div>
@@ -233,19 +249,35 @@
                 <div class="relative bg-gradient-to-b from-vibe-card to-vibe-black border-b border-vibe-border py-8 sm:py-16 overflow-hidden">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-6">
                         <div class="max-w-2xl">
-                            <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white px-3 py-1 rounded-full text-[11px] font-semibold mb-3 tracking-wide">
+                            <div id="heroBadgeText" class="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white px-3 py-1 rounded-full text-[11px] font-semibold mb-3 tracking-wide">
                                 <i class="fa-solid fa-bolt text-amber-400"></i> Next-Gen Smart Shopping Experience
                             </div>
-                            <h1 class="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white mb-3 leading-tight">
+                            <h1 id="heroMainHeading" class="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white mb-3 leading-tight">
                                 ELEVATE YOUR <br><span class="text-slate-400">DAILY VIBE</span>
                             </h1>
-                            <p class="text-slate-400 text-xs sm:text-base leading-relaxed mb-5 font-normal">
+                            <p id="heroSubHeading" class="text-slate-400 text-xs sm:text-base leading-relaxed mb-5 font-normal">
                                 Top Trending Tech, Home Gadgets & Accessories in Pakistan.
                             </p>
                             <!-- Search Bar -->
                             <div class="relative max-w-md">
                                 <input type="text" id="storeSearchInput" oninput="filterStoreProducts()" placeholder="Search products..." class="w-full bg-black border border-vibe-border rounded-xl px-4 py-3 text-xs text-white outline-none focus:border-white transition">
                                 <i class="fa-solid fa-search absolute right-4 top-3.5 text-slate-500"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- OPTIONAL CAMPAIGN BANNER (ONLY SHOWN WHEN APPROVED BY ADMIN) -->
+                <div id="activeCampaignBanner" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-5">
+                    <div class="bg-gradient-to-r from-cyan-950/60 via-vibe-card to-sky-950/60 border border-cyan-500/40 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-cyan-500/15 border border-cyan-400/30 text-cyan-300 flex items-center justify-center text-base flex-shrink-0">
+                                <i class="fa-solid fa-tags"></i>
+                            </div>
+                            <div>
+                                <span id="campaignBadgeLabel" class="text-[10px] font-black uppercase tracking-wider text-cyan-300 bg-cyan-500/15 px-2 py-0.5 rounded-full">Special Offer</span>
+                                <h3 id="campaignBannerTitle" class="text-sm sm:text-base font-black text-white mt-0.5">Active Campaign</h3>
+                                <p id="campaignBannerDesc" class="text-xs text-slate-300"></p>
                             </div>
                         </div>
                     </div>
@@ -280,7 +312,7 @@
 
                 <!-- Products Grid Section -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
-                    <h2 class="text-xl sm:text-2xl font-black text-white uppercase mb-6 flex items-center gap-2">
+                    <h2 id="productsSectionHeading" class="text-xl sm:text-2xl font-black text-white uppercase mb-6 flex items-center gap-2">
                         <i class="fa-solid fa-fire text-amber-400"></i> Trending Products
                     </h2>
                     <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"></div>
@@ -405,6 +437,9 @@
                             <button onclick="openAddProductModal()" class="bg-white hover:bg-slate-200 text-black text-xs font-extrabold uppercase px-4 py-2.5 rounded-xl shadow flex items-center gap-1.5 transition">
                                 <i class="fa-solid fa-plus"></i> Add Product (Multiple Media)
                             </button>
+                            <button onclick="scrollToLumenAdmin()" class="bg-cyan-500/15 border border-cyan-400/40 hover:bg-cyan-500/25 text-cyan-300 text-xs font-extrabold uppercase px-3.5 py-2.5 rounded-xl flex items-center gap-1.5 transition">
+                                <img src="./cuterobot.png" alt="Lumen" class="w-4 h-4 rounded-full object-cover"> Lumen AI Hub
+                            </button>
                             <button onclick="openStoreView()" class="bg-vibe-border text-slate-200 text-xs font-bold uppercase px-3.5 py-2.5 rounded-xl">Store View</button>
                             <button onclick="logout()" class="bg-rose-900/60 text-rose-200 text-xs font-bold uppercase px-3.5 py-2.5 rounded-xl">Logout</button>
                         </div>
@@ -478,6 +513,84 @@
                             </table>
                         </div>
                     </div>
+
+                    <!-- =========================================================
+                         LUMEN AI ADMIN CONTROL HUB & APPROVAL WORKFLOW
+                         ========================================================= -->
+                    <div id="lumenAdminHub" class="bg-vibe-card rounded-3xl border border-cyan-500/30 p-5 sm:p-6 shadow-2xl space-y-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-vibe-border pb-4">
+                            <div class="flex items-center gap-3">
+                                <img src="./cuterobot.png" alt="Lumen AI" class="w-12 h-12 rounded-2xl object-cover border border-cyan-400/50 shadow-lg">
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <h3 class="text-lg sm:text-xl font-black text-white uppercase">Lumen AI Command & Approval Hub</h3>
+                                        <span class="bg-cyan-500/15 text-cyan-300 border border-cyan-400/30 text-[9px] font-black uppercase px-2 py-0.5 rounded-full">Approval Required</span>
+                                    </div>
+                                    <p class="text-xs text-slate-400">Lumen ko koi bhi kaam ya command dein — pehle preview & approval aayega, phir apply hoga.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4 text-xs bg-black border border-vibe-border px-4 py-2.5 rounded-2xl">
+                                <div>
+                                    <span class="text-[10px] text-slate-400 block">AI Prompts</span>
+                                    <span id="lumenUsageCount" class="font-black text-cyan-300">0</span>
+                                </div>
+                                <div class="h-6 w-px bg-vibe-border"></div>
+                                <div>
+                                    <span class="text-[10px] text-slate-400 block">Pending</span>
+                                    <span id="lumenPendingCount" class="font-black text-amber-400">0</span>
+                                </div>
+                                <div class="h-6 w-px bg-vibe-border"></div>
+                                <div>
+                                    <span class="text-[10px] text-slate-400 block">Applied</span>
+                                    <span id="lumenAppliedCount" class="font-black text-emerald-400">0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Admin Command Box for Lumen -->
+                        <div class="space-y-3">
+                            <label class="block text-xs font-bold text-slate-200 uppercase tracking-wide">Lumen Ko Command Ya Sawaal Dein</label>
+                            <div class="flex flex-wrap gap-2">
+                                <button type="button" onclick="setLumenAdminCommand('VibeShop par 30% discount campaign laga do')" class="bg-black hover:bg-zinc-900 border border-vibe-border text-[11px] text-slate-300 px-3 py-1.5 rounded-xl transition">30% Discount Campaign</button>
+                                <button type="button" onclick="setLumenAdminCommand('Homepage ka hero banner change karo')" class="bg-black hover:bg-zinc-900 border border-vibe-border text-[11px] text-slate-300 px-3 py-1.5 rounded-xl transition">Hero Banner Update</button>
+                                <button type="button" onclick="setLumenAdminCommand('Sab products ki descriptions professional bana do')" class="bg-black hover:bg-zinc-900 border border-vibe-border text-[11px] text-slate-300 px-3 py-1.5 rounded-xl transition">Pro Descriptions</button>
+                                <button type="button" onclick="setLumenAdminCommand('SEO improve karo')" class="bg-black hover:bg-zinc-900 border border-vibe-border text-[11px] text-slate-300 px-3 py-1.5 rounded-xl transition">SEO Boost</button>
+                            </div>
+                            <form onsubmit="handleLumenAdminCommand(event)" class="flex flex-col sm:flex-row gap-2.5">
+                                <input type="text" id="lumenAdminCommandInput" required placeholder="e.g. VibeShop par 30% discount campaign laga do ya koi bhi sawaal/kaam likhein..." class="flex-grow bg-black border border-vibe-border focus:border-cyan-400 rounded-xl px-4 py-3 text-xs text-white outline-none transition">
+                                <button type="submit" id="lumenAdminSubmitBtn" class="bg-cyan-400 hover:bg-cyan-300 text-black font-extrabold text-xs uppercase px-5 py-3 rounded-xl transition shadow flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i> Run Lumen Plan
+                                </button>
+                            </form>
+                            <div id="lumenAdminReplyBox" class="hidden bg-black border border-cyan-500/30 rounded-2xl p-4 text-xs text-slate-200 whitespace-pre-line leading-relaxed"></div>
+                        </div>
+
+                        <!-- Pending Approvals Queue -->
+                        <div class="space-y-3">
+                            <h4 class="text-xs font-black text-amber-400 uppercase tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-hourglass-half"></i> Pending Approvals (Aapki Manzoori Ka Intezar)
+                            </h4>
+                            <div id="lumenPendingApprovalsList" class="space-y-3 text-xs">
+                                <p class="text-slate-500 bg-black border border-vibe-border rounded-2xl p-4">Abhi koi pending change nahi hai.</p>
+                            </div>
+                        </div>
+
+                        <!-- Applied Changes & Rollback + Activity Logs -->
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                            <div class="bg-black border border-vibe-border rounded-2xl p-4 space-y-3">
+                                <h4 class="text-xs font-black text-emerald-400 uppercase tracking-wider">Applied Changes & Rollback</h4>
+                                <div id="lumenAppliedChangesList" class="space-y-2 text-xs max-h-60 overflow-y-auto custom-scrollbar">
+                                    <p class="text-slate-500">Koi applied change record nahi hai.</p>
+                                </div>
+                            </div>
+                            <div class="bg-black border border-vibe-border rounded-2xl p-4 space-y-3">
+                                <h4 class="text-xs font-black text-sky-400 uppercase tracking-wider">Lumen Activity & Chat Logs</h4>
+                                <div id="lumenActivityLogsList" class="space-y-2 text-xs max-h-60 overflow-y-auto custom-scrollbar">
+                                    <p class="text-slate-500">Activity logs yahan show honge.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
         </main>
@@ -515,7 +628,60 @@
         </div>
     </div>
 
-    <!-- FLOATING WHATSAPP BUTTON -->
+    <!-- =========================================================
+         FLOATING LUMEN AI CHAT WINDOW & FLOATING BUTTONS
+         ========================================================= -->
+    <div id="lumenChatWindow" class="fixed bottom-24 right-4 sm:right-6 z-50 hidden w-[calc(100vw-2rem)] sm:w-[390px] max-h-[75vh] bg-vibe-card border border-cyan-500/40 rounded-3xl shadow-2xl flex flex-col overflow-hidden lumen-window-open">
+        <!-- Header -->
+        <div class="bg-black/95 border-b border-vibe-border px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+                <img src="./cuterobot.png" alt="Lumen AI" class="w-9 h-9 rounded-full object-cover border border-cyan-400/60">
+                <div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-sm font-black text-white">Lumen AI</span>
+                        <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+                    </div>
+                    <span class="text-[10px] text-cyan-300 block leading-none">VibeShop Smart Assistant</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-1">
+                <button type="button" onclick="clearLumenChat()" title="Clear Chat" class="text-slate-400 hover:text-cyan-300 p-1.5 rounded-lg transition text-xs">
+                    <i class="fa-solid fa-rotate-right"></i>
+                </button>
+                <button type="button" onclick="minimizeLumenChat()" title="Minimize" class="text-slate-400 hover:text-white p-1.5 rounded-lg transition text-xs">
+                    <i class="fa-solid fa-minus"></i>
+                </button>
+                <button type="button" onclick="closeLumenChat()" title="Close" class="text-slate-400 hover:text-rose-400 p-1.5 rounded-lg transition text-sm">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Messages Area -->
+        <div id="lumenMessagesContainer" class="flex-grow overflow-y-auto p-3.5 space-y-3 custom-scrollbar text-xs bg-gradient-to-b from-vibe-card to-black/70"></div>
+
+        <!-- Suggested Question Chips -->
+        <div id="lumenSuggestionsBar" class="px-3 py-2 bg-black/70 border-t border-vibe-border flex gap-1.5 overflow-x-auto custom-scrollbar">
+            <button type="button" onclick="sendQuickLumenPrompt('Kaunse products available hain aur unki price kya hai?')" class="flex-shrink-0 bg-vibe-card hover:bg-zinc-800 border border-cyan-500/30 text-[10px] text-cyan-200 px-2.5 py-1.5 rounded-full transition">Products & Price</button>
+            <button type="button" onclick="sendQuickLumenPrompt('Delivery charges aur return policy kya hai?')" class="flex-shrink-0 bg-vibe-card hover:bg-zinc-800 border border-cyan-500/30 text-[10px] text-cyan-200 px-2.5 py-1.5 rounded-full transition">Delivery & Policy</button>
+            <button type="button" onclick="sendQuickLumenPrompt('Python mein list aur dictionary mein kya farq hai?')" class="flex-shrink-0 bg-vibe-card hover:bg-zinc-800 border border-cyan-500/30 text-[10px] text-cyan-200 px-2.5 py-1.5 rounded-full transition">General / Tech Q</button>
+        </div>
+
+        <!-- Input Form -->
+        <form onsubmit="handleCustomerLumenSubmit(event)" class="p-2.5 bg-black border-t border-vibe-border flex items-center gap-2">
+            <input type="text" id="lumenChatInput" required placeholder="Kuch bhi poochein (products, order, tech, general)..." class="flex-grow bg-vibe-card border border-vibe-border focus:border-cyan-400 rounded-xl px-3.5 py-2.5 text-xs text-white outline-none transition">
+            <button type="submit" id="lumenSendBtn" class="bg-cyan-400 hover:bg-cyan-300 text-black w-10 h-10 rounded-xl flex items-center justify-center transition flex-shrink-0 font-bold">
+                <i class="fa-solid fa-paper-plane text-xs"></i>
+            </button>
+        </form>
+    </div>
+
+    <!-- FLOATING LUMEN AI BUTTON (NEAR WHATSAPP BUTTON) -->
+    <button type="button" onclick="toggleLumenChat()" title="Chat with Lumen AI" class="lumen-float-btn fixed bottom-6 right-20 sm:right-24 z-50 w-12 h-12 sm:w-14 sm:h-14 rounded-full overflow-hidden shadow-2xl transition-transform hover:scale-110 border-2 border-cyan-400 bg-vibe-card flex items-center justify-center">
+        <img src="./cuterobot.png" alt="Lumen AI" class="w-full h-full object-cover">
+    </button>
+
+    <!-- FLOATING WHATSAPP BUTTON (UNCHANGED) -->
     <a href="https://wa.me/923114690687" target="_blank" class="fixed bottom-6 right-6 z-50 bg-emerald-500 hover:bg-emerald-600 text-white w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center text-xl sm:text-2xl shadow-2xl transition-transform hover:scale-110 border-2 border-white">
         <i class="fa-brands fa-whatsapp"></i>
     </a>
@@ -663,6 +829,46 @@
         </div>
     </div>
 
+    <!-- EDIT PRODUCT MODAL -->
+    <div id="editProductModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-vibe-card border border-vibe-border w-full max-w-lg rounded-3xl p-5 relative shadow-2xl">
+            <div class="flex items-center justify-between mb-3 border-b border-vibe-border pb-2.5">
+                <h3 class="font-extrabold text-white text-sm uppercase">Edit Product</h3>
+                <button onclick="closeEditProductModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="handleEditProductSubmit(event)" class="space-y-3 text-xs">
+                <input type="hidden" id="editProdDocId">
+                <div>
+                    <label class="block font-semibold text-slate-300 mb-1">Product Title *</label>
+                    <input type="text" id="editProdTitle" required class="w-full bg-black border border-vibe-border text-white rounded-xl p-2.5 outline-none focus:border-white">
+                </div>
+                <div class="grid grid-cols-2 gap-2.5">
+                    <div>
+                        <label class="block font-semibold text-slate-300 mb-1">Selling Price (Rs.) *</label>
+                        <input type="number" id="editProdPrice" required class="w-full bg-black border border-vibe-border text-white rounded-xl p-2.5 outline-none focus:border-white">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-300 mb-1">Cost Price (Rs.) *</label>
+                        <input type="number" id="editProdCost" required class="w-full bg-black border border-vibe-border text-white rounded-xl p-2.5 outline-none focus:border-white">
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-300 mb-1">Category</label>
+                    <select id="editProdCat" class="w-full bg-black border border-vibe-border text-white rounded-xl p-2.5 outline-none focus:border-white">
+                        <option value="Home & Kitchen">Home & Kitchen</option>
+                        <option value="Trending Gadgets">Trending Gadgets</option>
+                        <option value="Accessories">Accessories</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-300 mb-1">Description *</label>
+                    <textarea id="editProdDesc" rows="3" required class="w-full bg-black border border-vibe-border text-white rounded-xl p-2.5 outline-none focus:border-white"></textarea>
+                </div>
+                <button type="submit" id="updateProdBtn" class="w-full bg-white hover:bg-slate-200 text-black font-extrabold uppercase py-3 rounded-xl transition">Update Product</button>
+            </form>
+        </div>
+    </div>
+
     <!-- TRACK ORDER MODAL -->
     <div id="trackOrderModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-vibe-card border border-vibe-border w-full max-w-md rounded-3xl p-5 relative shadow-2xl space-y-4">
@@ -712,6 +918,7 @@
         const BASE_DELIVERY_FEE = 250;
         const COD_EXTRA_FEE = 50;
         const MERCHANT_WHATSAPP = '923114690687';
+        const LUMEN_WORKER_URL = 'https://lumen-ai.mayanumer239.workers.dev/';
 
         let products = [];
         let orders = [];
@@ -721,6 +928,14 @@
         let selectedProductForDetail = null;
         let checkoutItem = null;
         let currentPaymentMethod = 'COD';
+
+        // Lumen State
+        let lumenChatHistory = JSON.parse(sessionStorage.getItem('lumen_chat_history') || '[]');
+        let lumenPendingApprovals = JSON.parse(localStorage.getItem('lumen_pending_approvals') || '[]');
+        let lumenAppliedChanges = JSON.parse(localStorage.getItem('lumen_applied_changes') || '[]');
+        let lumenActivityLogs = JSON.parse(localStorage.getItem('lumen_activity_logs') || '[]');
+        let lumenUsageCount = Number(localStorage.getItem('lumen_usage_count') || '0');
+        let lastCustomerRequestTime = 0;
 
         /* =========================================================
            3D AIRPLANE INTRO & TAIL REVEAL CONTROLLER
@@ -813,8 +1028,10 @@
         async function loadData() {
             await fetchProductsFromCloud();
             await fetchOrdersFromCloud();
+            await fetchApprovedSiteConfigFromCloud();
             renderHomeReviews();
             updateCartBadge();
+            renderLumenChatMessages();
             if(currentUser && currentUser.isAdmin) renderAdminDashboard();
         }
 
@@ -843,6 +1060,56 @@
             }
         }
 
+        async function fetchApprovedSiteConfigFromCloud() {
+            try {
+                const doc = await db.collection('lumen_config').doc('live_site').get();
+                if (doc.exists) {
+                    applyLiveSiteConfigToDOM(doc.data());
+                }
+            } catch (_) {}
+        }
+
+        function applyLiveSiteConfigToDOM(cfg = {}) {
+            if (cfg.heroBadge) {
+                document.getElementById('heroBadgeText').innerHTML = `<i class="fa-solid fa-bolt text-amber-400"></i> ${escapeHtml(cfg.heroBadge)}`;
+            }
+            if (cfg.heroTitle) {
+                document.getElementById('heroMainHeading').innerHTML = escapeHtml(cfg.heroTitle).replace(/\n/g, '<br>');
+            }
+            if (cfg.heroSubtitle) {
+                document.getElementById('heroSubHeading').textContent = cfg.heroSubtitle;
+            }
+            if (cfg.announcement) {
+                document.getElementById('announcementBannerText').textContent = cfg.announcement;
+            }
+            if (cfg.sectionHeading) {
+                document.getElementById('productsSectionHeading').innerHTML = `<i class="fa-solid fa-fire text-amber-400"></i> ${escapeHtml(cfg.sectionHeading)}`;
+            }
+            if (cfg.seoTitle) {
+                document.getElementById('pageTitleTag').textContent = cfg.seoTitle;
+            }
+            if (cfg.seoDescription) {
+                document.getElementById('pageMetaDesc').setAttribute('content', cfg.seoDescription);
+            }
+            const bannerEl = document.getElementById('activeCampaignBanner');
+            if (cfg.campaign && cfg.campaign.active) {
+                bannerEl.classList.remove('hidden');
+                document.getElementById('campaignBadgeLabel').textContent = cfg.campaign.badge || 'Special Offer';
+                document.getElementById('campaignBannerTitle').textContent = cfg.campaign.title || 'Active Campaign';
+                document.getElementById('campaignBannerDesc').textContent = cfg.campaign.description || '';
+            } else {
+                bannerEl.classList.add('hidden');
+            }
+        }
+
+        function escapeHtml(str) {
+            return String(str || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
         function renderStoreGrid(filteredProducts = null) {
             const grid = document.getElementById('productGrid');
             if(!grid) return;
@@ -858,6 +1125,7 @@
             listToRender.forEach(p => {
                 const firstMedia = p.mediaList && p.mediaList.length > 0 ? p.mediaList[0] : { url: '', type: 'image' };
                 const priceNum = Number(p.price) || 0;
+                const origPriceNum = Number(p.originalPrice) || 0;
                 const card = document.createElement('div');
                 card.className = 'bg-vibe-card rounded-2xl border border-vibe-border overflow-hidden hover:border-slate-400 transition duration-300 flex flex-col justify-between group cursor-pointer';
                 card.onclick = () => openProductDetail(p.cloudDocId || p.id);
@@ -869,10 +1137,11 @@
                             <img src="${firstMedia.url}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                         </div>
                         <div class="p-4 sm:p-5">
-                            <span class="text-[8px] sm:text-[9px] font-black text-slate-500 uppercase tracking-widest block mb-1">${p.category || 'General'}</span>
-                            <h3 class="font-bold text-white text-xs sm:text-sm line-clamp-2">${p.title || 'Product'}</h3>
+                            <span class="text-[8px] sm:text-[9px] font-black text-slate-500 uppercase tracking-widest block mb-1">${escapeHtml(p.category || 'General')}</span>
+                            <h3 class="font-bold text-white text-xs sm:text-sm line-clamp-2">${escapeHtml(p.title || 'Product')}</h3>
                             <div class="flex items-baseline gap-2 mt-2.5">
                                 <span class="text-lg sm:text-xl font-black text-white">Rs. ${priceNum.toLocaleString()}</span>
+                                ${origPriceNum > priceNum ? `<span class="text-xs line-through text-slate-500">Rs. ${origPriceNum.toLocaleString()}</span>` : ''}
                             </div>
                         </div>
                     </div>
@@ -965,10 +1234,10 @@
                 html += `
                     <div class="bg-vibe-card p-4 rounded-2xl border border-vibe-border">
                         <div class="flex justify-between items-center mb-1">
-                            <span class="font-bold text-white text-xs">${r.name || 'Customer'}</span>
-                            <span class="text-amber-400 text-xs">${r.stars || '⭐⭐⭐⭐⭐'}</span>
+                            <span class="font-bold text-white text-xs">${escapeHtml(r.name || 'Customer')}</span>
+                            <span class="text-amber-400 text-xs">${escapeHtml(r.stars || '⭐⭐⭐⭐⭐')}</span>
                         </div>
-                        <p class="text-slate-400 text-xs">${r.text || ''}</p>
+                        <p class="text-slate-400 text-xs">${escapeHtml(r.text || '')}</p>
                     </div>
                 `;
             });
@@ -1053,7 +1322,7 @@
                     <div class="flex items-center justify-between gap-3 bg-black p-3 rounded-2xl border border-vibe-border text-xs">
                         <img src="${firstImg}" class="w-10 h-10 rounded-xl object-cover border border-vibe-border">
                         <div class="flex-grow">
-                            <h4 class="font-bold text-white line-clamp-1 text-[11px]">${item.title || ''}</h4>
+                            <h4 class="font-bold text-white line-clamp-1 text-[11px]">${escapeHtml(item.title || '')}</h4>
                             <span class="text-slate-400 text-[10px]">Rs. ${itemPrice.toLocaleString()} × ${item.qty || 1}</span>
                         </div>
                         <button onclick="removeFromCart(${index})" class="text-rose-400 p-1"><i class="fa-solid fa-trash text-xs"></i></button>
@@ -1169,14 +1438,51 @@
         function openEditProductModal(cloudDocId) {
             const p = products.find(item => item.cloudDocId === cloudDocId || item.id === cloudDocId);
             if(!p) return;
-            document.getElementById('editProdDocId').value = p.cloudDocId;
+            document.getElementById('editProdDocId').value = p.cloudDocId || p.id || '';
             document.getElementById('editProdTitle').value = p.title || '';
-            document.getElementById('editProdPrice').value = p.price || 0;
-            document.getElementById('editProdCost').value = p.costPrice || 0;
+            document.getElementById('editProdPrice').value = Number(p.price) || 0;
+            document.getElementById('editProdCost').value = Number(p.costPrice) || 0;
+            document.getElementById('editProdCat').value = p.category || 'Home & Kitchen';
             document.getElementById('editProdDesc').value = p.description || '';
             document.getElementById('editProductModal').classList.remove('hidden');
         }
         function closeEditProductModal() { document.getElementById('editProductModal').classList.add('hidden'); }
+
+        async function handleEditProductSubmit(e) {
+            e.preventDefault();
+            const docKey = document.getElementById('editProdDocId').value;
+            const p = products.find(item => item.cloudDocId === docKey || item.id === docKey);
+            if(!p) return;
+
+            const btn = document.getElementById('updateProdBtn');
+            btn.innerText = "Updating...";
+            btn.disabled = true;
+
+            const updatedFields = {
+                title: document.getElementById('editProdTitle').value.trim(),
+                price: parseFloat(document.getElementById('editProdPrice').value) || 0,
+                costPrice: parseFloat(document.getElementById('editProdCost').value) || 0,
+                category: document.getElementById('editProdCat').value,
+                description: document.getElementById('editProdDesc').value
+            };
+
+            try {
+                if (p.cloudDocId) {
+                    await db.collection('products').doc(p.cloudDocId).update(updatedFields);
+                }
+                Object.assign(p, updatedFields);
+                renderStoreGrid();
+                renderAdminDashboard();
+                closeEditProductModal();
+                alert("Product updated successfully!");
+            } catch(err) {
+                console.error(err);
+                alert("Error updating product: " + err.message);
+            }
+
+            btn.innerText = "Update Product";
+            btn.disabled = false;
+        }
 
         function resizeImageAndGetBase64(file) {
             return new Promise((resolve, reject) => {
@@ -1246,6 +1552,7 @@
 
                 await db.collection('products').add(newProd);
                 await fetchProductsFromCloud();
+                if(currentUser && currentUser.isAdmin) renderAdminDashboard();
 
                 alert("Product with multiple images added successfully!");
                 closeAddProductModal();
@@ -1277,6 +1584,7 @@
                 if(cloudDocId) {
                     await db.collection('products').doc(cloudDocId).delete();
                     await fetchProductsFromCloud();
+                    renderAdminDashboard();
                     alert("Product deleted successfully!");
                 }
             } catch(err) {
@@ -1375,12 +1683,14 @@
             
             products.forEach(p => {
                 const priceNum = Number(p.price) || 0;
+                const prodKey = p.cloudDocId || p.id;
                 adminProdTable.innerHTML += `
                     <tr class="hover:bg-vibe-border/40">
-                        <td class="p-3 font-bold text-white">${p.title || ''}</td>
-                        <td class="p-3 text-slate-400">${p.category || ''}</td>
+                        <td class="p-3 font-bold text-white">${escapeHtml(p.title || '')}</td>
+                        <td class="p-3 text-slate-400">${escapeHtml(p.category || '')}</td>
                         <td class="p-3 font-mono text-white">Rs. ${priceNum.toLocaleString()}</td>
                         <td class="p-3 text-center space-x-2">
+                            <button onclick="openEditProductModal('${prodKey}')" class="bg-sky-600 hover:bg-sky-500 text-white px-2.5 py-1 rounded text-xs font-bold">Edit</button>
                             <button onclick="deleteProduct('${p.cloudDocId}')" class="bg-rose-600 hover:bg-rose-500 text-white px-2.5 py-1 rounded text-xs font-bold">Delete</button>
                         </td>
                     </tr>
@@ -1393,10 +1703,10 @@
             orders.forEach(o => {
                 tbody.innerHTML += `
                     <tr class="hover:bg-vibe-border/40">
-                        <td class="p-3"><span class="font-mono font-bold text-white">${o.ref || '#VS'}</span><div class="text-[9px] text-slate-500">${o.date || ''}</div></td>
-                        <td class="p-3"><div class="font-bold text-slate-200">${o.custName || ''}</div><div class="text-slate-400 font-mono text-[10px]">${o.custPhone || ''}</div></td>
-                        <td class="p-3"><div class="truncate text-slate-300 text-[11px]">${o.custAddress || ''}</div><div class="font-bold text-white text-[10px]">${o.custCity || ''}</div></td>
-                        <td class="p-3 text-amber-400 text-[11px]">${o.productTitle || ''} <span class="block text-[10px] text-slate-400">Payment: ${o.paymentMode || 'COD'}</span></td>
+                        <td class="p-3"><span class="font-mono font-bold text-white">${escapeHtml(o.ref || '#VS')}</span><div class="text-[9px] text-slate-500">${escapeHtml(o.date || '')}</div></td>
+                        <td class="p-3"><div class="font-bold text-slate-200">${escapeHtml(o.custName || '')}</div><div class="text-slate-400 font-mono text-[10px]">${escapeHtml(o.custPhone || '')}</div></td>
+                        <td class="p-3"><div class="truncate text-slate-300 text-[11px]">${escapeHtml(o.custAddress || '')}</div><div class="font-bold text-white text-[10px]">${escapeHtml(o.custCity || '')}</div></td>
+                        <td class="p-3 text-amber-400 text-[11px]">${escapeHtml(o.productTitle || '')} <span class="block text-[10px] text-slate-400">Payment: ${escapeHtml(o.paymentMode || 'COD')}</span></td>
                         <td class="p-3">
                             <select onchange="updateOrderStatus('${o.firebaseId}', this.value)" class="bg-black border border-vibe-border text-white rounded p-1 text-xs">
                                 <option value="Pending" ${o.status === 'Pending' ? 'selected' : ''}>Pending</option>
@@ -1413,6 +1723,7 @@
                 `;
             });
             document.getElementById('orderCountBadge').innerText = `${orders.length} Orders`;
+            renderLumenAdminHub();
         }
 
         function copyForMarkaz(firebaseId) {
@@ -1421,6 +1732,600 @@
             const priceNum = Number(o.price) || 0;
             navigator.clipboard.writeText(`MARKAZ ORDER:\nName: ${o.custName}\nPhone: ${o.custPhone}\nCity: ${o.custCity}\nAddress: ${o.custAddress}\nProducts: ${o.productTitle}\nPayment: ${o.paymentMode || 'COD'}\nTotal: Rs. ${priceNum}`);
             alert("Order details copied for Markaz!");
+        }
+
+        /* =========================================================
+           LUMEN AI CUSTOMER CHAT & CLOUDFLARE WORKER CLIENT
+           ========================================================= */
+        function toggleLumenChat() {
+            const win = document.getElementById('lumenChatWindow');
+            win.classList.toggle('hidden');
+            if (!win.classList.contains('hidden')) {
+                renderLumenChatMessages();
+                setTimeout(() => document.getElementById('lumenChatInput')?.focus(), 80);
+            }
+        }
+
+        function minimizeLumenChat() {
+            document.getElementById('lumenChatWindow').classList.add('hidden');
+        }
+
+        function closeLumenChat() {
+            document.getElementById('lumenChatWindow').classList.add('hidden');
+        }
+
+        function clearLumenChat() {
+            lumenChatHistory = [];
+            sessionStorage.removeItem('lumen_chat_history');
+            renderLumenChatMessages();
+        }
+
+        function sendQuickLumenPrompt(promptText) {
+            const input = document.getElementById('lumenChatInput');
+            input.value = promptText;
+            document.getElementById('lumenSendBtn').click();
+        }
+
+        function renderLumenChatMessages() {
+            const box = document.getElementById('lumenMessagesContainer');
+            if (!box) return;
+
+            if (lumenChatHistory.length === 0) {
+                box.innerHTML = `
+                    <div class="bg-black/80 border border-cyan-500/25 rounded-2xl p-3.5 space-y-2">
+                        <div class="flex items-center gap-2">
+                            <img src="./cuterobot.png" alt="Lumen" class="w-7 h-7 rounded-full object-cover border border-cyan-400/50">
+                            <span class="font-bold text-cyan-300 text-xs">Assalam-o-Alaikum! Main Lumen AI hoon.</span>
+                        </div>
+                        <p class="text-slate-300 text-[11px] leading-relaxed">
+                            Aap mujh se VibeShop ke products, prices, delivery, ya kisi bhi general, tech, ya study topic par Roman Urdu, Urdu, ya English mein pooch sakte hain.
+                        </p>
+                    </div>
+                `;
+                return;
+            }
+
+            box.innerHTML = lumenChatHistory.map(m => {
+                if (m.role === 'user') {
+                    return `
+                        <div class="flex justify-end">
+                            <div class="bg-cyan-500 text-black font-semibold rounded-2xl rounded-br-sm px-3.5 py-2.5 max-w-[82%] leading-relaxed">
+                                ${escapeHtml(m.text)}
+                            </div>
+                        </div>
+                    `;
+                }
+                return `
+                    <div class="flex items-start gap-2">
+                        <img src="./cuterobot.png" alt="Lumen" class="w-6 h-6 rounded-full object-cover border border-cyan-400/50 flex-shrink-0 mt-0.5">
+                        <div class="bg-black/90 border border-vibe-border text-slate-200 rounded-2xl rounded-bl-sm px-3.5 py-2.5 max-w-[85%] leading-relaxed whitespace-pre-line">
+                            ${escapeHtml(m.text)}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function buildStoreContextSummary() {
+            const prodSummary = products.length > 0
+                ? products.slice(0, 20).map(p => `- ${p.title} | Category: ${p.category || 'General'} | Price: Rs. ${Number(p.price) || 0} | Desc: ${(p.description || '').slice(0, 120)}`).join('\n')
+                : 'No products currently listed in store.';
+
+            return [
+                `Store Name: VibeShop Pakistan`,
+                `Delivery Policy: Flat Rs. 250 delivery across Pakistan, FREE delivery on orders Rs. 5,000 or above, COD has + Rs. 50 extra fee, Open Parcel Inspection allowed.`,
+                `Current Products:\n${prodSummary}`
+            ].join('\n');
+        }
+
+        async function callLumenWorker({ prompt, mode = 'customer', history = [] }) {
+            const cleanPrompt = String(prompt || '').trim().slice(0, 2500);
+            if (!cleanPrompt) throw new Error('Empty prompt');
+
+            const payload = {
+                prompt: cleanPrompt,
+                mode,
+                history: history.slice(-8),
+                storeContext: buildStoreContextSummary()
+            };
+
+            const res = await fetch(LUMEN_WORKER_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (res.status === 429) {
+                throw new Error('Thori der baad dobara koshish karein (rate limit).');
+            }
+            if (!res.ok) {
+                throw new Error(`Worker error (${res.status})`);
+            }
+
+            const data = await res.json();
+            const replyText = data.reply || data.answer || data.text || data.response || data.message || '';
+            if (!replyText) {
+                throw new Error('Empty response from Lumen backend');
+            }
+            return { reply: replyText, structured: data.structured || null };
+        }
+
+        async function handleCustomerLumenSubmit(e) {
+            e.preventDefault();
+            const now = Date.now();
+            if (now - lastCustomerRequestTime < 1500) {
+                return;
+            }
+            lastCustomerRequestTime = now;
+
+            const input = document.getElementById('lumenChatInput');
+            const sendBtn = document.getElementById('lumenSendBtn');
+            const userText = input.value.trim();
+            if (!userText) return;
+
+            lumenChatHistory.push({ role: 'user', text: userText });
+            sessionStorage.setItem('lumen_chat_history', JSON.stringify(lumenChatHistory));
+            input.value = '';
+            sendBtn.disabled = true;
+            renderLumenChatMessages();
+
+            // Typing indicator
+            const box = document.getElementById('lumenMessagesContainer');
+            const typingId = 'lumenTypingIndicator';
+            box.insertAdjacentHTML('beforeend', `
+                <div id="${typingId}" class="flex items-center gap-2 text-cyan-300 text-[11px]">
+                    <img src="./cuterobot.png" alt="Lumen" class="w-6 h-6 rounded-full object-cover border border-cyan-400/50">
+                    <span class="bg-black/80 border border-vibe-border px-3 py-2 rounded-2xl">Lumen type kar raha hai...</span>
+                </div>
+            `);
+            box.scrollTop = box.scrollHeight;
+
+            try {
+                const { reply } = await callLumenWorker({
+                    prompt: userText,
+                    mode: 'customer',
+                    history: lumenChatHistory
+                });
+                document.getElementById(typingId)?.remove();
+                lumenChatHistory.push({ role: 'assistant', text: reply });
+                sessionStorage.setItem('lumen_chat_history', JSON.stringify(lumenChatHistory));
+                renderLumenChatMessages();
+
+                lumenUsageCount += 1;
+                localStorage.setItem('lumen_usage_count', String(lumenUsageCount));
+                addLumenActivityLog('Customer Chat', userText.slice(0, 60));
+            } catch (err) {
+                document.getElementById(typingId)?.remove();
+                const fallbackMsg = 'Maaf kijiye ga, abhi Lumen AI server se connect karne mein masla aa raha hai. Aap thori der baad dobara try kar sakte hain ya WhatsApp support use kar sakte hain.';
+                lumenChatHistory.push({ role: 'assistant', text: fallbackMsg });
+                sessionStorage.setItem('lumen_chat_history', JSON.stringify(lumenChatHistory));
+                renderLumenChatMessages();
+            } finally {
+                sendBtn.disabled = false;
+            }
+        }
+
+        /* =========================================================
+           LUMEN AI ADMIN HUB, PREVIEW, APPROVAL & ROLLBACK
+           ========================================================= */
+        function scrollToLumenAdmin() {
+            document.getElementById('lumenAdminHub')?.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function setLumenAdminCommand(cmd) {
+            const inp = document.getElementById('lumenAdminCommandInput');
+            if (inp) {
+                inp.value = cmd;
+                inp.focus();
+            }
+        }
+
+        function addLumenActivityLog(type, detail) {
+            lumenActivityLogs.unshift({
+                id: 'log-' + Date.now() + '-' + Math.random().toString(36).slice(2, 6),
+                type,
+                detail,
+                time: new Date().toLocaleTimeString()
+            });
+            lumenActivityLogs = lumenActivityLogs.slice(0, 40);
+            localStorage.setItem('lumen_activity_logs', JSON.stringify(lumenActivityLogs));
+            if (currentUser && currentUser.isAdmin) {
+                renderLumenAdminHub();
+            }
+        }
+
+        function buildProposedChangeFromCommand(commandText, aiText) {
+            const lower = commandText.toLowerCase();
+            const discountMatch = commandText.match(/(\d+)\s*%/);
+
+            // 1. Discount Campaign Command
+            if (discountMatch || lower.includes('discount') || lower.includes('sale')) {
+                const pct = discountMatch ? Math.min(80, Math.max(1, parseInt(discountMatch[1], 10))) : 20;
+                const priceUpdates = products.map(p => {
+                    const currentP = Number(p.price) || 0;
+                    const baseOrig = Number(p.originalPrice) > currentP ? Number(p.originalPrice) : currentP;
+                    const discounted = Math.max(1, Math.round(baseOrig * (1 - pct / 100)));
+                    return {
+                        docId: p.cloudDocId || p.id,
+                        title: p.title,
+                        oldPrice: currentP,
+                        newPrice: discounted,
+                        oldOriginalPrice: Number(p.originalPrice) || 0,
+                        newOriginalPrice: baseOrig
+                    };
+                });
+
+                return {
+                    id: 'appr-' + Date.now(),
+                    kind: 'discount_campaign',
+                    title: `${pct}% Discount Campaign`,
+                    placement: 'Top Campaign Banner + Product Prices',
+                    summary: `${priceUpdates.length} products par ${pct}% discount calculate kiya gaya hai aur promotional banner tayar hai.`,
+                    aiExplanation: aiText,
+                    payload: {
+                        discountPct: pct,
+                        priceUpdates,
+                        banner: {
+                            active: true,
+                            badge: `${pct}% OFF SALE`,
+                            title: `🔥 ${pct}% Special VibeShop Discount Campaign!`,
+                            description: `Selected products par ${pct}% tak discount aur open parcel inspection available.`
+                        }
+                    },
+                    createdAt: new Date().toLocaleTimeString()
+                };
+            }
+
+            // 2. Hero Banner Command
+            if (lower.includes('banner') || lower.includes('hero') || lower.includes('homepage')) {
+                return {
+                    id: 'appr-' + Date.now(),
+                    kind: 'hero_banner',
+                    title: 'Homepage Hero & Banner Update',
+                    placement: 'Homepage Hero Section & Top Strip',
+                    summary: 'Hero headline, badge, aur announcement strip ko zyada premium aur clear banane ka proposal.',
+                    aiExplanation: aiText,
+                    payload: {
+                        heroBadge: '⚡ Verified Pakistan Store • Express Parcel',
+                        heroTitle: 'SHOP SMART.\nUPGRADE YOUR VIBE',
+                        heroSubtitle: 'Handpicked Gadgets, Home Essentials & Accessories — Open Parcel Inspection Across Pakistan.',
+                        announcement: '🔥 Flat Rs. 250 Delivery | Free Shipping Rs. 5,000+ | Open Parcel Allowed!'
+                    },
+                    createdAt: new Date().toLocaleTimeString()
+                };
+            }
+
+            // 3. Descriptions Improvement Command
+            if (lower.includes('description') || lower.includes('descriptions')) {
+                const descUpdates = products.map(p => {
+                    const base = (p.description || p.title || '').trim();
+                    const polished = base.includes('Open Parcel Inspection')
+                        ? base
+                        : `${base}\n\n✅ Quality Checked • 🚚 Fast Delivery Across Pakistan • 📦 Open Parcel Inspection Allowed.`;
+                    return {
+                        docId: p.cloudDocId || p.id,
+                        title: p.title,
+                        oldDesc: p.description || '',
+                        newDesc: polished
+                    };
+                });
+                return {
+                    id: 'appr-' + Date.now(),
+                    kind: 'product_descriptions',
+                    title: 'Professional Product Descriptions',
+                    placement: 'Product Detail Pages',
+                    summary: `${descUpdates.length} products ki descriptions ko customer-friendly aur clear banaya gaya hai.`,
+                    aiExplanation: aiText,
+                    payload: { descUpdates },
+                    createdAt: new Date().toLocaleTimeString()
+                };
+            }
+
+            // 4. SEO Command
+            if (lower.includes('seo')) {
+                return {
+                    id: 'appr-' + Date.now(),
+                    kind: 'seo_update',
+                    title: 'Store SEO Title & Meta Description',
+                    placement: 'Browser Title & Search Meta Tags',
+                    summary: 'Pakistan e-commerce keywords ke mutabiq SEO title aur meta description tayar ki gayi hai.',
+                    aiExplanation: aiText,
+                    payload: {
+                        seoTitle: 'VibeShop Pakistan | Trending Gadgets, Home Essentials & Accessories',
+                        seoDescription: 'Buy trending tech gadgets, home accessories & lifestyle products in Pakistan at VibeShop with cash on delivery and open parcel check.'
+                    },
+                    createdAt: new Date().toLocaleTimeString()
+                };
+            }
+
+            // 5. General / Any Other Admin Command or Question (logged & previewed safely)
+            return {
+                id: 'appr-' + Date.now(),
+                kind: 'general_note',
+                title: 'Lumen Admin Action / Answer',
+                placement: 'Admin Log & Guidance',
+                summary: commandText,
+                aiExplanation: aiText,
+                payload: { note: aiText },
+                createdAt: new Date().toLocaleTimeString()
+            };
+        }
+
+        async function handleLumenAdminCommand(e) {
+            e.preventDefault();
+            const input = document.getElementById('lumenAdminCommandInput');
+            const btn = document.getElementById('lumenAdminSubmitBtn');
+            const replyBox = document.getElementById('lumenAdminReplyBox');
+            const cmd = input.value.trim();
+            if (!cmd) return;
+
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Thinking...`;
+            replyBox.classList.remove('hidden');
+            replyBox.textContent = 'Lumen aapki command aur store data ka jaiza le raha hai...';
+
+            try {
+                const { reply } = await callLumenWorker({
+                    prompt: `Admin Command / Question: ${cmd}\nRespond respectfully in the same language (Roman Urdu/Urdu/English), be helpful, and summarize the plan clearly without claiming changes are live before approval.`,
+                    mode: 'admin',
+                    history: []
+                });
+
+                const proposal = buildProposedChangeFromCommand(cmd, reply);
+                lumenPendingApprovals.unshift(proposal);
+                localStorage.setItem('lumen_pending_approvals', JSON.stringify(lumenPendingApprovals));
+
+                lumenUsageCount += 1;
+                localStorage.setItem('lumen_usage_count', String(lumenUsageCount));
+
+                replyBox.textContent = `🤖 Lumen AI:\n${reply}\n\n⏳ Preview & Approval Card neeche "Pending Approvals" mein add kar diya gaya hai. Jab aap "Approve & Apply" dabayenge tabhi change apply hoga.`;
+                addLumenActivityLog('Admin Plan Created', `${proposal.title}: ${cmd.slice(0, 50)}`);
+                input.value = '';
+                renderLumenAdminHub();
+            } catch (err) {
+                replyBox.textContent = `⚠️ Error: ${err.message}. Dobara koshish karein.`;
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> Run Lumen Plan`;
+            }
+        }
+
+        async function approveLumenProposal(proposalId) {
+            const idx = lumenPendingApprovals.findIndex(p => p.id === proposalId);
+            if (idx === -1) return;
+            const proposal = lumenPendingApprovals[idx];
+
+            const previousSnapshot = {
+                productsBackup: products.map(p => ({
+                    cloudDocId: p.cloudDocId,
+                    id: p.id,
+                    price: p.price,
+                    originalPrice: p.originalPrice,
+                    description: p.description
+                })),
+                heroBadge: document.getElementById('heroBadgeText').textContent.trim(),
+                heroTitle: document.getElementById('heroMainHeading').innerText,
+                heroSubtitle: document.getElementById('heroSubHeading').textContent,
+                announcement: document.getElementById('announcementBannerText').textContent,
+                seoTitle: document.getElementById('pageTitleTag').textContent,
+                seoDescription: document.getElementById('pageMetaDesc').getAttribute('content'),
+                campaignBannerHidden: document.getElementById('activeCampaignBanner').classList.contains('hidden')
+            };
+
+            try {
+                if (proposal.kind === 'discount_campaign') {
+                    for (const upd of proposal.payload.priceUpdates) {
+                        const targetProd = products.find(p => (p.cloudDocId || p.id) === upd.docId);
+                        if (targetProd) {
+                            targetProd.price = upd.newPrice;
+                            targetProd.originalPrice = upd.newOriginalPrice;
+                            if (targetProd.cloudDocId) {
+                                await db.collection('products').doc(targetProd.cloudDocId).update({
+                                    price: upd.newPrice,
+                                    originalPrice: upd.newOriginalPrice
+                                });
+                            }
+                        }
+                    }
+                    await db.collection('lumen_config').doc('live_site').set({
+                        campaign: proposal.payload.banner
+                    }, { merge: true });
+                    applyLiveSiteConfigToDOM({ campaign: proposal.payload.banner });
+                    renderStoreGrid();
+                } else if (proposal.kind === 'hero_banner') {
+                    const patch = {
+                        heroBadge: proposal.payload.heroBadge,
+                        heroTitle: proposal.payload.heroTitle,
+                        heroSubtitle: proposal.payload.heroSubtitle,
+                        announcement: proposal.payload.announcement
+                    };
+                    await db.collection('lumen_config').doc('live_site').set(patch, { merge: true });
+                    applyLiveSiteConfigToDOM(patch);
+                } else if (proposal.kind === 'product_descriptions') {
+                    for (const upd of proposal.payload.descUpdates) {
+                        const targetProd = products.find(p => (p.cloudDocId || p.id) === upd.docId);
+                        if (targetProd) {
+                            targetProd.description = upd.newDesc;
+                            if (targetProd.cloudDocId) {
+                                await db.collection('products').doc(targetProd.cloudDocId).update({
+                                    description: upd.newDesc
+                                });
+                            }
+                        }
+                    }
+                } else if (proposal.kind === 'seo_update') {
+                    await db.collection('lumen_config').doc('live_site').set({
+                        seoTitle: proposal.payload.seoTitle,
+                        seoDescription: proposal.payload.seoDescription
+                    }, { merge: true });
+                    applyLiveSiteConfigToDOM(proposal.payload);
+                }
+
+                lumenPendingApprovals.splice(idx, 1);
+                lumenAppliedChanges.unshift({
+                    ...proposal,
+                    appliedAt: new Date().toLocaleTimeString(),
+                    previousSnapshot
+                });
+
+                localStorage.setItem('lumen_pending_approvals', JSON.stringify(lumenPendingApprovals));
+                localStorage.setItem('lumen_applied_changes', JSON.stringify(lumenAppliedChanges));
+                addLumenActivityLog('Approved & Applied', proposal.title);
+                renderAdminDashboard();
+                alert(`"${proposal.title}" approve ho kar apply ho gaya!`);
+            } catch (err) {
+                console.error(err);
+                alert("Apply karte waqt error aaya: " + err.message);
+            }
+        }
+
+        function rejectLumenProposal(proposalId) {
+            const idx = lumenPendingApprovals.findIndex(p => p.id === proposalId);
+            if (idx === -1) return;
+            const removed = lumenPendingApprovals.splice(idx, 1)[0];
+            localStorage.setItem('lumen_pending_approvals', JSON.stringify(lumenPendingApprovals));
+            addLumenActivityLog('Rejected Proposal', removed.title);
+            renderLumenAdminHub();
+        }
+
+        async function rollbackLumenAppliedChange(appliedId) {
+            const idx = lumenAppliedChanges.findIndex(c => c.id === appliedId);
+            if (idx === -1) return;
+            const item = lumenAppliedChanges[idx];
+            const snap = item.previousSnapshot;
+
+            try {
+                if (snap && Array.isArray(snap.productsBackup)) {
+                    for (const b of snap.productsBackup) {
+                        const p = products.find(prod => (prod.cloudDocId || prod.id) === (b.cloudDocId || b.id));
+                        if (p) {
+                            p.price = b.price;
+                            p.originalPrice = b.originalPrice;
+                            p.description = b.description;
+                            if (p.cloudDocId) {
+                                await db.collection('products').doc(p.cloudDocId).update({
+                                    price: b.price,
+                                    originalPrice: b.originalPrice || 0,
+                                    description: b.description || ''
+                                });
+                            }
+                        }
+                    }
+                    renderStoreGrid();
+                }
+
+                if (snap) {
+                    const restoreCfg = {
+                        heroBadge: snap.heroBadge,
+                        heroTitle: snap.heroTitle,
+                        heroSubtitle: snap.heroSubtitle,
+                        announcement: snap.announcement,
+                        seoTitle: snap.seoTitle,
+                        seoDescription: snap.seoDescription,
+                        campaign: snap.campaignBannerHidden ? { active: false } : undefined
+                    };
+                    await db.collection('lumen_config').doc('live_site').set(restoreCfg, { merge: true });
+                    applyLiveSiteConfigToDOM(restoreCfg);
+                }
+
+                lumenAppliedChanges.splice(idx, 1);
+                localStorage.setItem('lumen_applied_changes', JSON.stringify(lumenAppliedChanges));
+                addLumenActivityLog('Rollback Executed', item.title);
+                renderAdminDashboard();
+                alert("Change rollback (undo) ho gaya!");
+            } catch (err) {
+                alert("Rollback error: " + err.message);
+            }
+        }
+
+        function renderLumenAdminHub() {
+            const usageEl = document.getElementById('lumenUsageCount');
+            const pendEl = document.getElementById('lumenPendingCount');
+            const appEl = document.getElementById('lumenAppliedCount');
+            if (usageEl) usageEl.textContent = String(lumenUsageCount);
+            if (pendEl) pendEl.textContent = String(lumenPendingApprovals.length);
+            if (appEl) appEl.textContent = String(lumenAppliedChanges.length);
+
+            const pendList = document.getElementById('lumenPendingApprovalsList');
+            if (pendList) {
+                if (lumenPendingApprovals.length === 0) {
+                    pendList.innerHTML = `<p class="text-slate-500 bg-black border border-vibe-border rounded-2xl p-4">Abhi koi pending change nahi hai.</p>`;
+                } else {
+                    pendList.innerHTML = lumenPendingApprovals.map(p => {
+                        let previewHtml = `<p class="text-slate-300 mt-1">${escapeHtml(p.summary)}</p>`;
+                        if (p.kind === 'discount_campaign' && Array.isArray(p.payload.priceUpdates)) {
+                            const sampleRows = p.payload.priceUpdates.slice(0, 5).map(u =>
+                                `<div class="flex justify-between text-[11px] bg-vibe-card px-2.5 py-1.5 rounded-lg border border-vibe-border">
+                                    <span class="text-white font-semibold truncate pr-2">${escapeHtml(u.title)}</span>
+                                    <span class="font-mono"><span class="line-through text-slate-500 mr-1.5">Rs. ${Number(u.oldPrice).toLocaleString()}</span><span class="text-emerald-400 font-bold">Rs. ${Number(u.newPrice).toLocaleString()}</span></span>
+                                </div>`
+                            ).join('');
+                            previewHtml += `<div class="mt-2.5 space-y-1.5">${sampleRows}</div>`;
+                        } else if (p.payload && p.payload.banner) {
+                            previewHtml += `<div class="mt-2 p-2.5 rounded-xl bg-cyan-950/30 border border-cyan-500/30 text-cyan-200 text-[11px]">Banner Preview: <strong>${escapeHtml(p.payload.banner.title)}</strong> — ${escapeHtml(p.payload.banner.description)}</div>`;
+                        }
+
+                        return `
+                            <div class="bg-black border border-amber-400/40 rounded-2xl p-4 space-y-2.5">
+                                <div class="flex flex-wrap items-center justify-between gap-2">
+                                    <div>
+                                        <span class="text-[10px] font-black uppercase text-amber-400">${escapeHtml(p.placement)}</span>
+                                        <h5 class="text-sm font-bold text-white">${escapeHtml(p.title)}</h5>
+                                    </div>
+                                    <span class="text-[10px] text-slate-500 font-mono">${escapeHtml(p.createdAt)}</span>
+                                </div>
+                                ${previewHtml}
+                                <div class="flex items-center gap-2 pt-2">
+                                    <button type="button" onclick="approveLumenProposal('${p.id}')" class="bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-[11px] uppercase px-4 py-2 rounded-xl transition">
+                                        Approve & Apply
+                                    </button>
+                                    <button type="button" onclick="rejectLumenProposal('${p.id}')" class="bg-rose-950 hover:bg-rose-900 border border-rose-500/40 text-rose-200 font-bold text-[11px] uppercase px-3.5 py-2 rounded-xl transition">
+                                        Reject
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
+
+            const appList = document.getElementById('lumenAppliedChangesList');
+            if (appList) {
+                if (lumenAppliedChanges.length === 0) {
+                    appList.innerHTML = `<p class="text-slate-500">Koi applied change record nahi hai.</p>`;
+                } else {
+                    appList.innerHTML = lumenAppliedChanges.map(c => `
+                        <div class="bg-vibe-card border border-vibe-border rounded-xl p-3 flex items-center justify-between gap-2">
+                            <div>
+                                <div class="font-bold text-white">${escapeHtml(c.title)}</div>
+                                <div class="text-[10px] text-slate-400">Applied: ${escapeHtml(c.appliedAt)}</div>
+                            </div>
+                            <button type="button" onclick="rollbackLumenAppliedChange('${c.id}')" class="bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/40 text-amber-300 text-[10px] font-extrabold uppercase px-2.5 py-1.5 rounded-lg transition">
+                                Rollback
+                            </button>
+                        </div>
+                    `).join('');
+                }
+            }
+
+            const logList = document.getElementById('lumenActivityLogsList');
+            if (logList) {
+                if (lumenActivityLogs.length === 0) {
+                    logList.innerHTML = `<p class="text-slate-500">Activity logs yahan show honge.</p>`;
+                } else {
+                    logList.innerHTML = lumenActivityLogs.map(l => `
+                        <div class="bg-vibe-card border border-vibe-border rounded-xl p-2.5 flex items-center justify-between gap-2">
+                            <div class="truncate">
+                                <span class="text-cyan-300 font-bold">[${escapeHtml(l.type)}]</span>
+                                <span class="text-slate-200 ml-1">${escapeHtml(l.detail)}</span>
+                            </div>
+                            <span class="text-[10px] text-slate-500 font-mono flex-shrink-0">${escapeHtml(l.time)}</span>
+                        </div>
+                    `).join('');
+                }
+            }
         }
 
         window.onload = function() {
