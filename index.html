@@ -1069,12 +1069,27 @@
             } catch (_) {}
         }
 
+        function formatHeroHeadingHtml(rawTitle = '') {
+            const cleaned = String(rawTitle || '').trim();
+            if (!cleaned) {
+                return `ELEVATE YOUR <br><span class="text-slate-400">DAILY VIBE</span>`;
+            }
+            if (cleaned.includes('<span') && cleaned.includes('DAILY VIBE')) {
+                return cleaned;
+            }
+            const normalized = cleaned.replace(/<br\s*\/?>/gi, '\n').replace(/\s+/g, ' ').trim();
+            if (/^ELEVATE YOUR\s+DAILY VIBE$/i.test(normalized)) {
+                return `ELEVATE YOUR <br><span class="text-slate-400">DAILY VIBE</span>`;
+            }
+            return escapeHtml(cleaned).replace(/\n/g, '<br>');
+        }
+
         function applyLiveSiteConfigToDOM(cfg = {}) {
             if (cfg.heroBadge) {
                 document.getElementById('heroBadgeText').innerHTML = `<i class="fa-solid fa-bolt text-amber-400"></i> ${escapeHtml(cfg.heroBadge)}`;
             }
             if (cfg.heroTitle) {
-                document.getElementById('heroMainHeading').innerHTML = escapeHtml(cfg.heroTitle).replace(/\n/g, '<br>');
+                document.getElementById('heroMainHeading').innerHTML = formatHeroHeadingHtml(cfg.heroTitle);
             }
             if (cfg.heroSubtitle) {
                 document.getElementById('heroSubHeading').textContent = cfg.heroSubtitle;
@@ -1821,36 +1836,57 @@
         }
 
         async function callLumenWorker({ prompt, mode = 'customer', history = [] }) {
-            const cleanPrompt = String(prompt || '').trim().slice(0, 2500);
+            const cleanPrompt = String(prompt || '').trim().slice(0, 1800);
             if (!cleanPrompt) throw new Error('Empty prompt');
 
             const payload = {
                 prompt: cleanPrompt,
                 mode,
-                history: history.slice(-8),
+                history: history.slice(-4),
                 storeContext: buildStoreContextSummary()
             };
 
-            const res = await fetch(LUMEN_WORKER_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
+            let lastFetchErr = null;
 
-            if (res.status === 429) {
-                throw new Error('Thori der baad dobara koshish karein (rate limit).');
-            }
-            if (!res.ok) {
-                const errData = await res.json().catch(() => ({}));
-                throw new Error(errData.error || `Worker error (${res.status})`);
+            for (let attempt = 0; attempt < 2; attempt++) {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 18000);
+
+                try {
+                    const res = await fetch(LUMEN_WORKER_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload),
+                        signal: controller.signal
+                    });
+                    clearTimeout(timeoutId);
+
+                    if (res.status === 429) {
+                        throw new Error('Thori der baad dobara koshish karein (rate limit).');
+                    }
+                    if (!res.ok) {
+                        const errData = await res.json().catch(() => ({}));
+                        throw new Error(errData.error || `Worker error (${res.status})`);
+                    }
+
+                    const data = await res.json();
+                    const replyText = data.reply || data.answer || data.text || data.response || data.message || '';
+                    if (!replyText) {
+                        throw new Error('Empty response from Lumen backend');
+                    }
+                    return { reply: replyText, structured: data.structured || null };
+                } catch (err) {
+                    clearTimeout(timeoutId);
+                    lastFetchErr = err && err.name === 'AbortError'
+                        ? new Error('Server response mein der hui (timed out).')
+                        : err;
+                    if (attempt === 0) {
+                        await new Promise((r) => setTimeout(r, 500));
+                    }
+                }
             }
 
-            const data = await res.json();
-            const replyText = data.reply || data.answer || data.text || data.response || data.message || '';
-            if (!replyText) {
-                throw new Error('Empty response from Lumen backend');
-            }
-            return { reply: replyText, structured: data.structured || null };
+            throw lastFetchErr || new Error('Failed to fetch');
         }
 
         async function handleCustomerLumenSubmit(e) {
@@ -2102,6 +2138,7 @@
                 })),
                 heroBadge: document.getElementById('heroBadgeText').textContent.trim(),
                 heroTitle: document.getElementById('heroMainHeading').innerText,
+                heroTitleHtml: document.getElementById('heroMainHeading').innerHTML,
                 heroSubtitle: document.getElementById('heroSubHeading').textContent,
                 announcement: document.getElementById('announcementBannerText').textContent,
                 seoTitle: document.getElementById('pageTitleTag').textContent,
@@ -2212,9 +2249,10 @@
                 }
 
                 if (snap) {
+                    const restoredHeroTitle = snap.heroTitleHtml || formatHeroHeadingHtml(snap.heroTitle);
                     const restoreCfg = {
                         heroBadge: snap.heroBadge,
-                        heroTitle: snap.heroTitle,
+                        heroTitle: restoredHeroTitle,
                         heroSubtitle: snap.heroSubtitle,
                         announcement: snap.announcement,
                         seoTitle: snap.seoTitle,
