@@ -9,8 +9,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Font Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Google Font Inter & Orbitron for Futuristic 3D Display -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@700;800;900&display=swap" rel="stylesheet">
     
     <!-- Firebase SDK Scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
@@ -31,6 +31,7 @@
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
+                        display: ['Orbitron', 'Inter', 'sans-serif'],
                     }
                 }
             }
@@ -52,7 +53,228 @@
         button:active, div.cursor-pointer:active { transform: scale(0.98); transition: transform 0.1s ease; }
 
         /* =========================================================
-           CINEMATIC 3D AIRPLANE INTRO & TAIL REVEAL OVERLAY
+           3D TILT & CURSOR-FOLLOWING THEME LIGHT ON PRODUCT CARDS
+           ========================================================= */
+        .vibe-3d-card {
+            --tilt-x: 0deg;
+            --tilt-y: 0deg;
+            --spot-x: 50%;
+            --spot-y: 50%;
+            --spot-opacity: 0;
+            transform: perspective(900px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translateZ(0);
+            transform-style: preserve-3d;
+            transition: transform 0.14s ease-out, border-color 0.25s ease, box-shadow 0.25s ease;
+            will-change: transform;
+        }
+        .vibe-3d-card:hover {
+            box-shadow: 0 22px 42px rgba(0, 0, 0, 0.78), 0 0 28px rgba(148, 163, 184, 0.12);
+        }
+        .vibe-3d-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 6;
+            opacity: var(--spot-opacity);
+            transition: opacity 0.25s ease;
+            background:
+                radial-gradient(
+                    190px circle at var(--spot-x) var(--spot-y),
+                    rgba(241, 245, 249, 0.22) 0%,
+                    rgba(148, 163, 184, 0.14) 38%,
+                    rgba(52, 211, 153, 0.08) 62%,
+                    transparent 82%
+                );
+            mix-blend-mode: screen;
+        }
+
+        /* =========================================================
+           VIBESHOP — IN-STORE 3D WELCOME TEXT TRANSITION (NO BLUE PAGE)
+           ========================================================= */
+        #vibeCinematicWelcome {
+            position: fixed;
+            inset: 0;
+            z-index: 99998;
+            background: rgba(10, 10, 10, 0.36);
+            backdrop-filter: blur(2px);
+            overflow: hidden;
+            perspective: 1600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.75s ease;
+            will-change: opacity;
+        }
+
+        #vibeCinematicWelcome.cinema-visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #vibeCinematicWelcome.cinema-exit {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .cinema-light-beam {
+            position: absolute;
+            top: 50%;
+            left: -120%;
+            width: 85%;
+            height: 2px;
+            transform: translateY(-50%) skewX(-24deg);
+            background: linear-gradient(
+                90deg,
+                transparent 0%,
+                rgba(226, 232, 240, 0.25) 25%,
+                rgba(255, 255, 255, 0.9) 50%,
+                rgba(148, 163, 184, 0.25) 75%,
+                transparent 100%
+            );
+            box-shadow: 0 0 22px rgba(255, 255, 255, 0.55);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 4;
+        }
+
+        .cinema-light-beam.beam-shoot {
+            opacity: 1;
+            animation: cinemaBeamSweep 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes cinemaBeamSweep {
+            0% { left: -100%; opacity: 0.2; }
+            25% { opacity: 1; }
+            100% { left: 130%; opacity: 0; }
+        }
+
+        .cinema-title-stage {
+            position: relative;
+            z-index: 6;
+            text-align: center;
+            padding: 1.5rem 2rem;
+            border-radius: 1.5rem;
+            background: rgba(10, 10, 10, 0.55);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75);
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.7s ease;
+        }
+
+        .cinema-title-stage.title-settled {
+            transform: rotateX(4deg) rotateY(-2deg) scale(1);
+        }
+
+        .cinema-title-stage.title-scatter {
+            transform: translate3d(0, -14px, 140px) scale(1.08);
+            opacity: 0;
+        }
+
+        .cinema-3d-heading {
+            font-family: 'Orbitron', 'Inter', sans-serif;
+            font-weight: 900;
+            letter-spacing: 0.06em;
+            line-height: 1.12;
+            font-size: clamp(1.75rem, 5.8vw, 4.4rem);
+            position: relative;
+            display: inline-block;
+            user-select: none;
+        }
+
+        .cinema-char {
+            display: inline-block;
+            opacity: 0;
+            transform: translate3d(0, 28px, -120px) rotateX(40deg) scale(0.75);
+            transition:
+                opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+                filter 0.65s ease;
+            filter: blur(6px);
+            background: linear-gradient(
+                180deg,
+                #ffffff 0%,
+                #e2e8f0 42%,
+                #94a3b8 68%,
+                #f8fafc 100%
+            );
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 10px 24px rgba(0, 0, 0, 0.95);
+        }
+
+        .cinema-char.char-assembled {
+            opacity: 1;
+            transform: translate3d(0, 0, 18px) rotateX(0deg) scale(1);
+            filter: blur(0px) drop-shadow(0 6px 16px rgba(0, 0, 0, 0.65));
+        }
+
+        .cinema-char.char-bang {
+            color: #ffffff;
+            -webkit-text-fill-color: #ffffff;
+            filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.75));
+        }
+
+        .cinema-char.char-bang.bang-burst {
+            transform: translate3d(0, -3px, 36px) scale(1.18);
+            filter: drop-shadow(0 0 26px rgba(255, 255, 255, 0.95));
+        }
+
+        .cinema-chrome-sweep {
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+        }
+
+        .cinema-chrome-sweep::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -120%;
+            width: 55%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.5),
+                rgba(226, 232, 240, 0.35),
+                transparent
+            );
+            transform: skewX(-25deg);
+            pointer-events: none;
+        }
+
+        .cinema-chrome-sweep.sweep-run::after {
+            animation: chromeSheenMove 1.05s ease-in-out forwards;
+        }
+
+        @keyframes chromeSheenMove {
+            0% { left: -120%; }
+            100% { left: 160%; }
+        }
+
+        .cinema-subtitle {
+            margin-top: 0.75rem;
+            font-size: clamp(0.68rem, 1.6vw, 0.9rem);
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: rgba(203, 213, 225, 0.85);
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity 0.75s ease, transform 0.75s ease;
+        }
+
+        .cinema-subtitle.sub-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* =========================================================
+           STAGE 1: CINEMATIC 3D AIRPLANE INTRO & TAIL REVEAL OVERLAY
            ========================================================= */
         #vibeIntroOverlay {
             position: fixed;
@@ -61,8 +283,8 @@
             pointer-events: none;
             overflow: hidden;
             perspective: 1400px;
-            background: rgba(10, 10, 10, 0.96);
-            transition: opacity 0.55s ease, visibility 0.55s ease;
+            background: rgba(10, 10, 10, 0.92);
+            transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.75s ease;
             will-change: opacity, background;
         }
 
@@ -150,6 +372,7 @@
         }
 
         @media (prefers-reduced-motion: reduce) {
+            #vibeCinematicWelcome,
             #vibeIntroOverlay {
                 display: none !important;
             }
@@ -157,10 +380,13 @@
                 clip-path: none !important;
                 opacity: 1 !important;
             }
+            .vibe-3d-card {
+                transform: none !important;
+            }
         }
 
         /* =========================================================
-           LUMEN AI FLOATING WIDGET & CYAN ACCENTS
+           LUMEN AI FLOATING WIDGET, WELCOME BUBBLE & ACCENTS
            ========================================================= */
         @keyframes lumenPopIn {
             0% { opacity: 0; transform: translateY(16px) scale(0.95); }
@@ -170,18 +396,64 @@
             animation: lumenPopIn 0.24s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
         @keyframes lumenPulseRing {
-            0% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.45); }
-            70% { box-shadow: 0 0 0 10px rgba(34, 211, 238, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0); }
+            0% { box-shadow: 0 0 0 0 rgba(226, 232, 240, 0.35); }
+            70% { box-shadow: 0 0 0 10px rgba(226, 232, 240, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(226, 232, 240, 0); }
         }
         .lumen-float-btn {
             animation: lumenPulseRing 2.6s infinite;
         }
+        @keyframes lumenWelcomeBounceIn {
+            0% {
+                opacity: 0;
+                transform: translateY(14px) scale(0.88);
+            }
+            65% {
+                opacity: 1;
+                transform: translateY(-3px) scale(1.02);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        @keyframes lumenWelcomeFadeOut {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(10px) scale(0.94);
+            }
+        }
+        .lumen-welcome-show {
+            animation: lumenWelcomeBounceIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        .lumen-welcome-hide {
+            animation: lumenWelcomeFadeOut 0.35s ease forwards;
+        }
     </style>
 </head>
-<body class="font-sans antialiased bg-vibe-black text-slate-100 flex flex-col min-h-screen pb-20 sm:pb-0">
+<body class="font-sans antialiased bg-vibe-black text-slate-100 flex flex-col min-h-screen pb-24 sm:pb-0">
 
-    <!-- CINEMATIC 3D AIRPLANE INTRO OVERLAY USING ./plane.jpg -->
+    <!-- =========================================================
+         STAGE 2: VIBESHOP — IN-STORE 3D WELCOME TEXT OVERLAY
+         ========================================================= -->
+    <div id="vibeCinematicWelcome" aria-label="Welcome to VibeShop">
+        <div id="cinemaLightBeam" class="cinema-light-beam"></div>
+
+        <div id="cinemaTitleStage" class="cinema-title-stage">
+            <div id="cinemaChromeSweep" class="cinema-chrome-sweep">
+                <div id="cinema3DHeading" class="cinema-3d-heading" aria-label="WELCOME TO VIBESHOP!"></div>
+            </div>
+            <div id="cinemaSubtitle" class="cinema-subtitle">Next-Gen Shopping Universe • Pakistan</div>
+        </div>
+    </div>
+
+    <!-- =========================================================
+         STAGE 1: CINEMATIC 3D AIRPLANE INTRO OVERLAY USING ./plane.jpg
+         ========================================================= -->
     <div id="vibeIntroOverlay" aria-hidden="true">
         <div id="vibeTailGlow"></div>
         <div id="vibeTailRibbon"></div>
@@ -223,6 +495,10 @@
 
                 <!-- Header Actions -->
                 <div class="flex items-center space-x-1.5 sm:space-x-2.5">
+                    <button type="button" onclick="replayFullCinematicSequence()" title="Replay Welcome Intro" class="bg-vibe-card border border-vibe-border hover:bg-zinc-800 text-slate-200 text-[11px] sm:text-xs font-bold uppercase px-2.5 sm:px-3 py-2.5 rounded-xl transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-sparkles text-slate-300"></i> <span class="hidden md:inline">Intro</span>
+                    </button>
+
                     <button onclick="scrollToContact()" class="hidden sm:flex bg-vibe-card border border-vibe-border hover:bg-zinc-800 text-slate-200 text-xs font-bold uppercase px-3 py-2.5 rounded-xl transition items-center gap-1.5">
                         <i class="fa-solid fa-envelope text-sky-400"></i> <span>Contact</span>
                     </button>
@@ -258,24 +534,28 @@
                             <p id="heroSubHeading" class="text-slate-400 text-xs sm:text-base leading-relaxed mb-5 font-normal">
                                 Top Trending Tech, Home Gadgets & Accessories in Pakistan.
                             </p>
-                            <!-- Search Bar -->
-                            <div class="relative max-w-md">
-                                <input type="text" id="storeSearchInput" oninput="filterStoreProducts()" placeholder="Search products..." class="w-full bg-black border border-vibe-border rounded-xl px-4 py-3 text-xs text-white outline-none focus:border-white transition">
-                                <i class="fa-solid fa-search absolute right-4 top-3.5 text-slate-500"></i>
+                            <!-- Search Bar + Voice Search -->
+                            <div class="relative max-w-md flex items-center bg-black border border-vibe-border rounded-xl px-3.5 py-2 focus-within:border-white transition">
+                                <i class="fa-solid fa-search text-slate-500 text-xs mr-2.5"></i>
+                                <input type="text" id="storeSearchInput" oninput="filterStoreProducts()" placeholder="Search or speak product name..." class="w-full bg-transparent text-xs text-white outline-none py-1 pr-2">
+                                <button type="button" id="voiceSearchBtn" onclick="startVoiceSearch()" title="Voice Search" class="w-8 h-8 rounded-lg bg-vibe-card hover:bg-zinc-800 border border-vibe-border text-slate-200 flex items-center justify-center flex-shrink-0 transition">
+                                    <i id="voiceSearchIcon" class="fa-solid fa-microphone text-xs"></i>
+                                </button>
                             </div>
+                            <p id="voiceSearchStatus" class="text-[11px] text-amber-400 mt-1.5 hidden"></p>
                         </div>
                     </div>
                 </div>
 
                 <!-- OPTIONAL CAMPAIGN BANNER (ONLY SHOWN WHEN APPROVED BY ADMIN) -->
                 <div id="activeCampaignBanner" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-5">
-                    <div class="bg-gradient-to-r from-cyan-950/60 via-vibe-card to-sky-950/60 border border-cyan-500/40 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg">
+                    <div class="bg-gradient-to-r from-zinc-900 via-vibe-card to-zinc-900 border border-slate-500/40 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-cyan-500/15 border border-cyan-400/30 text-cyan-300 flex items-center justify-center text-base flex-shrink-0">
+                            <div class="w-10 h-10 rounded-xl bg-white/10 border border-white/20 text-white flex items-center justify-center text-base flex-shrink-0">
                                 <i class="fa-solid fa-tags"></i>
                             </div>
                             <div>
-                                <span id="campaignBadgeLabel" class="text-[10px] font-black uppercase tracking-wider text-cyan-300 bg-cyan-500/15 px-2 py-0.5 rounded-full">Special Offer</span>
+                                <span id="campaignBadgeLabel" class="text-[10px] font-black uppercase tracking-wider text-slate-200 bg-white/10 px-2 py-0.5 rounded-full">Special Offer</span>
                                 <h3 id="campaignBannerTitle" class="text-sm sm:text-base font-black text-white mt-0.5">Active Campaign</h3>
                                 <p id="campaignBannerDesc" class="text-xs text-slate-300"></p>
                             </div>
@@ -318,7 +598,7 @@
                     <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"></div>
                 </div>
 
-                <!-- HOME PAGE CUSTOMER REVIEWS SECTION -->
+                <!-- HOME PAGE CUSTOMER REVIEWS SECTION (APPROVED REVIEWS ONLY) -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 border-t border-vibe-border">
                     <div class="flex items-center justify-between mb-6">
                         <div>
@@ -437,7 +717,7 @@
                             <button onclick="openAddProductModal()" class="bg-white hover:bg-slate-200 text-black text-xs font-extrabold uppercase px-4 py-2.5 rounded-xl shadow flex items-center gap-1.5 transition">
                                 <i class="fa-solid fa-plus"></i> Add Product (Multiple Media)
                             </button>
-                            <button onclick="scrollToLumenAdmin()" class="bg-cyan-500/15 border border-cyan-400/40 hover:bg-cyan-500/25 text-cyan-300 text-xs font-extrabold uppercase px-3.5 py-2.5 rounded-xl flex items-center gap-1.5 transition">
+                            <button onclick="scrollToLumenAdmin()" class="bg-zinc-800 border border-slate-600 hover:bg-zinc-700 text-white text-xs font-extrabold uppercase px-3.5 py-2.5 rounded-xl flex items-center gap-1.5 transition">
                                 <img src="./cuterobot.png" alt="Lumen" class="w-4 h-4 rounded-full object-cover"> Lumen AI Hub
                             </button>
                             <button onclick="openStoreView()" class="bg-vibe-border text-slate-200 text-xs font-bold uppercase px-3.5 py-2.5 rounded-xl">Store View</button>
@@ -467,6 +747,22 @@
                                 <h3 id="statTotalProfit" class="text-3xl font-black text-emerald-400">Rs. 0</h3>
                             </div>
                             <i class="fa-solid fa-percent text-amber-400 text-2xl"></i>
+                        </div>
+                    </div>
+
+                    <!-- PENDING CUSTOMER REVIEWS APPROVAL PANEL -->
+                    <div class="bg-vibe-card rounded-2xl border border-amber-400/40 p-4 sm:p-5 mb-8 shadow-xl space-y-4">
+                        <div class="flex items-center justify-between border-b border-vibe-border pb-3">
+                            <div>
+                                <h3 class="font-black text-white text-base uppercase flex items-center gap-2">
+                                    <i class="fa-solid fa-star text-amber-400"></i> Pending Customer Reviews (Approval Required)
+                                </h3>
+                                <p class="text-[11px] text-slate-400">Naye reviews pehle yahan aate hain. Approve karne par hi store par publicly show honge.</p>
+                            </div>
+                            <span id="adminPendingReviewCountBadge" class="text-[10px] font-bold bg-amber-400 text-black px-2.5 py-1 rounded-full uppercase">0 Pending</span>
+                        </div>
+                        <div id="adminPendingReviewsList" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                            <p class="text-slate-500 bg-black border border-vibe-border rounded-2xl p-4 col-span-full">Abhi koi pending review nahi hai.</p>
                         </div>
                     </div>
 
@@ -517,14 +813,14 @@
                     <!-- =========================================================
                          LUMEN AI ADMIN CONTROL HUB & APPROVAL WORKFLOW
                          ========================================================= -->
-                    <div id="lumenAdminHub" class="bg-vibe-card rounded-3xl border border-cyan-500/30 p-5 sm:p-6 shadow-2xl space-y-6">
+                    <div id="lumenAdminHub" class="bg-vibe-card rounded-3xl border border-slate-600/50 p-5 sm:p-6 shadow-2xl space-y-6">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-vibe-border pb-4">
                             <div class="flex items-center gap-3">
-                                <img src="./cuterobot.png" alt="Lumen AI" class="w-12 h-12 rounded-2xl object-cover border border-cyan-400/50 shadow-lg">
+                                <img src="./cuterobot.png" alt="Lumen AI" class="w-12 h-12 rounded-2xl object-cover border border-slate-400/50 shadow-lg">
                                 <div>
                                     <div class="flex items-center gap-2">
                                         <h3 class="text-lg sm:text-xl font-black text-white uppercase">Lumen AI Command & Approval Hub</h3>
-                                        <span class="bg-cyan-500/15 text-cyan-300 border border-cyan-400/30 text-[9px] font-black uppercase px-2 py-0.5 rounded-full">Approval Required</span>
+                                        <span class="bg-white/10 text-slate-200 border border-slate-500/40 text-[9px] font-black uppercase px-2 py-0.5 rounded-full">Approval Required</span>
                                     </div>
                                     <p class="text-xs text-slate-400">Lumen ko koi bhi kaam ya command dein — pehle preview & approval aayega, phir apply hoga.</p>
                                 </div>
@@ -532,7 +828,7 @@
                             <div class="flex items-center gap-4 text-xs bg-black border border-vibe-border px-4 py-2.5 rounded-2xl">
                                 <div>
                                     <span class="text-[10px] text-slate-400 block">AI Prompts</span>
-                                    <span id="lumenUsageCount" class="font-black text-cyan-300">0</span>
+                                    <span id="lumenUsageCount" class="font-black text-white">0</span>
                                 </div>
                                 <div class="h-6 w-px bg-vibe-border"></div>
                                 <div>
@@ -551,18 +847,18 @@
                         <div class="space-y-3">
                             <label class="block text-xs font-bold text-slate-200 uppercase tracking-wide">Lumen Ko Command Ya Sawaal Dein</label>
                             <div class="flex flex-wrap gap-2">
-                                <button type="button" onclick="setLumenAdminCommand('VibeShop par 30% discount campaign laga do')" class="bg-black hover:bg-zinc-900 border border-vibe-border text-[11px] text-slate-300 px-3 py-1.5 rounded-xl transition">30% Discount Campaign</button>
+                                <button type="button" onclick="setLumenAdminCommand('VibeShop par 25% discount campaign laga do')" class="bg-black hover:bg-zinc-900 border border-vibe-border text-[11px] text-slate-300 px-3 py-1.5 rounded-xl transition">25% Discount Campaign</button>
                                 <button type="button" onclick="setLumenAdminCommand('Homepage ka hero banner change karo')" class="bg-black hover:bg-zinc-900 border border-vibe-border text-[11px] text-slate-300 px-3 py-1.5 rounded-xl transition">Hero Banner Update</button>
                                 <button type="button" onclick="setLumenAdminCommand('Sab products ki descriptions professional bana do')" class="bg-black hover:bg-zinc-900 border border-vibe-border text-[11px] text-slate-300 px-3 py-1.5 rounded-xl transition">Pro Descriptions</button>
                                 <button type="button" onclick="setLumenAdminCommand('SEO improve karo')" class="bg-black hover:bg-zinc-900 border border-vibe-border text-[11px] text-slate-300 px-3 py-1.5 rounded-xl transition">SEO Boost</button>
                             </div>
                             <form onsubmit="handleLumenAdminCommand(event)" class="flex flex-col sm:flex-row gap-2.5">
-                                <input type="text" id="lumenAdminCommandInput" required placeholder="e.g. VibeShop par 30% discount campaign laga do ya koi bhi sawaal/kaam likhein..." class="flex-grow bg-black border border-vibe-border focus:border-cyan-400 rounded-xl px-4 py-3 text-xs text-white outline-none transition">
-                                <button type="submit" id="lumenAdminSubmitBtn" class="bg-cyan-400 hover:bg-cyan-300 text-black font-extrabold text-xs uppercase px-5 py-3 rounded-xl transition shadow flex items-center justify-center gap-2">
+                                <input type="text" id="lumenAdminCommandInput" required placeholder="e.g. VibeShop par 25% discount campaign laga do ya koi bhi sawaal/kaam likhein..." class="flex-grow bg-black border border-vibe-border focus:border-white rounded-xl px-4 py-3 text-xs text-white outline-none transition">
+                                <button type="submit" id="lumenAdminSubmitBtn" class="bg-white hover:bg-slate-200 text-black font-extrabold text-xs uppercase px-5 py-3 rounded-xl transition shadow flex items-center justify-center gap-2">
                                     <i class="fa-solid fa-wand-magic-sparkles"></i> Run Lumen Plan
                                 </button>
                             </form>
-                            <div id="lumenAdminReplyBox" class="hidden bg-black border border-cyan-500/30 rounded-2xl p-4 text-xs text-slate-200 whitespace-pre-line leading-relaxed"></div>
+                            <div id="lumenAdminReplyBox" class="hidden bg-black border border-slate-600/50 rounded-2xl p-4 text-xs text-slate-200 whitespace-pre-line leading-relaxed"></div>
                         </div>
 
                         <!-- Pending Approvals Queue -->
@@ -629,23 +925,23 @@
     </div>
 
     <!-- =========================================================
-         FLOATING LUMEN AI CHAT WINDOW & FLOATING BUTTONS
+         FLOATING LUMEN AI CHAT WINDOW, WELCOME BUBBLE & STACKED BUTTONS
          ========================================================= -->
-    <div id="lumenChatWindow" class="fixed bottom-24 right-4 sm:right-6 z-50 hidden w-[calc(100vw-2rem)] sm:w-[390px] max-h-[75vh] bg-vibe-card border border-cyan-500/40 rounded-3xl shadow-2xl flex flex-col overflow-hidden lumen-window-open">
+    <div id="lumenChatWindow" class="fixed bottom-44 right-4 sm:right-6 z-50 hidden w-[calc(100vw-2rem)] sm:w-[390px] max-h-[70vh] bg-vibe-card border border-slate-500/40 rounded-3xl shadow-2xl flex flex-col overflow-hidden lumen-window-open">
         <!-- Header -->
         <div class="bg-black/95 border-b border-vibe-border px-4 py-3 flex items-center justify-between">
             <div class="flex items-center gap-2.5">
-                <img src="./cuterobot.png" alt="Lumen AI" class="w-9 h-9 rounded-full object-cover border border-cyan-400/60">
+                <img src="./cuterobot.png" alt="Lumen AI" class="w-9 h-9 rounded-full object-cover border border-slate-400/60">
                 <div>
                     <div class="flex items-center gap-1.5">
                         <span class="text-sm font-black text-white">Lumen AI</span>
-                        <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+                        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
                     </div>
-                    <span class="text-[10px] text-cyan-300 block leading-none">VibeShop Smart Assistant</span>
+                    <span class="text-[10px] text-slate-400 block leading-none">VibeShop Smart Assistant</span>
                 </div>
             </div>
             <div class="flex items-center gap-1">
-                <button type="button" onclick="clearLumenChat()" title="Clear Chat" class="text-slate-400 hover:text-cyan-300 p-1.5 rounded-lg transition text-xs">
+                <button type="button" onclick="clearLumenChat()" title="Clear Chat" class="text-slate-400 hover:text-white p-1.5 rounded-lg transition text-xs">
                     <i class="fa-solid fa-rotate-right"></i>
                 </button>
                 <button type="button" onclick="minimizeLumenChat()" title="Minimize" class="text-slate-400 hover:text-white p-1.5 rounded-lg transition text-xs">
@@ -662,29 +958,55 @@
 
         <!-- Suggested Question Chips -->
         <div id="lumenSuggestionsBar" class="px-3 py-2 bg-black/70 border-t border-vibe-border flex gap-1.5 overflow-x-auto custom-scrollbar">
-            <button type="button" onclick="sendQuickLumenPrompt('Kaunse products available hain aur unki price kya hai?')" class="flex-shrink-0 bg-vibe-card hover:bg-zinc-800 border border-cyan-500/30 text-[10px] text-cyan-200 px-2.5 py-1.5 rounded-full transition">Products & Price</button>
-            <button type="button" onclick="sendQuickLumenPrompt('Delivery charges aur return policy kya hai?')" class="flex-shrink-0 bg-vibe-card hover:bg-zinc-800 border border-cyan-500/30 text-[10px] text-cyan-200 px-2.5 py-1.5 rounded-full transition">Delivery & Policy</button>
-            <button type="button" onclick="sendQuickLumenPrompt('Python mein list aur dictionary mein kya farq hai?')" class="flex-shrink-0 bg-vibe-card hover:bg-zinc-800 border border-cyan-500/30 text-[10px] text-cyan-200 px-2.5 py-1.5 rounded-full transition">General / Tech Q</button>
+            <button type="button" onclick="sendQuickLumenPrompt('Kaunse products available hain aur unki price kya hai?')" class="flex-shrink-0 bg-vibe-card hover:bg-zinc-800 border border-vibe-border text-[10px] text-slate-200 px-2.5 py-1.5 rounded-full transition">Products & Price</button>
+            <button type="button" onclick="sendQuickLumenPrompt('Delivery charges aur return policy kya hai?')" class="flex-shrink-0 bg-vibe-card hover:bg-zinc-800 border border-vibe-border text-[10px] text-slate-200 px-2.5 py-1.5 rounded-full transition">Delivery & Policy</button>
+            <button type="button" onclick="sendQuickLumenPrompt('Python mein list aur dictionary mein kya farq hai?')" class="flex-shrink-0 bg-vibe-card hover:bg-zinc-800 border border-vibe-border text-[10px] text-slate-200 px-2.5 py-1.5 rounded-full transition">General / Tech Q</button>
         </div>
 
-        <!-- Input Form -->
+        <!-- Input Form with Lumen Voice Input -->
         <form onsubmit="handleCustomerLumenSubmit(event)" class="p-2.5 bg-black border-t border-vibe-border flex items-center gap-2">
-            <input type="text" id="lumenChatInput" required placeholder="Kuch bhi poochein (products, order, tech, general)..." class="flex-grow bg-vibe-card border border-vibe-border focus:border-cyan-400 rounded-xl px-3.5 py-2.5 text-xs text-white outline-none transition">
-            <button type="submit" id="lumenSendBtn" class="bg-cyan-400 hover:bg-cyan-300 text-black w-10 h-10 rounded-xl flex items-center justify-center transition flex-shrink-0 font-bold">
+            <input type="text" id="lumenChatInput" required placeholder="Kuch bhi poochein ya mic dabayein..." class="flex-grow bg-vibe-card border border-vibe-border focus:border-white rounded-xl px-3.5 py-2.5 text-xs text-white outline-none transition">
+            <button type="button" id="lumenVoiceBtn" onclick="startLumenVoiceInput()" title="Speak to Lumen" class="bg-vibe-card hover:bg-zinc-800 border border-vibe-border text-slate-200 w-10 h-10 rounded-xl flex items-center justify-center transition flex-shrink-0">
+                <i id="lumenVoiceIcon" class="fa-solid fa-microphone text-xs"></i>
+            </button>
+            <button type="submit" id="lumenSendBtn" class="bg-white hover:bg-slate-200 text-black w-10 h-10 rounded-xl flex items-center justify-center transition flex-shrink-0 font-bold">
                 <i class="fa-solid fa-paper-plane text-xs"></i>
             </button>
         </form>
     </div>
 
-    <!-- FLOATING LUMEN AI BUTTON (NEAR WHATSAPP BUTTON) -->
-    <button type="button" onclick="toggleLumenChat()" title="Chat with Lumen AI" class="lumen-float-btn fixed bottom-6 right-20 sm:right-24 z-50 w-12 h-12 sm:w-14 sm:h-14 rounded-full overflow-hidden shadow-2xl transition-transform hover:scale-110 border-2 border-cyan-400 bg-vibe-card flex items-center justify-center">
-        <img src="./cuterobot.png" alt="Lumen AI" class="w-full h-full object-cover">
-    </button>
+    <!-- ANIMATED WELCOME POPUP ABOVE LUMEN BUTTON -->
+    <div id="lumenWelcomePopup" onclick="openLumenFromPopup()" class="fixed bottom-40 right-4 sm:right-6 z-50 hidden cursor-pointer max-w-[250px] sm:max-w-[270px] bg-gradient-to-br from-zinc-900 via-vibe-card to-black border border-slate-500/60 text-white rounded-2xl rounded-br-sm p-3 shadow-2xl">
+        <div class="flex items-start gap-2">
+            <img src="./cuterobot.png" alt="Lumen" class="w-7 h-7 rounded-full object-cover border border-slate-400/60 flex-shrink-0 mt-0.5">
+            <p class="text-[11px] leading-snug text-slate-100 font-medium">
+                hy! welcome to vibe shop ap mera sa kuch pochna chta ha ma vibe shop ka assistant ho
+            </p>
+        </div>
+    </div>
 
-    <!-- FLOATING WHATSAPP BUTTON (UNCHANGED) -->
-    <a href="https://wa.me/923114690687" target="_blank" class="fixed bottom-6 right-6 z-50 bg-emerald-500 hover:bg-emerald-600 text-white w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center text-xl sm:text-2xl shadow-2xl transition-transform hover:scale-110 border-2 border-white">
-        <i class="fa-brands fa-whatsapp"></i>
-    </a>
+    <!-- STACKED RIGHT FLOATING BUTTONS: LUMEN AI ON TOP OF WHATSAPP -->
+    <div class="fixed bottom-4 right-4 sm:right-6 z-50 flex flex-col items-center gap-2.5">
+        <!-- Lumen AI Button + Label -->
+        <button type="button" onclick="toggleLumenChat()" title="Chat with Lumen AI" class="group flex flex-col items-center gap-1 focus:outline-none">
+            <span class="lumen-float-btn w-12 h-12 sm:w-13 sm:h-13 rounded-full overflow-hidden shadow-2xl transition-transform group-hover:scale-110 border-2 border-slate-300 bg-vibe-card flex items-center justify-center">
+                <img src="./cuterobot.png" alt="Lumen AI" class="w-full h-full object-cover object-center">
+            </span>
+            <span class="bg-black/90 text-slate-200 border border-vibe-border text-[9px] font-extrabold tracking-wide px-2 py-0.5 rounded-full shadow">
+                Lumen AI
+            </span>
+        </button>
+
+        <!-- WhatsApp Button + Label -->
+        <a href="https://wa.me/923114690687" target="_blank" title="WhatsApp Support" class="group flex flex-col items-center gap-1 focus:outline-none">
+            <span class="bg-emerald-500 hover:bg-emerald-600 text-white w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-xl shadow-2xl transition-transform group-hover:scale-110 border-2 border-white">
+                <i class="fa-brands fa-whatsapp"></i>
+            </span>
+            <span class="bg-black/90 text-emerald-400 border border-emerald-500/40 text-[9px] font-extrabold tracking-wide px-2 py-0.5 rounded-full shadow">
+                WhatsApp
+            </span>
+        </a>
+    </div>
 
     <!-- ADD HOME REVIEW MODAL -->
     <div id="addHomeReviewModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
@@ -698,7 +1020,7 @@
                     <option value="⭐⭐⭐⭐">⭐⭐⭐⭐ (4 Stars)</option>
                 </select>
                 <textarea id="homeRevText" required rows="3" placeholder="Write your review..." class="w-full bg-black border border-vibe-border rounded-xl p-2.5 text-white outline-none"></textarea>
-                <button type="submit" class="w-full bg-white text-black font-extrabold uppercase py-3 rounded-xl">Post Review</button>
+                <button type="submit" class="w-full bg-white text-black font-extrabold uppercase py-3 rounded-xl">Submit for Admin Approval</button>
             </form>
         </div>
     </div>
@@ -919,10 +1241,12 @@
         const COD_EXTRA_FEE = 50;
         const MERCHANT_WHATSAPP = '923114690687';
         const LUMEN_WORKER_URL = 'https://lumen-ai.mayanumer239.workers.dev/';
+        const HUMAN_WELCOME_AUDIO_URL = './welcome.mp3';
 
         let products = [];
         let orders = [];
-        let homeReviews = JSON.parse(localStorage.getItem('vibeshop_reviews')) || [];
+        let approvedReviews = [];
+        let pendingReviews = [];
         let cart = [];
         let currentUser = null;
         let selectedProductForDetail = null;
@@ -936,18 +1260,328 @@
         let lumenActivityLogs = JSON.parse(localStorage.getItem('lumen_activity_logs') || '[]');
         let lumenUsageCount = Number(localStorage.getItem('lumen_usage_count') || '0');
         let lastCustomerRequestTime = 0;
+        let lumenWelcomeHideTimer = null;
 
-        /* =========================================================
-           3D AIRPLANE INTRO & TAIL REVEAL CONTROLLER
-           ========================================================= */
-        function runVibeAirplaneIntro() {
-            const overlay = document.getElementById('vibeIntroOverlay');
+        // Voice Recognition State
+        let activeRecognition = null;
+
+        // Cinematic Voice & Audio State (Single-shot per intro run)
+        let cinemaAudioCtx = null;
+        let cinemaTimeouts = [];
+        let welcomeAudioEl = null;
+        let pendingWelcomeVoice = false;
+        let introRunToken = 0;
+        let welcomeVoicePlayedToken = 0;
+
+        function ensureCinemaAudioContext() {
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            if (!AudioCtx) return null;
+
+            if (!cinemaAudioCtx) {
+                cinemaAudioCtx = new AudioCtx();
+            }
+            if (cinemaAudioCtx.state === 'suspended') {
+                cinemaAudioCtx.resume().catch(() => {});
+            }
+            return cinemaAudioCtx;
+        }
+
+        function playFuturisticWhoosh() {
+            const ctx = ensureCinemaAudioContext();
+            if (!ctx) return;
+
+            try {
+                const duration = 0.7;
+                const bufferSize = Math.floor(ctx.sampleRate * duration);
+                const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+                const data = noiseBuffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = (Math.random() * 2 - 1) * Math.sin((i / bufferSize) * Math.PI);
+                }
+
+                const source = ctx.createBufferSource();
+                source.buffer = noiseBuffer;
+
+                const filter = ctx.createBiquadFilter();
+                filter.type = 'bandpass';
+                filter.Q.setValueAtTime(2.0, ctx.currentTime);
+                filter.frequency.setValueAtTime(200, ctx.currentTime);
+                filter.frequency.exponentialRampToValueAtTime(1250, ctx.currentTime + duration * 0.65);
+                filter.frequency.exponentialRampToValueAtTime(280, ctx.currentTime + duration);
+
+                const gain = ctx.createGain();
+                gain.gain.setValueAtTime(0.001, ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.06, ctx.currentTime + 0.2);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+
+                source.connect(filter);
+                filter.connect(gain);
+                gain.connect(ctx.destination);
+                source.start();
+            } catch (_) {}
+        }
+
+        function playWarmChime() {
+            const ctx = ensureCinemaAudioContext();
+            if (!ctx) return;
+
+            try {
+                const freqs = [523.25, 659.25, 783.99];
+                freqs.forEach((f, idx) => {
+                    const start = ctx.currentTime + idx * 0.08;
+                    const osc = ctx.createOscillator();
+                    const g = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(f, start);
+
+                    g.gain.setValueAtTime(0.0001, start);
+                    g.gain.linearRampToValueAtTime(0.025, start + 0.03);
+                    g.gain.exponentialRampToValueAtTime(0.0001, start + 0.36);
+
+                    osc.connect(g);
+                    g.connect(ctx.destination);
+                    osc.start(start);
+                    osc.stop(start + 0.38);
+                });
+            } catch (_) {}
+        }
+
+        function speakNaturalFallback() {
+            try {
+                if (!('speechSynthesis' in window)) return;
+                window.speechSynthesis.cancel();
+                const utter = new SpeechSynthesisUtterance('Welcome to VibeShop!');
+                utter.lang = 'en-US';
+                utter.rate = 0.9;
+                utter.pitch = 0.96;
+                utter.volume = 0.92;
+
+                const voices = window.speechSynthesis.getVoices();
+                const humanLikeVoice =
+                    voices.find(v => /en/i.test(v.lang) && /natural|neural|aria|guy|ryan|samantha|jenny|sonia|google us english|google uk english/i.test(v.name)) ||
+                    voices.find(v => /en/i.test(v.lang)) ||
+                    null;
+                if (humanLikeVoice) {
+                    utter.voice = humanLikeVoice;
+                }
+                utter.onstart = () => {
+                    pendingWelcomeVoice = false;
+                };
+                window.speechSynthesis.speak(utter);
+            } catch (_) {}
+        }
+
+        function triggerWelcomeVoiceOnce(token) {
+            if (token !== introRunToken) return;
+            if (welcomeVoicePlayedToken === token) return;
+            welcomeVoicePlayedToken = token;
+            pendingWelcomeVoice = true;
+
+            try {
+                if (!welcomeAudioEl) {
+                    welcomeAudioEl = new Audio(HUMAN_WELCOME_AUDIO_URL);
+                    welcomeAudioEl.preload = 'auto';
+                } else {
+                    welcomeAudioEl.pause();
+                    welcomeAudioEl.currentTime = 0;
+                }
+
+                const playPromise = welcomeAudioEl.play();
+                if (playPromise && typeof playPromise.then === 'function') {
+                    playPromise.then(() => {
+                        pendingWelcomeVoice = false;
+                    }).catch(() => {
+                        speakNaturalFallback();
+                    });
+                } else {
+                    speakNaturalFallback();
+                }
+            } catch (_) {
+                speakNaturalFallback();
+            }
+        }
+
+        function unlockCinemaSoundOnGesture() {
+            ensureCinemaAudioContext();
+            if (pendingWelcomeVoice && welcomeVoicePlayedToken === introRunToken) {
+                pendingWelcomeVoice = false;
+                try {
+                    if (welcomeAudioEl && welcomeAudioEl.paused) {
+                        welcomeAudioEl.play().catch(() => {
+                            speakNaturalFallback();
+                        });
+                    }
+                } catch (_) {}
+            }
+        }
+
+        function cleanupCinemaResources() {
+            cinemaTimeouts.forEach(id => clearTimeout(id));
+            cinemaTimeouts = [];
+        }
+
+        function buildCinemaLetters() {
+            const container = document.getElementById('cinema3DHeading');
+            if (!container) return [];
+            const phrase = 'WELCOME TO VIBESHOP!';
+            container.innerHTML = '';
+            const spans = [];
+
+            for (let i = 0; i < phrase.length; i++) {
+                const ch = phrase[i];
+                const span = document.createElement('span');
+                span.className = 'cinema-char';
+                if (ch === ' ') {
+                    span.innerHTML = '&nbsp;';
+                    span.style.width = '0.32em';
+                } else {
+                    span.textContent = ch;
+                }
+                if (ch === '!') {
+                    span.classList.add('char-bang');
+                }
+                container.appendChild(span);
+                spans.push(span);
+            }
+            return spans;
+        }
+
+        function finishCinematicWelcomeStage(token) {
+            if (token !== introRunToken) return;
+            const welcomeEl = document.getElementById('vibeCinematicWelcome');
+            const site = document.getElementById('vibeSiteContent');
+            cleanupCinemaResources();
+
+            if (site) {
+                site.style.clipPath = 'inset(0 0 0% 0)';
+                site.style.opacity = '1';
+                site.classList.add('intro-finished');
+            }
+
+            if (welcomeEl) {
+                welcomeEl.classList.add('cinema-exit');
+                setTimeout(() => {
+                    if (token !== introRunToken) return;
+                    welcomeEl.classList.remove('cinema-visible', 'cinema-exit');
+                }, 800);
+            }
+        }
+
+        function startWelcomeTextTransition(token) {
+            if (token !== introRunToken) return;
+            cleanupCinemaResources();
+
+            const welcomeEl = document.getElementById('vibeCinematicWelcome');
+            const beam = document.getElementById('cinemaLightBeam');
+            const stage = document.getElementById('cinemaTitleStage');
+            const sweep = document.getElementById('cinemaChromeSweep');
+            const subtitle = document.getElementById('cinemaSubtitle');
+
+            if (!welcomeEl) {
+                finishCinematicWelcomeStage(token);
+                return;
+            }
+
+            welcomeEl.classList.remove('cinema-exit');
+            if (beam) beam.classList.remove('beam-shoot');
+            if (stage) stage.classList.remove('title-settled', 'title-scatter');
+            if (sweep) sweep.classList.remove('sweep-run');
+            if (subtitle) subtitle.classList.remove('sub-visible');
+
+            const letterSpans = buildCinemaLetters();
+
+            requestAnimationFrame(() => {
+                if (token !== introRunToken) return;
+                welcomeEl.classList.add('cinema-visible');
+            });
+
+            const schedule = (fn, ms) => {
+                const id = setTimeout(() => {
+                    if (token !== introRunToken) return;
+                    fn();
+                }, ms);
+                cinemaTimeouts.push(id);
+            };
+
+            schedule(() => {
+                if (beam) beam.classList.add('beam-shoot');
+                playFuturisticWhoosh();
+            }, 250);
+
+            schedule(() => {
+                triggerWelcomeVoiceOnce(token);
+
+                letterSpans.forEach((span, idx) => {
+                    const t = setTimeout(() => {
+                        if (token !== introRunToken) return;
+                        span.classList.add('char-assembled');
+                        if (span.classList.contains('char-bang')) {
+                            setTimeout(() => {
+                                if (token !== introRunToken) return;
+                                span.classList.add('bang-burst');
+                                playWarmChime();
+                            }, 150);
+                        }
+                    }, idx * 42);
+                    cinemaTimeouts.push(t);
+                });
+
+                if (stage) stage.classList.add('title-settled');
+                if (subtitle) subtitle.classList.add('sub-visible');
+            }, 650);
+
+            schedule(() => {
+                if (sweep) sweep.classList.add('sweep-run');
+            }, 1850);
+
+            schedule(() => {
+                if (stage) stage.classList.add('title-scatter');
+                playFuturisticWhoosh();
+            }, 3450);
+
+            schedule(() => {
+                finishCinematicWelcomeStage(token);
+            }, 4200);
+        }
+
+        function createPlaneOverlayElement() {
+            let overlay = document.getElementById('vibeIntroOverlay');
+            if (overlay) return overlay;
+
+            overlay = document.createElement('div');
+            overlay.id = 'vibeIntroOverlay';
+            overlay.setAttribute('aria-hidden', 'true');
+            overlay.innerHTML = `
+                <div id="vibeTailGlow"></div>
+                <div id="vibeTailRibbon"></div>
+                <div id="vibe3DPlane">
+                    <img
+                        id="vibePlaneImg"
+                        src="./plane.jpg"
+                        alt="VibeShop 3D Airplane"
+                    >
+                </div>
+            `;
+            const welcomeEl = document.getElementById('vibeCinematicWelcome');
+            if (welcomeEl && welcomeEl.parentNode) {
+                welcomeEl.parentNode.insertBefore(overlay, welcomeEl.nextSibling);
+            } else {
+                document.body.appendChild(overlay);
+            }
+            return overlay;
+        }
+
+        function runVibeAirplaneIntro(token, onAfterPlane) {
+            const overlay = createPlaneOverlayElement();
             const plane = document.getElementById('vibe3DPlane');
             const ribbon = document.getElementById('vibeTailRibbon');
             const glow = document.getElementById('vibeTailGlow');
             const site = document.getElementById('vibeSiteContent');
 
-            if (!overlay || !plane || !ribbon || !glow || !site) return;
+            if (!overlay || !plane || !ribbon || !glow || !site) {
+                if (typeof onAfterPlane === 'function') onAfterPlane();
+                return;
+            }
 
             const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             if (prefersReduced) {
@@ -956,28 +1590,36 @@
                 return;
             }
 
-            const duration = 2700;
+            overlay.classList.remove('intro-complete');
+            overlay.style.opacity = '1';
+            overlay.style.visibility = 'visible';
+
+            const duration = 4200;
             const startTime = performance.now();
+            let completed = false;
 
-            function easeInOutCubic(t) {
-                return t < 0.5
-                    ? 4 * t * t * t
-                    : 1 - Math.pow(-2 * t + 2, 3) / 2;
-            }
+            function finishPlaneStage() {
+                if (completed || token !== introRunToken) return;
+                completed = true;
 
-            function finishIntro() {
-                site.classList.add('intro-finished');
+                if (typeof onAfterPlane === 'function') {
+                    onAfterPlane();
+                }
+
                 overlay.classList.add('intro-complete');
                 setTimeout(() => {
                     if (overlay && overlay.parentNode) {
                         overlay.remove();
                     }
-                }, 600);
+                }, 800);
             }
 
             function step(now) {
+                if (completed || token !== introRunToken) return;
                 const rawProgress = Math.min(1, Math.max(0, (now - startTime) / duration));
-                const eased = easeInOutCubic(rawProgress);
+                const eased = rawProgress < 0.5
+                    ? 4 * rawProgress * rawProgress * rawProgress
+                    : 1 - Math.pow(-2 * rawProgress + 2, 3) / 2;
 
                 const vh = window.innerHeight || 800;
                 const planeHeight = plane.offsetHeight || 350;
@@ -1014,20 +1656,220 @@
                 if (rawProgress < 1) {
                     requestAnimationFrame(step);
                 } else {
-                    finishIntro();
+                    finishPlaneStage();
                 }
             }
 
-            const safetyTimer = setTimeout(finishIntro, duration + 900);
+            const safetyTimer = setTimeout(finishPlaneStage, duration + 1000);
             requestAnimationFrame((now) => {
                 clearTimeout(safetyTimer);
                 step(now);
             });
         }
 
+        function initIntroSequence() {
+            introRunToken += 1;
+            const currentToken = introRunToken;
+            pendingWelcomeVoice = false;
+
+            cleanupCinemaResources();
+            const welcomeEl = document.getElementById('vibeCinematicWelcome');
+            if (welcomeEl) {
+                welcomeEl.classList.remove('cinema-visible', 'cinema-exit');
+            }
+
+            const site = document.getElementById('vibeSiteContent');
+            if (site) {
+                site.classList.remove('intro-finished');
+                site.style.clipPath = 'inset(0 0 100% 0)';
+                site.style.opacity = '0.15';
+            }
+
+            document.removeEventListener('pointerdown', unlockCinemaSoundOnGesture);
+            document.addEventListener('pointerdown', unlockCinemaSoundOnGesture, { once: true });
+
+            runVibeAirplaneIntro(currentToken, () => {
+                startWelcomeTextTransition(currentToken);
+            });
+        }
+
+        function replayFullCinematicSequence() {
+            initIntroSequence();
+        }
+
+        /* =========================================================
+           VOICE SEARCH & LUMEN VOICE INPUT (WEB SPEECH API)
+           ========================================================= */
+        function getSpeechRecognizer() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) return null;
+            const rec = new SpeechRecognition();
+            rec.lang = 'en-PK';
+            rec.interimResults = false;
+            rec.maxAlternatives = 1;
+            return rec;
+        }
+
+        function setVoiceSearchStatus(msg, isError = false) {
+            const el = document.getElementById('voiceSearchStatus');
+            if (!el) return;
+            if (!msg) {
+                el.classList.add('hidden');
+                el.textContent = '';
+                return;
+            }
+            el.classList.remove('hidden');
+            el.className = `text-[11px] mt-1.5 ${isError ? 'text-rose-400' : 'text-amber-400'}`;
+            el.textContent = msg;
+        }
+
+        function startVoiceSearch() {
+            if (activeRecognition) {
+                try { activeRecognition.stop(); } catch (_) {}
+                activeRecognition = null;
+            }
+
+            const rec = getSpeechRecognizer();
+            const btn = document.getElementById('voiceSearchBtn');
+            const icon = document.getElementById('voiceSearchIcon');
+
+            if (!rec) {
+                setVoiceSearchStatus('Is browser mein voice search support nahi hai. Chrome/Edge try karein.', true);
+                return;
+            }
+
+            activeRecognition = rec;
+            btn?.classList.add('border-amber-400', 'text-amber-400');
+            icon?.classList.add('animate-pulse');
+            setVoiceSearchStatus('Sun raha hoon... product ka naam bolein.');
+
+            rec.onresult = (event) => {
+                const spoken = event.results?.[0]?.[0]?.transcript || '';
+                const input = document.getElementById('storeSearchInput');
+                if (input && spoken) {
+                    input.value = spoken;
+                    filterStoreProducts();
+                    setVoiceSearchStatus(`Voice search: "${spoken}"`);
+                }
+            };
+
+            rec.onerror = () => {
+                setVoiceSearchStatus('Mic access ya voice samajhne mein masla aaya. Dobara try karein.', true);
+            };
+
+            rec.onend = () => {
+                activeRecognition = null;
+                btn?.classList.remove('border-amber-400', 'text-amber-400');
+                icon?.classList.remove('animate-pulse');
+            };
+
+            try {
+                rec.start();
+            } catch (_) {
+                setVoiceSearchStatus('Mic start nahi ho saka.', true);
+            }
+        }
+
+        function startLumenVoiceInput() {
+            if (activeRecognition) {
+                try { activeRecognition.stop(); } catch (_) {}
+                activeRecognition = null;
+            }
+
+            const rec = getSpeechRecognizer();
+            const btn = document.getElementById('lumenVoiceBtn');
+            const icon = document.getElementById('lumenVoiceIcon');
+
+            if (!rec) {
+                alert('Is browser mein voice input support nahi hai. Chrome/Edge try karein.');
+                return;
+            }
+
+            activeRecognition = rec;
+            btn?.classList.add('border-amber-400', 'text-amber-400');
+            icon?.classList.add('animate-pulse');
+
+            rec.onresult = (event) => {
+                const spoken = (event.results?.[0]?.[0]?.transcript || '').trim();
+                const input = document.getElementById('lumenChatInput');
+                if (input && spoken) {
+                    input.value = spoken;
+                    document.getElementById('lumenSendBtn')?.click();
+                }
+            };
+
+            rec.onerror = () => {
+                btn?.classList.remove('border-amber-400', 'text-amber-400');
+                icon?.classList.remove('animate-pulse');
+            };
+
+            rec.onend = () => {
+                activeRecognition = null;
+                btn?.classList.remove('border-amber-400', 'text-amber-400');
+                icon?.classList.remove('animate-pulse');
+            };
+
+            try {
+                rec.start();
+            } catch (_) {}
+        }
+
+        /* =========================================================
+           LUMEN WELCOME POPUP SCHEDULER (3s FIRST, THEN EVERY 13s)
+           ========================================================= */
+        function triggerLumenWelcomeBubble() {
+            const chatWin = document.getElementById('lumenChatWindow');
+            const bubble = document.getElementById('lumenWelcomePopup');
+            if (!bubble) return;
+            if (chatWin && !chatWin.classList.contains('hidden')) return;
+
+            if (lumenWelcomeHideTimer) {
+                clearTimeout(lumenWelcomeHideTimer);
+            }
+
+            bubble.classList.remove('hidden', 'lumen-welcome-hide');
+            void bubble.offsetWidth;
+            bubble.classList.add('lumen-welcome-show');
+
+            lumenWelcomeHideTimer = setTimeout(() => {
+                bubble.classList.remove('lumen-welcome-show');
+                bubble.classList.add('lumen-welcome-hide');
+                setTimeout(() => {
+                    bubble.classList.add('hidden');
+                    bubble.classList.remove('lumen-welcome-hide');
+                }, 360);
+            }, 4500);
+        }
+
+        function hideLumenWelcomeBubbleImmediately() {
+            const bubble = document.getElementById('lumenWelcomePopup');
+            if (!bubble) return;
+            if (lumenWelcomeHideTimer) clearTimeout(lumenWelcomeHideTimer);
+            bubble.classList.add('hidden');
+            bubble.classList.remove('lumen-welcome-show', 'lumen-welcome-hide');
+        }
+
+        function openLumenFromPopup() {
+            hideLumenWelcomeBubbleImmediately();
+            const win = document.getElementById('lumenChatWindow');
+            if (win && win.classList.contains('hidden')) {
+                toggleLumenChat();
+            }
+        }
+
+        function startLumenWelcomePopups() {
+            setTimeout(() => {
+                triggerLumenWelcomeBubble();
+                setInterval(() => {
+                    triggerLumenWelcomeBubble();
+                }, 13000);
+            }, 3000);
+        }
+
         async function loadData() {
             await fetchProductsFromCloud();
             await fetchOrdersFromCloud();
+            await fetchReviewsFromCloud();
             await fetchApprovedSiteConfigFromCloud();
             renderHomeReviews();
             updateCartBadge();
@@ -1058,6 +1900,45 @@
             } catch(e) {
                 console.log("Cloud orders fetch error", e);
             }
+        }
+
+        /* =========================================================
+           CUSTOMER REVIEWS MODERATION (PENDING -> ADMIN APPROVE -> PUBLIC)
+           ========================================================= */
+        async function fetchReviewsFromCloud() {
+            approvedReviews = [];
+            pendingReviews = [];
+
+            try {
+                const snapshot = await db.collection('reviews').get();
+                snapshot.forEach(doc => {
+                    const item = { reviewDocId: doc.id, ...doc.data() };
+                    const status = (item.status || '').toLowerCase();
+                    if (status === 'approved') {
+                        approvedReviews.push(item);
+                    } else if (status === 'pending') {
+                        pendingReviews.push(item);
+                    }
+                });
+            } catch (_) {}
+
+            const legacyLocal = JSON.parse(localStorage.getItem('vibeshop_reviews') || '[]');
+            if (Array.isArray(legacyLocal) && legacyLocal.length > 0) {
+                legacyLocal.forEach((r, i) => {
+                    pendingReviews.push({
+                        reviewDocId: 'local-pending-' + i + '-' + (r.createdAt || i),
+                        name: r.name || 'Customer',
+                        stars: r.stars || '⭐⭐⭐⭐⭐',
+                        text: r.text || '',
+                        status: 'pending',
+                        createdAt: r.createdAt || Date.now()
+                    });
+                });
+                localStorage.removeItem('vibeshop_reviews');
+            }
+
+            approvedReviews.sort((a, b) => (Number(b.createdAt) || 0) - (Number(a.createdAt) || 0));
+            pendingReviews.sort((a, b) => (Number(b.createdAt) || 0) - (Number(a.createdAt) || 0));
         }
 
         async function fetchApprovedSiteConfigFromCloud() {
@@ -1125,6 +2006,49 @@
                 .replace(/"/g, '&quot;');
         }
 
+        function attachCard3DTilt(card) {
+            let rafId = null;
+            let pendingX = 0;
+            let pendingY = 0;
+            let hasPointer = false;
+
+            const flush = () => {
+                rafId = null;
+                if (!hasPointer) return;
+                const rect = card.getBoundingClientRect();
+                if (!rect.width || !rect.height) return;
+                const px = Math.min(1, Math.max(0, (pendingX - rect.left) / rect.width));
+                const py = Math.min(1, Math.max(0, (pendingY - rect.top) / rect.height));
+                const rotateY = ((px - 0.5) * 14).toFixed(2);
+                const rotateX = ((0.5 - py) * 14).toFixed(2);
+                card.style.setProperty('--tilt-x', `${rotateX}deg`);
+                card.style.setProperty('--tilt-y', `${rotateY}deg`);
+                card.style.setProperty('--spot-x', `${(px * 100).toFixed(1)}%`);
+                card.style.setProperty('--spot-y', `${(py * 100).toFixed(1)}%`);
+                card.style.setProperty('--spot-opacity', '1');
+            };
+
+            card.addEventListener('pointermove', (e) => {
+                pendingX = e.clientX;
+                pendingY = e.clientY;
+                hasPointer = true;
+                if (!rafId) {
+                    rafId = requestAnimationFrame(flush);
+                }
+            });
+
+            card.addEventListener('pointerleave', () => {
+                hasPointer = false;
+                if (rafId) {
+                    cancelAnimationFrame(rafId);
+                    rafId = null;
+                }
+                card.style.setProperty('--tilt-x', '0deg');
+                card.style.setProperty('--tilt-y', '0deg');
+                card.style.setProperty('--spot-opacity', '0');
+            });
+        }
+
         function renderStoreGrid(filteredProducts = null) {
             const grid = document.getElementById('productGrid');
             if(!grid) return;
@@ -1142,8 +2066,9 @@
                 const priceNum = Number(p.price) || 0;
                 const origPriceNum = Number(p.originalPrice) || 0;
                 const card = document.createElement('div');
-                card.className = 'bg-vibe-card rounded-2xl border border-vibe-border overflow-hidden hover:border-slate-400 transition duration-300 flex flex-col justify-between group cursor-pointer';
+                card.className = 'vibe-3d-card bg-vibe-card rounded-2xl border border-vibe-border overflow-hidden hover:border-slate-400 flex flex-col justify-between group cursor-pointer relative';
                 card.onclick = () => openProductDetail(p.cloudDocId || p.id);
+                attachCard3DTilt(card);
 
                 card.innerHTML = `
                     <div>
@@ -1245,7 +2170,7 @@
                 </div>
             `;
 
-            homeReviews.forEach(r => {
+            approvedReviews.forEach(r => {
                 html += `
                     <div class="bg-vibe-card p-4 rounded-2xl border border-vibe-border">
                         <div class="flex justify-between items-center mb-1">
@@ -1259,22 +2184,109 @@
             container.innerHTML = html;
         }
 
+        function renderAdminPendingReviews() {
+            const listEl = document.getElementById('adminPendingReviewsList');
+            const badgeEl = document.getElementById('adminPendingReviewCountBadge');
+            if (!listEl) return;
+
+            if (badgeEl) {
+                badgeEl.textContent = `${pendingReviews.length} Pending`;
+            }
+
+            if (pendingReviews.length === 0) {
+                listEl.innerHTML = `<p class="text-slate-500 bg-black border border-vibe-border rounded-2xl p-4 col-span-full">Abhi koi pending review nahi hai.</p>`;
+                return;
+            }
+
+            listEl.innerHTML = pendingReviews.map(r => `
+                <div class="bg-black border border-vibe-border rounded-2xl p-4 flex flex-col justify-between gap-3">
+                    <div class="space-y-1.5">
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="font-bold text-white text-xs">${escapeHtml(r.name || 'Customer')}</span>
+                            <span class="text-amber-400 text-xs">${escapeHtml(r.stars || '⭐⭐⭐⭐⭐')}</span>
+                        </div>
+                        <p class="text-slate-300 text-xs leading-relaxed">${escapeHtml(r.text || '')}</p>
+                    </div>
+                    <div class="flex items-center gap-2 pt-2 border-t border-vibe-border">
+                        <button type="button" onclick="approveCustomerReview('${escapeHtml(r.reviewDocId)}')" class="bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-[11px] uppercase px-3.5 py-1.5 rounded-xl transition">
+                            Approve & Publish
+                        </button>
+                        <button type="button" onclick="rejectCustomerReview('${escapeHtml(r.reviewDocId)}')" class="bg-rose-950 hover:bg-rose-900 border border-rose-500/40 text-rose-200 font-bold text-[11px] uppercase px-3 py-1.5 rounded-xl transition">
+                            Reject
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
         function openAddHomeReviewModal() { document.getElementById('addHomeReviewModal').classList.remove('hidden'); }
         function closeAddHomeReviewModal() { document.getElementById('addHomeReviewModal').classList.add('hidden'); }
 
-        function handleHomeReviewSubmit(e) {
+        async function handleHomeReviewSubmit(e) {
             e.preventDefault();
             const newRev = {
-                name: document.getElementById('homeRevName').value,
+                name: document.getElementById('homeRevName').value.trim(),
                 stars: document.getElementById('homeRevStars').value,
-                text: document.getElementById('homeRevText').value
+                text: document.getElementById('homeRevText').value.trim(),
+                status: 'pending',
+                createdAt: Date.now()
             };
-            homeReviews.push(newRev);
-            localStorage.setItem('vibeshop_reviews', JSON.stringify(homeReviews));
+
+            let docId = 'rev-' + Date.now();
+            try {
+                const ref = await db.collection('reviews').add(newRev);
+                docId = ref.id;
+            } catch (err) {
+                console.error('Review cloud save error', err);
+            }
+
+            pendingReviews.unshift({ reviewDocId: docId, ...newRev });
             renderHomeReviews();
+            if (currentUser && currentUser.isAdmin) {
+                renderAdminPendingReviews();
+            }
             closeAddHomeReviewModal();
-            alert("Review added successfully!");
+            alert("Aapka review submit ho gaya hai! Admin approval ke baad publicly show hoga.");
             e.target.reset();
+        }
+
+        async function approveCustomerReview(reviewDocId) {
+            const idx = pendingReviews.findIndex(r => r.reviewDocId === reviewDocId);
+            if (idx === -1) return;
+            const item = pendingReviews[idx];
+
+            try {
+                if (!String(reviewDocId).startsWith('local-pending-')) {
+                    await db.collection('reviews').doc(reviewDocId).update({ status: 'approved' });
+                }
+            } catch (err) {
+                console.error('Approve review error', err);
+                alert('Review approve karte waqt error aaya: ' + err.message);
+                return;
+            }
+
+            pendingReviews.splice(idx, 1);
+            approvedReviews.unshift({ ...item, status: 'approved' });
+            renderHomeReviews();
+            renderAdminPendingReviews();
+        }
+
+        async function rejectCustomerReview(reviewDocId) {
+            const idx = pendingReviews.findIndex(r => r.reviewDocId === reviewDocId);
+            if (idx === -1) return;
+
+            try {
+                if (!String(reviewDocId).startsWith('local-pending-')) {
+                    await db.collection('reviews').doc(reviewDocId).delete();
+                }
+            } catch (err) {
+                console.error('Reject review error', err);
+                alert('Review reject karte waqt error aaya: ' + err.message);
+                return;
+            }
+
+            pendingReviews.splice(idx, 1);
+            renderAdminPendingReviews();
         }
 
         function scrollToContact() {
@@ -1685,12 +2697,15 @@
             document.getElementById('productDetailView').classList.add('hidden');
             document.getElementById('adminView').classList.remove('hidden');
             await fetchOrdersFromCloud();
+            await fetchReviewsFromCloud();
             renderAdminDashboard();
         }
 
         function renderAdminDashboard() {
             const totalProfitSum = orders.reduce((sum, o) => o.status !== 'Cancelled' ? sum + (Number(o.profit) || 0) : sum, 0);
             document.getElementById('statTotalProfit').innerText = `Rs. ${totalProfitSum.toLocaleString()}`;
+
+            renderAdminPendingReviews();
             
             const adminProdTable = document.getElementById('adminProductsTableBody');
             adminProdTable.innerHTML = products.length === 0 ? `<tr><td colspan="4" class="p-6 text-center text-slate-500">No products uploaded yet.</td></tr>` : '';
@@ -1753,6 +2768,7 @@
            LUMEN AI CUSTOMER CHAT & CLOUDFLARE WORKER CLIENT
            ========================================================= */
         function toggleLumenChat() {
+            hideLumenWelcomeBubbleImmediately();
             const win = document.getElementById('lumenChatWindow');
             win.classList.toggle('hidden');
             if (!win.classList.contains('hidden')) {
@@ -1787,10 +2803,10 @@
 
             if (lumenChatHistory.length === 0) {
                 box.innerHTML = `
-                    <div class="bg-black/80 border border-cyan-500/25 rounded-2xl p-3.5 space-y-2">
+                    <div class="bg-black/80 border border-slate-600/40 rounded-2xl p-3.5 space-y-2">
                         <div class="flex items-center gap-2">
-                            <img src="./cuterobot.png" alt="Lumen" class="w-7 h-7 rounded-full object-cover border border-cyan-400/50">
-                            <span class="font-bold text-cyan-300 text-xs">Assalam-o-Alaikum! Main Lumen AI hoon.</span>
+                            <img src="./cuterobot.png" alt="Lumen" class="w-7 h-7 rounded-full object-cover border border-slate-400/50">
+                            <span class="font-bold text-white text-xs">Assalam-o-Alaikum! Main Lumen AI hoon.</span>
                         </div>
                         <p class="text-slate-300 text-[11px] leading-relaxed">
                             Aap mujh se VibeShop ke products, prices, delivery, ya kisi bhi general, tech, ya study topic par Roman Urdu, Urdu, ya English mein pooch sakte hain.
@@ -1804,7 +2820,7 @@
                 if (m.role === 'user') {
                     return `
                         <div class="flex justify-end">
-                            <div class="bg-cyan-500 text-black font-semibold rounded-2xl rounded-br-sm px-3.5 py-2.5 max-w-[82%] leading-relaxed">
+                            <div class="bg-white text-black font-semibold rounded-2xl rounded-br-sm px-3.5 py-2.5 max-w-[82%] leading-relaxed">
                                 ${escapeHtml(m.text)}
                             </div>
                         </div>
@@ -1812,7 +2828,7 @@
                 }
                 return `
                     <div class="flex items-start gap-2">
-                        <img src="./cuterobot.png" alt="Lumen" class="w-6 h-6 rounded-full object-cover border border-cyan-400/50 flex-shrink-0 mt-0.5">
+                        <img src="./cuterobot.png" alt="Lumen" class="w-6 h-6 rounded-full object-cover border border-slate-400/50 flex-shrink-0 mt-0.5">
                         <div class="bg-black/90 border border-vibe-border text-slate-200 rounded-2xl rounded-bl-sm px-3.5 py-2.5 max-w-[85%] leading-relaxed whitespace-pre-line">
                             ${escapeHtml(m.text)}
                         </div>
@@ -1830,6 +2846,7 @@
 
             return [
                 `Store Name: VibeShop Pakistan`,
+                `Features Active: 3D Tilt Product Cards with Cursor Light, Voice Search & Lumen Voice Input.`,
                 `Delivery Policy: Flat Rs. 250 delivery across Pakistan, FREE delivery on orders Rs. 5,000 or above, COD has + Rs. 50 extra fee, Open Parcel Inspection allowed.`,
                 `Current Products:\n${prodSummary}`
             ].join('\n');
@@ -1911,8 +2928,8 @@
             const box = document.getElementById('lumenMessagesContainer');
             const typingId = 'lumenTypingIndicator';
             box.insertAdjacentHTML('beforeend', `
-                <div id="${typingId}" class="flex items-center gap-2 text-cyan-300 text-[11px]">
-                    <img src="./cuterobot.png" alt="Lumen" class="w-6 h-6 rounded-full object-cover border border-cyan-400/50">
+                <div id="${typingId}" class="flex items-center gap-2 text-slate-300 text-[11px]">
+                    <img src="./cuterobot.png" alt="Lumen" class="w-6 h-6 rounded-full object-cover border border-slate-400/50">
                     <span class="bg-black/80 border border-vibe-border px-3 py-2 rounded-2xl">Lumen type kar raha hai...</span>
                 </div>
             `);
@@ -2297,7 +3314,7 @@
                             ).join('');
                             previewHtml += `<div class="mt-2.5 space-y-1.5">${sampleRows}</div>`;
                         } else if (p.payload && p.payload.banner) {
-                            previewHtml += `<div class="mt-2 p-2.5 rounded-xl bg-cyan-950/30 border border-cyan-500/30 text-cyan-200 text-[11px]">Banner Preview: <strong>${escapeHtml(p.payload.banner.title)}</strong> — ${escapeHtml(p.payload.banner.description)}</div>`;
+                            previewHtml += `<div class="mt-2 p-2.5 rounded-xl bg-zinc-900 border border-slate-600/40 text-slate-200 text-[11px]">Banner Preview: <strong>${escapeHtml(p.payload.banner.title)}</strong> — ${escapeHtml(p.payload.banner.description)}</div>`;
                         }
 
                         return `
@@ -2351,8 +3368,8 @@
                     logList.innerHTML = lumenActivityLogs.map(l => `
                         <div class="bg-vibe-card border border-vibe-border rounded-xl p-2.5 flex items-center justify-between gap-2">
                             <div class="truncate">
-                                <span class="text-cyan-300 font-bold">[${escapeHtml(l.type)}]</span>
-                                <span class="text-slate-200 ml-1">${escapeHtml(l.detail)}</span>
+                                <span class="text-slate-200 font-bold">[${escapeHtml(l.type)}]</span>
+                                <span class="text-slate-300 ml-1">${escapeHtml(l.detail)}</span>
                             </div>
                             <span class="text-[10px] text-slate-500 font-mono flex-shrink-0">${escapeHtml(l.time)}</span>
                         </div>
@@ -2362,10 +3379,14 @@
         }
 
         window.onload = function() {
-            runVibeAirplaneIntro();
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.getVoices();
+            }
+            initIntroSequence();
             loadData();
             startSalesPopups();
             startCountdownTimer();
+            startLumenWelcomePopups();
         };
     </script>
 </body>
